@@ -1,0 +1,13 @@
+---
+const { cityName, slotNumber } = Astro.props;
+---
+
+<div class="card">
+  <div style="font-weight:1000;">Local sponsor spot #{slotNumber}</div>
+  <div class="muted" style="margin-top:6px;">
+    Reserved for a {cityName} partner (training, gear, insurance, dealer, etc.)
+  </div>
+  <div class="muted" style="margin-top:10px; font-size:13px;">
+    Want this spot? Email: <a href="mailto:support@borrowmybike.ca">support@borrowmybike.ca</a>
+  </div>
+</div>

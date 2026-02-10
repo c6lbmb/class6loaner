@@ -1,0 +1,34 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { CITIES, groupCitiesByProvince } from "../../data/cities";
+const grouped = groupCitiesByProvince();
+---
+
+<BaseLayout
+  title="Cities — Class6Loaner"
+  description="City-by-city road test education and mentor guidance across Canada (excluding Saskatchewan)."
+  canonicalPath="/cities"
+>
+  <section class="card">
+    <h1 style="margin:0; font-weight:1000;">Cities</h1>
+    <p class="muted" style="margin:10px 0 0; max-width:75ch;">
+      Choose your city to see a calm, practical road test guide and mentor info. Canada-wide marketing (excluding Saskatchewan).
+    </p>
+  </section>
+
+  <section style="margin-top:14px;" class="grid">
+    {Object.entries(grouped).map(([prov, cities]) => (
+      <div class="card">
+        <div style="font-weight:1000; margin-bottom:10px;">{prov}</div>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:10px;">
+          {cities.map((c) => (
+            <a class="card" href={`/cities/${c.slug}`} style="text-decoration:none; padding:14px;">
+              <div style="font-weight:1000;">{c.name}</div>
+              <div class="muted" style="margin-top:4px; font-size:13px;">{c.province}, Canada</div>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+</BaseLayout>

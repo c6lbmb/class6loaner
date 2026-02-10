@@ -1,17 +1,54 @@
 ---
-
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="Class6Loaner — Safety-first road tests"
+  description="A calm, clear guide for motorcycle road-test day — and a safe way for mentors to help test-takers."
+>
+  <section style="padding: 18px 0 8px;">
+    <h1 style="font-size: 44px; line-height: 1.05; margin: 18px 0 10px;">
+      Road test day, without the chaos.
+    </h1>
+    <p class="muted" style="font-size: 18px; max-width: 70ch;">
+      Class6Loaner is the education + confidence layer for motorcycle road tests across Canada (excluding Saskatchewan).
+      Learn the process, reduce anxiety, and connect with safety-minded mentors via the BorrowMyBike app.
+    </p>
+
+    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
+      <a class="cta" href="/how-it-works">Start here →</a>
+      <a class="cta" href="/road-test-guide">Road test guide</a>
+      <a class="cta" href="/mentor-guide">Mentor guide</a>
+      <a class="cta" href="/cities">Find your city</a>
+    </div>
+  </section>
+
+  <section class="grid grid-3" style="margin-top: 18px;">
+    <div class="card">
+      <h3 style="margin:0 0 6px;">Safety-first</h3>
+      <p class="muted" style="margin:0;">
+        Clear expectations, checklists, and “what to do if…” scenarios that prevent bad days.
+      </p>
+    </div>
+    <div class="card">
+      <h3 style="margin:0 0 6px;">Lower anxiety</h3>
+      <p class="muted" style="margin:0;">
+        Step-by-step road-test prep so test-takers show up calm and ready.
+      </p>
+    </div>
+    <div class="card">
+      <h3 style="margin:0 0 6px;">Mentor friendly</h3>
+      <p class="muted" style="margin:0;">
+        Mentors learn the process and how to help responsibly — without surprises.
+      </p>
+    </div>
+  </section>
+
+  <section style="margin-top: 22px;" class="card">
+    <h2 style="margin-top:0;">Want to book a mentor + bike?</h2>
+    <p class="muted">
+      Class6Loaner is the guide. The actual booking experience lives on BorrowMyBike.
+    </p>
+    <a class="cta" href="https://borrowmybike.ca" rel="noopener" target="_blank">Go to BorrowMyBike →</a>
+  </section>
+</BaseLayout>

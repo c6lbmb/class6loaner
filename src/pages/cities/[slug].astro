@@ -1,0 +1,188 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SponsorSlot from "../../components/SponsorSlot.astro";
+import { CITIES } from "../../data/cities";
+
+export function getStaticPaths() {
+  return CITIES.map((c) => ({
+    params: { slug: c.slug },
+    props: { city: c },
+  }));
+}
+
+const { city } = Astro.props;
+
+const isCalgary = city.slug === "calgary";
+const cityDisplay = `${city.name}, ${city.province}`;
+
+const title = `${city.name} Motorcycle Road Test Guide — Calm, Safety-First | Class6Loaner`;
+const description =
+  `A practical, anxiety-reducing road test guide for ${cityDisplay}. What to expect, what to bring, and how mentors can help test-takers stay calm and safe.`;
+
+const canonicalPath = `/cities/${city.slug}`;
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath}>
+  <!-- HERO -->
+  <section class="card">
+    <div class="muted" style="font-weight:900;">City guide</div>
+
+    <h1 style="margin:8px 0 0; font-weight:1000;">
+      Motorcycle Road Test in {city.name}: calm, clear, safety-first
+    </h1>
+
+    <p class="muted" style="margin:10px 0 0; max-width:85ch;">
+      If you’re feeling stressed about test day, you’re not alone. This page is built to reduce anxiety by
+      making everything predictable: what happens, what to bring, and how to avoid the most common mistakes.
+    </p>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+      <a class="cta" href="https://borrowmybike.ca" rel="noopener" target="_blank">
+        Book / Become a mentor →
+      </a>
+      <a class="cta" href="/road-test-guide">Read the full guide →</a>
+    </div>
+
+    <div class="muted" style="margin-top:12px; font-size:13px;">
+      Educational content only. Registry rules vary—always follow the examiner’s direction.
+    </div>
+  </section>
+
+  <!-- MAIN + SPONSORS -->
+  <section class="grid grid-2" style="margin-top:14px;">
+    <!-- LEFT CONTENT -->
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">What happens on test day (simple timeline)</h2>
+
+      <ol style="margin:0; padding-left:18px;">
+        <li><b>Arrive early</b> so you’re not making rushed decisions under pressure.</li>
+        <li><b>Check-in & documents</b> (ID, paperwork, whatever the registry requires).</li>
+        <li><b>Bike + gear check</b>: the examiner confirms roadworthiness + safety basics.</li>
+        <li><b>Test ride</b>: focus on smooth, safe control—not speed or “impressing.”</li>
+        <li><b>Wrap-up</b>: results, feedback, and you’re done.</li>
+      </ol>
+
+      <h2 style="margin:18px 0 10px; font-weight:1000;">The “don’t panic” checklist</h2>
+
+      <div class="grid" style="grid-template-columns: 1fr; gap:10px;">
+        <div class="card" style="padding:14px;">
+          <div style="font-weight:1000;">Bring</div>
+          <ul style="margin:8px 0 0; padding-left:18px;">
+            <li>Your required ID and registry paperwork</li>
+            <li>Any confirmation details for your appointment</li>
+            <li>Time buffer (arrive early)</li>
+          </ul>
+        </div>
+
+        <div class="card" style="padding:14px;">
+          <div style="font-weight:1000;">Wear (protective gear)</div>
+          <ul style="margin:8px 0 0; padding-left:18px;">
+            <li>Proper helmet</li>
+            <li>Jacket + gloves</li>
+            <li>Long pants</li>
+            <li>Closed-toe boots (ideally riding boots)</li>
+          </ul>
+          <div class="muted" style="margin-top:8px; font-size:13px;">
+            If you’re unsure, over-prepare. It’s better than showing up and being turned away.
+          </div>
+        </div>
+
+        <div class="card" style="padding:14px;">
+          <div style="font-weight:1000;">Mental cues that actually help</div>
+          <ul style="margin:8px 0 0; padding-left:18px;">
+            <li>Slow breathing before you start</li>
+            <li>Ride smooth, not “fast”</li>
+            <li>Look where you want to go (head up)</li>
+            <li>If you make a small mistake—reset and continue calmly</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 style="margin:18px 0 10px; font-weight:1000;">Weather & reschedules (common in Calgary)</h2>
+
+      <p class="muted" style="margin:0; max-width:85ch;">
+        Calgary weather can change fast. If the registry reschedules your test due to conditions,
+        the goal is that neither side is penalized—especially if nobody has checked in yet.
+      </p>
+
+      <div class="card" style="padding:14px; margin-top:10px;">
+        <div style="font-weight:1000;">Best practice</div>
+        <ul style="margin:8px 0 0; padding-left:18px;">
+          <li>If you get a reschedule call/text, communicate early.</li>
+          <li>Don’t wait until the last minute if the weather is clearly unsafe.</li>
+          <li>Safety > forcing a test.</li>
+        </ul>
+      </div>
+
+      <h2 style="margin:18px 0 10px; font-weight:1000;">For mentors in {city.name}</h2>
+
+      <p class="muted" style="margin:0; max-width:85ch;">
+        Mentors help test-takers reduce stress by making the day predictable. You’re not an instructor and you’re not there to
+        “coach during the test”—you’re there to help someone show up safe, prepared, and calm.
+      </p>
+
+      <div class="grid" style="grid-template-columns: 1fr; gap:10px; margin-top:10px;">
+        <div class="card" style="padding:14px;">
+          <div style="font-weight:1000;">What mentors typically handle</div>
+          <ul style="margin:8px 0 0; padding-left:18px;">
+            <li>Bike ready (signals, brakes, tires, lights)</li>
+            <li>Meet-up timing and expectations</li>
+            <li>Calm communication and safety-first approach</li>
+          </ul>
+        </div>
+
+        <div class="card" style="padding:14px;">
+          <div style="font-weight:1000;">What mentors should NOT do</div>
+          <ul style="margin:8px 0 0; padding-left:18px;">
+            <li>Argue with examiners or push unsafe choices</li>
+            <li>Encourage riding beyond comfort or conditions</li>
+            <li>Make promises about outcomes (“you’ll pass”)—nobody can guarantee that</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 style="margin:18px 0 10px; font-weight:1000;">FAQ</h2>
+
+      <div class="grid" style="gap:10px;">
+        <div class="card" style="padding:14px;">
+          <div style="font-weight:1000;">What if the registry refuses the test after inspection?</div>
+          <div class="muted" style="margin-top:6px;">
+            This can happen for bike-readiness or test-taker readiness reasons. The safest approach is to record the reason calmly and rebook.
+          </div>
+        </div>
+
+        <div class="card" style="padding:14px;">
+          <div style="font-weight:1000;">What if weather makes it unsafe?</div>
+          <div class="muted" style="margin-top:6px;">
+            Don’t force it. If conditions are clearly unsafe or the registry reschedules, prioritize safety and rebook.
+          </div>
+        </div>
+
+        <div class="card" style="padding:14px;">
+          <div style="font-weight:1000;">Does this site replace the app?</div>
+          <div class="muted" style="margin-top:6px;">
+            No. Class6Loaner is education + calm prep. Bookings happen on BorrowMyBike.ca.
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px; padding:14px;">
+        <div style="font-weight:1000;">Ready to book?</div>
+        <div class="muted" style="margin-top:6px;">
+          When you have your test date/time, request a mentor and bike through the app.
+        </div>
+        <div style="margin-top:10px;">
+          <a class="cta" href="https://borrowmybike.ca" rel="noopener" target="_blank">Go to BorrowMyBike →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDEBAR (SPONSORS) -->
+    <div class="grid">
+      <SponsorSlot cityName={city.name} slotNumber={1} />
+      <SponsorSlot cityName={city.name} slotNumber={2} />
+      <SponsorSlot cityName={city.name} slotNumber={3} />
+      <SponsorSlot cityName={city.name} slotNumber={4} />
+    </div>
+  </section>
+</BaseLayout>
