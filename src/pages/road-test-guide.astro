@@ -2,38 +2,108 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="Road test guide — Class6Loaner">
-  <h1>Road test guide</h1>
-  <p class="muted" style="max-width:75ch;">
-    Calm, practical checklist-style guidance for test day.
-  </p>
+<BaseLayout 
+  title="Road Test Guide — Calm, Safety-First Riding | Class6Loaner"
+  description="A practical, anxiety-reducing guide for motorcycle road test day. What to bring, what to expect, and how to stay calm and focused."
+  canonicalPath="/road-test-guide"
+>
+  <section class="card">
+    <div class="muted" style="font-weight:900;">Safety-first guidance</div>
 
-  <div class="grid" style="margin-top:16px;">
+    <h1 style="margin:8px 0 0; font-weight:1000;">
+      Road test day: calm, prepared, and predictable
+    </h1>
+
+    <p class="muted" style="margin:10px 0 0; max-width:85ch;">
+      Most test-day anxiety comes from uncertainty. This guide removes the unknowns.
+      When you know what to expect, your body settles — and calm riding follows.
+    </p>
+  </section>
+
+  <!-- BEFORE YOU LEAVE -->
+  <section class="grid grid-2" style="margin-top:14px;">
     <div class="card">
-      <h3 style="margin-top:0;">Before you leave</h3>
+      <h2 style="margin-top:0;">Before you leave</h2>
       <ul>
-        <li>Bring correct ID + registry requirements.</li>
-        <li>Wear proper gear (helmet, jacket, gloves, pants, boots).</li>
-        <li>Arrive early — build time for parking + nerves.</li>
+        <li>Bring required ID and registry documentation.</li>
+        <li>Wear proper protective gear (helmet, gloves, jacket, long pants, boots).</li>
+        <li>Arrive early — rushing creates mistakes.</li>
+        <li>Hydrate. Breathe slowly before you mount the bike.</li>
       </ul>
+      <div class="muted" style="margin-top:10px;">
+        Early arrival gives your nervous system time to settle.
+      </div>
     </div>
 
     <div class="card">
-      <h3 style="margin-top:0;">At the registry</h3>
+      <h2 style="margin-top:0;">Getting familiar with the bike</h2>
       <ul>
-        <li>Listen to the examiner. Ask clarifying questions if needed.</li>
-        <li>Do not argue — stay professional, calm, and clear.</li>
-        <li>If something goes sideways, follow the “what to do if…” options.</li>
+        <li>Adjust mirrors and controls before moving.</li>
+        <li>Take a slow loop in the parking lot if permitted.</li>
+        <li>Feel the clutch engagement and brake response.</li>
+        <li>Don’t rush this moment — smooth beats fast.</li>
       </ul>
+      <div class="muted" style="margin-top:10px;">
+        A few quiet minutes of familiarity builds confidence dramatically.
+      </div>
+    </div>
+  </section>
+
+  <!-- DURING THE TEST -->
+  <section class="grid grid-2" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin-top:0;">During the test</h2>
+      <ul>
+        <li>Listen carefully to the examiner’s instructions.</li>
+        <li>Ride smooth — not aggressive.</li>
+        <li>Keep your head up and look where you want to go.</li>
+        <li>If you make a small mistake, reset and continue calmly.</li>
+      </ul>
+      <div class="muted" style="margin-top:10px;">
+        The goal isn’t perfection. It’s controlled, predictable riding.
+      </div>
     </div>
 
     <div class="card">
-      <h3 style="margin-top:0;">After the test</h3>
+      <h2 style="margin-top:0;">If something unexpected happens</h2>
       <ul>
-        <li>Return the bike safely.</li>
-        <li>Confirm completion in the app.</li>
-        <li>Leave feedback that helps the community stay safe.</li>
+        <li>If weather turns unsafe — safety comes first.</li>
+        <li>If the examiner refuses the test after inspection, stay calm and ask for clarification.</li>
+        <li>If nerves spike, slow your breathing and reset your posture.</li>
       </ul>
+      <div class="muted" style="margin-top:10px;">
+        Staying composed matters more than reacting emotionally.
+      </div>
     </div>
-  </div>
+  </section>
+
+  <!-- AFTER THE TEST -->
+  <section class="card" style="margin-top:14px;">
+    <h2 style="margin-top:0;">After the test</h2>
+    <ul>
+      <li>Return the bike safely and professionally.</li>
+      <li>Confirm completion in the app (if applicable).</li>
+      <li>Leave feedback that helps the next rider feel calmer.</li>
+    </ul>
+
+    <div class="muted" style="margin-top:12px; max-width:85ch;">
+      Whether you pass or not, the win is showing up prepared and riding with control.
+      That mindset carries forward long after the test is over.
+    </div>
+  </section>
+
+  <!-- SOFT CTA -->
+  <section class="card" style="margin-top:14px;">
+    <h2 style="margin-top:0;">Need a bike for test day?</h2>
+    <p class="muted" style="max-width:85ch;">
+      When you already have your road test booked, you can request a prepared mentor and bike through BorrowMyBike.
+      Keep it simple. Show up early. Ride calm.
+    </p>
+
+    <div style="margin-top:12px;">
+      <a class="cta" href="https://borrowmybike.ca" target="_blank" rel="noopener">
+        Go to BorrowMyBike →
+      </a>
+    </div>
+  </section>
 </BaseLayout>

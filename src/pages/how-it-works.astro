@@ -1,17 +1,131 @@
-<html lang="en">
-  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>How it works — Class6Loaner</title>
-  </head>
-  <body style="font-family:system-ui;margin:0;background:#f8fafc;color:#0f172a">
-    <main style="max-width:980px;margin:0 auto;padding:28px">
-      <a href="/">← Home</a>
-      <h1 style="font-weight:1000;margin:14px 0">How it works</h1>
-      <ol>
-        <li>Find a bike/mentor on the app.</li>
-        <li>Book a time that matches your registry road test appointment.</li>
-        <li>Meet, verify readiness, check in, and ride safely.</li>
-      </ol>
-      <p><a href="https://borrowmybike.ca">Go to the app →</a></p>
-    </main>
-  </body>
-</html>
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="How it works — Class6Loaner"
+  description="How Class6Loaner builds calm, safety-first riders and connects experienced mentors with new riders through BorrowMyBike."
+  canonicalPath="/how-it-works"
+>
+  <section class="card">
+    <div class="muted" style="font-weight:900;">Simple. Predictable. Safety-first.</div>
+
+    <h1 style="margin:8px 0 0; font-weight:1000;">
+      How it works
+    </h1>
+
+    <p class="muted" style="margin:10px 0 0; max-width:85ch;">
+      Class6Loaner exists to reduce anxiety and build a safety-first mindset in new riders.
+      When test day feels predictable, riders perform better — and safer.
+    </p>
+  </section>
+
+  <!-- 1. EDUCATION FIRST -->
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin-top:0;">1. Calm, practical guidance</h2>
+      <p class="muted" style="max-width:85ch;">
+        We provide simple, checklist-style guidance so new riders know exactly what to expect.
+        Fewer unknowns means less stress. Less stress means smoother riding decisions.
+      </p>
+
+      <ul>
+        <li>What to bring</li>
+        <li>What to wear</li>
+        <li>What happens on test day</li>
+        <li>How to handle weather or unexpected issues</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 2. MENTORS STEP IN -->
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin-top:0;">2. Experienced riders step up</h2>
+
+      <p class="muted" style="max-width:85ch;">
+        Mentors help make test day calm and predictable.
+        They are not instructors, and they are not running lessons.
+        Road tests are booked under the assumption that the rider has already practiced.
+      </p>
+
+      <ul>
+        <li>Provide a road-test-ready bike</li>
+        <li>Communicate clearly before the booking</li>
+        <li>Show up prepared and on time</li>
+        <li>Maintain a safety-first tone</li>
+      </ul>
+
+      <div class="card" style="margin-top:12px; padding:14px;">
+        <div style="font-weight:1000;">What mentors don’t do</div>
+        <ul style="margin-top:8px;">
+          <li>No riding lessons</li>
+          <li>No last-minute training sessions</li>
+          <li>No promises about passing</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. BOOKING FLOW -->
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin-top:0;">3. Booking happens on BorrowMyBike</h2>
+
+      <p class="muted" style="max-width:85ch;">
+        When a rider has their date and time confirmed,
+        they request a mentor and bike through the BorrowMyBike marketplace.
+      </p>
+
+      <ul>
+        <li>Request based on city</li>
+        <li>Clear expectations before arrival</li>
+        <li>Short, registry-based booking</li>
+      </ul>
+
+      <div style="margin-top:12px;">
+        <a class="cta" href="https://borrowmybike.ca" target="_blank" rel="noopener">
+          Go to BorrowMyBike →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. WHY THIS MATTERS -->
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin-top:0;">Why this matters</h2>
+
+      <p class="muted" style="max-width:85ch;">
+        The goal isn’t just passing a test.
+        The goal is building riders who start with a safety-first mindset —
+        calm, aware, and responsible from day one.
+      </p>
+
+      <p class="muted" style="max-width:85ch; margin-top:10px;">
+        When new riders begin their journey in a controlled, respectful, prepared environment,
+        it benefits everyone on the road.
+      </p>
+    </div>
+  </section>
+
+  <!-- 5. MENTOR INCENTIVE SECTION -->
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin-top:0;">For experienced riders</h2>
+
+      <p class="muted" style="max-width:85ch;">
+        If you already own a suitable motorcycle and understand test-day expectations,
+        you can help new riders start strong — and be compensated for your time,
+        preparation, and professionalism.
+      </p>
+
+      <div style="margin-top:12px;">
+        <a class="cta" href="/become-a-mentor">
+          Become a mentor →
+        </a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
