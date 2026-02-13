@@ -1,0 +1,104 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SponsorSlot from "../components/SponsorSlot.astro";
+
+const title = "Become a mentor — Show up prepared. Get compensated. Ride safety-first | Class6Loaner";
+const description =
+  "For experienced riders: help a new rider show up calm and safety-first on test day. You're not an instructor — you're prepared, punctual, and compensated for being professional.";
+const canonicalPath = "/become-a-mentor";
+
+// Local sponsors if visitor selected a city
+const citySlug = Astro.url.searchParams.get("city") ?? null;
+const cityNameGuess = citySlug ? citySlug.replace(/-/g, " ") : null;
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath}>
+  <section class="card">
+    <div class="muted" style="font-weight:900;">Become a mentor</div>
+
+    <h1 style="margin:8px 0 0; font-weight:1000;">
+      Show up. Be prepared. Get compensated.
+    </h1>
+
+    <p class="muted" style="margin:10px 0 0; max-width:85ch;">
+      Mentors reduce anxiety by making test day predictable and safety-first. You’re not an instructor and we don’t recommend
+      teaching sessions — road tests are booked under the assumption the test-taker has already practiced riding.
+      What you <i>can</i> do is communicate calmly in-app, bring a road-test-ready bike, and be punctual and professional.
+      Mentors are compensated for being prepared and showing up when it matters (details live inside the app).
+    </p>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+      <a class="cta" href="https://borrowmybike.ca" target="_blank" rel="noopener">
+        Start onboarding in the app →
+      </a>
+      <a class="cta" href="/mentor-guide">Read the mentor guide →</a>
+      <a class="cta" href="/cities">See city pages →</a>
+    </div>
+
+    <div class="muted" style="margin-top:12px; font-size:13px;">
+      Note: Compensation details and rules live inside the app, where bookings happen.
+    </div>
+  </section>
+
+  <section class="grid grid-2" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">What mentors do</h2>
+      <ul style="margin:0; padding-left:18px;">
+        <li><b>Bring a road-test-ready bike</b>: lights, brakes, tires, mirrors, no loose parts.</li>
+        <li><b>Be calm and safety-first</b>: predictable communication beats hype.</li>
+        <li><b>Meet a bit early</b> so the test-taker can settle nerves and get comfortable.</li>
+        <li><b>Help the handoff feel professional</b> (documents/keys handled safely and respectfully).</li>
+      </ul>
+
+      <div class="card" style="padding:14px; margin-top:12px;">
+        <div style="font-weight:1000;">A smart meet-up pattern</div>
+        <div class="muted" style="margin-top:6px;">
+          Meet 15–25 minutes early at the registry. If everyone’s comfortable and it’s safe, the test-taker can sit on the bike
+          and do a slow lap or two in the parking lot to get familiar — not “training,” just settling into the controls.
+        </div>
+      </div>
+
+      <div class="card" style="padding:14px; margin-top:12px;">
+        <div style="font-weight:1000;">Documents on test day</div>
+        <div class="muted" style="margin-top:6px;">
+          If you prefer not to hand over papers/keys right away, you can go into the registry with the test-taker and provide
+          documents directly to staff, or wait by the bike until the examiner comes out for the visual inspection.
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2 style="margin:0 0 10px; font-weight:1000;">What mentors should NOT do</h2>
+        <ul style="margin:0; padding-left:18px;">
+          <li>Provide riding lessons or “practice sessions” (the road test assumes prior practice)</li>
+          <li>Argue with examiners or push unsafe choices</li>
+          <li>Encourage riding beyond comfort or conditions</li>
+          <li>Promise outcomes (“you’ll pass”) — nobody can guarantee that</li>
+        </ul>
+      </div>
+
+      <div class="card">
+       <h2 style="margin:18px 0 8px; font-weight:1000; font-size:25px; line-height:1.05;">
+  Built here. Grown by riders.
+</h2>
+
+<p class="muted" style="margin:0; max-width:85ch;">
+  Class6Loaner is a Canada-born project. We’re starting here at home in Alberta — the roads we ride, the weather we know,
+  the community we’re part of — and we’ll bring this to more cities as local riders step up to mentor a
+  calm, safety-first mindset.
+</p>
+
+        {citySlug && (
+          <div class="grid" style="margin-top:12px;">
+            <SponsorSlot cityName={cityNameGuess ?? "Your city"} slotNumber={1} />
+            <SponsorSlot cityName={cityNameGuess ?? "Your city"} slotNumber={2} />
+          </div>
+        )}
+      </div>
+
+     
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -12,14 +12,13 @@ export function getStaticPaths() {
 
 const { city } = Astro.props;
 
-const isCalgary = city.slug === "calgary";
 const cityDisplay = `${city.name}, ${city.province}`;
-
 const title = `${city.name} Motorcycle Road Test Guide — Calm, Safety-First | Class6Loaner`;
 const description =
-  `A practical, anxiety-reducing road test guide for ${cityDisplay}. What to expect, what to bring, and how mentors can help test-takers stay calm and safe.`;
+  `A practical, anxiety-reducing guide for ${cityDisplay}. What to expect, what to bring, and how mentors help test-takers stay calm and safe.`;
 
 const canonicalPath = `/cities/${city.slug}`;
+const cityParam = `?city=${encodeURIComponent(city.slug)}`;
 ---
 
 <BaseLayout title={title} description={description} canonicalPath={canonicalPath}>
@@ -28,23 +27,24 @@ const canonicalPath = `/cities/${city.slug}`;
     <div class="muted" style="font-weight:900;">City guide</div>
 
     <h1 style="margin:8px 0 0; font-weight:1000;">
-      Motorcycle Road Test in {city.name}: calm, clear, safety-first
+      {city.name}: calm, confident, safety-first riding starts here
     </h1>
 
     <p class="muted" style="margin:10px 0 0; max-width:85ch;">
-      If you’re feeling stressed about test day, you’re not alone. This page is built to reduce anxiety by
-      making everything predictable: what happens, what to bring, and how to avoid the most common mistakes.
+      If you’re stressed about test day, you’re not alone. This page is built to reduce anxiety by making things predictable:
+      what happens, what to bring, and how to avoid the most common mistakes — with a safety-first mindset.
     </p>
 
     <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
       <a class="cta" href="https://borrowmybike.ca" rel="noopener" target="_blank">
         Book / Become a mentor →
       </a>
-      <a class="cta" href="/road-test-guide">Read the full guide →</a>
+      <a class="cta" href={`/road-test-guide${cityParam}`}>Read the full guide →</a>
+      <a class="cta" href={`/become-a-mentor${cityParam}`}>Become a mentor →</a>
     </div>
 
     <div class="muted" style="margin-top:12px; font-size:13px;">
-      Educational content only. Registry rules vary—always follow the examiner’s direction.
+      Educational content only. Registry rules vary — always follow the examiner’s direction.
     </div>
   </section>
 
@@ -58,7 +58,7 @@ const canonicalPath = `/cities/${city.slug}`;
         <li><b>Arrive early</b> so you’re not making rushed decisions under pressure.</li>
         <li><b>Check-in & documents</b> (ID, paperwork, whatever the registry requires).</li>
         <li><b>Bike + gear check</b>: the examiner confirms roadworthiness + safety basics.</li>
-        <li><b>Test ride</b>: focus on smooth, safe control—not speed or “impressing.”</li>
+        <li><b>Road test</b>: focus on smooth, safe control — not speed or “impressing.”</li>
         <li><b>Wrap-up</b>: results, feedback, and you’re done.</li>
       </ol>
 
@@ -93,42 +93,51 @@ const canonicalPath = `/cities/${city.slug}`;
             <li>Slow breathing before you start</li>
             <li>Ride smooth, not “fast”</li>
             <li>Look where you want to go (head up)</li>
-            <li>If you make a small mistake—reset and continue calmly</li>
+            <li>If you make a small mistake — reset and continue calmly</li>
           </ul>
         </div>
       </div>
 
-      <h2 style="margin:18px 0 10px; font-weight:1000;">Weather & reschedules (common in Calgary)</h2>
+      <h2 style="margin:18px 0 10px; font-weight:1000;">Weather & reschedules</h2>
 
       <p class="muted" style="margin:0; max-width:85ch;">
-        Calgary weather can change fast. If the registry reschedules your test due to conditions,
-        the goal is that neither side is penalized—especially if nobody has checked in yet.
+        Weather can change fast. If the registry reschedules due to conditions, the goal is that nobody gets penalized —
+        especially if nobody has checked in yet. Safety &gt; forcing a test.
       </p>
 
       <div class="card" style="padding:14px; margin-top:10px;">
         <div style="font-weight:1000;">Best practice</div>
         <ul style="margin:8px 0 0; padding-left:18px;">
           <li>If you get a reschedule call/text, communicate early.</li>
-          <li>Don’t wait until the last minute if the weather is clearly unsafe.</li>
-          <li>Safety > forcing a test.</li>
+          <li>Don’t wait until the last minute if conditions are clearly unsafe.</li>
+          <li>Rebook calm. Ride safe.</li>
         </ul>
       </div>
 
       <h2 style="margin:18px 0 10px; font-weight:1000;">For mentors in {city.name}</h2>
 
       <p class="muted" style="margin:0; max-width:85ch;">
-        Mentors help test-takers reduce stress by making the day predictable. You’re not an instructor and you’re not there to
-        “coach during the test”—you’re there to help someone show up safe, prepared, and calm.
+        Mentors help by making test day calm and predictable. You’re not an instructor, and you’re not “coaching during the test.”
+        Road tests are booked under the assumption the test-taker has already practiced riding.
+        Mentors can offer calm reassurance and a few common-sense pointers through in-app messaging — but we recommend no teaching sessions and no last-minute “training” on test day.
+        Bookings are short, and mentors are compensated for being prepared, punctual, and professional (details are inside the app).
       </p>
 
       <div class="grid" style="grid-template-columns: 1fr; gap:10px; margin-top:10px;">
         <div class="card" style="padding:14px;">
-          <div style="font-weight:1000;">What mentors typically handle</div>
-          <ul style="margin:8px 0 0; padding-left:18px;">
-            <li>Bike ready (signals, brakes, tires, lights)</li>
-            <li>Meet-up timing and expectations</li>
-            <li>Calm communication and safety-first approach</li>
-          </ul>
+          <div style="font-weight:1000;">A smart meet-up pattern</div>
+          <div class="muted" style="margin-top:6px;">
+            Meet 15–25 minutes early at the registry. If everyone’s comfortable and it’s safe, the test-taker can sit on the bike
+            and do a slow lap or two in the parking lot to get familiar — not “training,” just settling into the controls.
+          </div>
+        </div>
+
+        <div class="card" style="padding:14px;">
+          <div style="font-weight:1000;">Documents + keys on test day</div>
+          <div class="muted" style="margin-top:6px;">
+            If the mentor prefers not to hand over papers/keys immediately, they can go into the registry with the test-taker and
+            provide documents to staff, or wait by the bike until the examiner comes out for the visual inspection.
+          </div>
         </div>
 
         <div class="card" style="padding:14px;">
@@ -136,7 +145,8 @@ const canonicalPath = `/cities/${city.slug}`;
           <ul style="margin:8px 0 0; padding-left:18px;">
             <li>Argue with examiners or push unsafe choices</li>
             <li>Encourage riding beyond comfort or conditions</li>
-            <li>Make promises about outcomes (“you’ll pass”)—nobody can guarantee that</li>
+            <li>Provide riding lessons or “practice sessions” (the road test assumes prior practice)</li>
+            <li>Make promises about outcomes (“you’ll pass”) — nobody can guarantee that</li>
           </ul>
         </div>
       </div>
@@ -155,13 +165,15 @@ const canonicalPath = `/cities/${city.slug}`;
           <div style="font-weight:1000;">What if weather makes it unsafe?</div>
           <div class="muted" style="margin-top:6px;">
             Don’t force it. If conditions are clearly unsafe or the registry reschedules, prioritize safety and rebook.
+            A safe reschedule is always better than a risky test day.
           </div>
         </div>
 
         <div class="card" style="padding:14px;">
-          <div style="font-weight:1000;">Does this site replace the app?</div>
+          <div style="font-weight:1000;">Do mentors teach people how to ride?</div>
           <div class="muted" style="margin-top:6px;">
-            No. Class6Loaner is education + calm prep. Bookings happen on BorrowMyBike.ca.
+            No. Mentors are there to provide a road-test-ready bike and a calm, safety-first experience.
+            The test-taker should already have practice riding before booking a road test.
           </div>
         </div>
       </div>
@@ -169,10 +181,11 @@ const canonicalPath = `/cities/${city.slug}`;
       <div class="card" style="margin-top:16px; padding:14px;">
         <div style="font-weight:1000;">Ready to book?</div>
         <div class="muted" style="margin-top:6px;">
-          When you have your test date/time, request a mentor and bike through the app.
+          When you have your test date/time, request a mentor and bike through the app. Keep it simple, show up early, ride safe.
         </div>
-        <div style="margin-top:10px;">
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
           <a class="cta" href="https://borrowmybike.ca" rel="noopener" target="_blank">Go to BorrowMyBike →</a>
+          <a class="cta" href={`/become-a-mentor${cityParam}`}>Become a mentor →</a>
         </div>
       </div>
     </div>

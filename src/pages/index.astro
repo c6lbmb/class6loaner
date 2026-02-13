@@ -1,54 +1,214 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import SponsorSlot from "../components/SponsorSlot.astro";
+import { groupCitiesByProvince } from "../data/cities";
+
+const title = "Class6Loaner — Safety-first community + calm riding confidence (Canada)";
+const description =
+  "A Canada-born, safety-first community project: practical guidance for new riders and a clear way for experienced riders to mentor (and get compensated) on test day.";
+const canonicalPath = "/";
+
+// Ads are hidden by default. Flip PUBLIC_ADS_ENABLED=true when you have real sponsors.
+const ADS_ENABLED = (import.meta.env.PUBLIC_ADS_ENABLED ?? "false") === "true";
+
+// No Saskatchewan for marketing right now
+const byProvRaw = groupCitiesByProvince();
+delete (byProvRaw as any)["SK"];
+
+const provinces = Object.keys(byProvRaw).sort();
+
+// Keep the embedded data small + safe for the client script
+const byProvClient = Object.fromEntries(
+  Object.entries(byProvRaw).map(([prov, list]) => [
+    prov,
+    (list ?? []).map((c) => ({ slug: c.slug, name: c.name, province: c.province })),
+  ])
+);
 ---
 
-<BaseLayout
-  title="Class6Loaner — Safety-first road tests"
-  description="A calm, clear guide for motorcycle road-test day — and a safe way for mentors to help test-takers."
->
-  <section style="padding: 18px 0 8px;">
-    <h1 style="font-size: 44px; line-height: 1.05; margin: 18px 0 10px;">
-      Road test day, without the chaos.
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath}>
+  <section class="card">
+    <div class="muted" style="font-weight:900;">Safety-first, Canada-wide</div>
+
+    <h1 style="margin:8px 0 0; font-weight:1000;">
+      Calm riders. Safer roads. A stronger two-wheel community.
     </h1>
-    <p class="muted" style="font-size: 18px; max-width: 70ch;">
-      Class6Loaner is the education + confidence layer for motorcycle road tests across Canada (excluding Saskatchewan).
-      Learn the process, reduce anxiety, and connect with safety-minded mentors via the BorrowMyBike app.
+
+    <p class="muted" style="margin:10px 0 0; max-width:85ch;">
+      This past season shook a lot of us. Too many close calls, too many stories that didn’t end well.
+      We built Class6Loaner to reduce anxiety for new riders by making the “unknowns” predictable — and to give
+      experienced riders a simple way to mentor, set a safety-first tone, and get compensated for showing up prepared.
     </p>
 
-    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
-      <a class="cta" href="/how-it-works">Start here →</a>
-      <a class="cta" href="/road-test-guide">Road test guide</a>
-      <a class="cta" href="/mentor-guide">Mentor guide</a>
-      <a class="cta" href="/cities">Find your city</a>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+      <a class="cta" href="/how-it-works">How it works →</a>
+      <a class="cta" href="/mentor-guide">Mentor guide →</a>
+      <a class="cta" href="/road-test-guide">Road test guide →</a>
+      <a class="cta" href="https://borrowmybike.ca" rel="noopener" target="_blank">Go to BorrowMyBike →</a>
+    </div>
+
+    <div class="grid" style="margin-top:14px; gap:10px;">
+      <div class="card" style="padding:14px;">
+        <div style="font-weight:1000;">Find your city</div>
+        <div class="muted" style="margin-top:6px;">
+          Choose your location to see local guidance and a calm “test day” checklist.
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+          <label style="display:flex; flex-direction:column; gap:6px; font-weight:900; min-width:220px;">
+            <span class="muted" style="font-size:13px;">Province</span>
+            <select id="prov" class="card" style="padding:10px 12px; border-radius:12px;">
+              <option value="">Select a province…</option>
+              {provinces.map((p) => <option value={p}>{p}</option>)}
+            </select>
+          </label>
+
+          <label style="display:flex; flex-direction:column; gap:6px; font-weight:900; min-width:260px;">
+            <span class="muted" style="font-size:13px;">City</span>
+            <select id="city" class="card" style="padding:10px 12px; border-radius:12px;" disabled>
+              <option value="">Select a city…</option>
+            </select>
+          </label>
+
+          <a id="go" class="cta" href="/cities" style="align-self:flex-end;">Browse all cities →</a>
+        </div>
+
+        <div class="muted" style="margin-top:10px; font-size:13px;">
+          Tip: once you pick a city, we keep “city mode” on across pages so the content stays local.
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="card" style="padding:14px;">
+          <div style="font-weight:1000;">For test-takers</div>
+          <div class="muted" style="margin-top:6px;">
+            Predictable steps. Practical checklists. Less anxiety — more calm confidence.
+          </div>
+        </div>
+
+        <div class="card" style="padding:14px;">
+          <div style="font-weight:1000;">For mentors</div>
+          <div class="muted" style="margin-top:6px;">
+            Show up. Be prepared. Get paid — and help a rider start with a safety-first mindset.
+          </div>
+        </div>
+
+        <div class="card" style="padding:14px;">
+          <div style="font-weight:1000;">Bookings</div>
+          <div class="muted" style="margin-top:6px;">
+            When you’re ready to request a mentor + bike, bookings happen on BorrowMyBike.ca.
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="grid grid-3" style="margin-top: 18px;">
+  <section class="grid" style="margin-top:14px;">
     <div class="card">
-      <h3 style="margin:0 0 6px;">Safety-first</h3>
-      <p class="muted" style="margin:0;">
-        Clear expectations, checklists, and “what to do if…” scenarios that prevent bad days.
-      </p>
-    </div>
-    <div class="card">
-      <h3 style="margin:0 0 6px;">Lower anxiety</h3>
-      <p class="muted" style="margin:0;">
-        Step-by-step road-test prep so test-takers show up calm and ready.
-      </p>
-    </div>
-    <div class="card">
-      <h3 style="margin:0 0 6px;">Mentor friendly</h3>
-      <p class="muted" style="margin:0;">
-        Mentors learn the process and how to help responsibly — without surprises.
-      </p>
+      <h2 style="margin:0 0 10px; font-weight:1000;">Quick answers</h2>
+
+      <div class="grid" style="gap:10px;">
+        <div class="card" style="padding:14px;">
+          <div style="font-weight:1000;">Do mentors teach people how to ride?</div>
+          <div class="muted" style="margin-top:6px; max-width:85ch;">
+            No. Mentors are not instructors. Road tests are booked under the assumption the test-taker has already practiced riding.
+            Mentors can offer calm reassurance and a few common-sense pointers through in-app messaging — but we recommend no lessons
+            and no last-minute “training sessions” on test day.
+          </div>
+        </div>
+
+        <div class="card" style="padding:14px;">
+          <div style="font-weight:1000;">Insurance & responsibility</div>
+          <div class="muted" style="margin-top:6px; max-width:85ch;">
+            BorrowMyBike is designed for short, registry-based road tests (not rentals, not lessons). Coverage and permitted use can vary by
+            insurer and province, so mentors and test-takers should understand their own policies and responsibilities. Full marketplace rules
+            and documentation live inside the app.
+          </div>
+        </div>
+
+        <div class="card" style="padding:14px;">
+          <div style="font-weight:1000;">Weather & reschedules</div>
+          <div class="muted" style="margin-top:6px; max-width:85ch;">
+            If conditions are unsafe or the registry reschedules, the goal is a safe rebook — not a stressful, last-minute scramble.
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section style="margin-top: 22px;" class="card">
-    <h2 style="margin-top:0;">Want to book a mentor + bike?</h2>
-    <p class="muted">
-      Class6Loaner is the guide. The actual booking experience lives on BorrowMyBike.
-    </p>
-    <a class="cta" href="https://borrowmybike.ca" rel="noopener" target="_blank">Go to BorrowMyBike →</a>
-  </section>
+  {ADS_ENABLED ? (
+    <section class="grid" style="margin-top:14px;">
+      <div class="card">
+        <h2 style="margin:0 0 10px; font-weight:1000;">Founding sponsor spots</h2>
+        <p class="muted" style="margin:0; max-width:85ch;">
+          Canada-wide spots live here. City pages show local sponsor spots once a visitor picks a city.
+        </p>
+        <div class="grid grid-3" style="margin-top:12px;">
+          <SponsorSlot cityName="Canada" slotNumber={1} scope="national" />
+          <SponsorSlot cityName="Canada" slotNumber={2} scope="national" />
+          <SponsorSlot cityName="Canada" slotNumber={3} scope="national" />
+        </div>
+      </div>
+    </section>
+  ) : null}
+  
+<script
+  is:inline
+  data-cities={JSON.stringify(byProvClient)}
+>
+  const byProv = JSON.parse(
+    document.currentScript.dataset.cities
+  );
+    const provSel = document.getElementById("prov");
+    const citySel = document.getElementById("city");
+
+    if (!provSel || !citySel) {
+      console.warn("City selector elements not found.");
+    } else {
+      function setCityOptions(prov) {
+        const list = byProv[prov] || [];
+        const options =
+          '<option value="">Select a city…</option>' +
+          list
+            .slice()
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((c) => `<option value="${c.slug}">${c.name}</option>`)
+            .join("");
+
+        citySel.innerHTML = options;
+        citySel.disabled = list.length === 0;
+      }
+
+      // Preselect if saved
+      try {
+        const savedCity = localStorage.getItem("c6l_city");
+        if (savedCity) {
+          let foundProv = "";
+          for (const p of Object.keys(byProv)) {
+            if ((byProv[p] || []).some((c) => c.slug === savedCity)) {
+              foundProv = p;
+              break;
+            }
+          }
+          if (foundProv) {
+            provSel.value = foundProv;
+            setCityOptions(foundProv);
+            citySel.value = savedCity;
+            citySel.disabled = false;
+          }
+        }
+      } catch {}
+
+      provSel.addEventListener("change", () => {
+        setCityOptions(provSel.value);
+      });
+
+      citySel.addEventListener("change", () => {
+        const slug = citySel.value;
+        if (!slug) return;
+        try { localStorage.setItem("c6l_city", slug); } catch {}
+        window.location.href = `/cities/${slug}?city=` + encodeURIComponent(slug);
+      });
+    }
+  </script>
 </BaseLayout>

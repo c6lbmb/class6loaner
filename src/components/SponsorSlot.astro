@@ -1,13 +1,53 @@
 ---
-const { cityName, slotNumber } = Astro.props;
+type Props = {
+  cityName?: string;
+  slotNumber: number;
+
+  // Optional: local vs national labeling
+  scope?: "local" | "national";
+
+  // Optional: hide the “email us” line (useful for tighter layouts)
+  compact?: boolean;
+};
+
+const {
+  cityName = "Your city",
+  slotNumber,
+  scope = "local",
+  compact = false,
+} = Astro.props;
+
+// Global kill-switch: if ads aren’t enabled, render nothing.
+// Default = hidden unless you explicitly turn it on.
+const ADS_ENABLED = (import.meta.env.PUBLIC_ADS_ENABLED ?? "false") === "true";
+if (!ADS_ENABLED) {
+  // IMPORTANT: This makes sponsor placeholders invisible to users everywhere.
+  // When ready, set PUBLIC_ADS_ENABLED=true.
+  return null;
+}
+
+const isNational = scope === "national";
+
+const title = isNational
+  ? `National sponsor spot #${slotNumber}`
+  : `Local sponsor spot #${slotNumber}`;
+
+const subtitle = isNational
+  ? "Reserved for a Canada-wide partner (training, gear, insurance, dealer, etc.)."
+  : `Reserved for a ${cityName} partner (training, gear, insurance, dealer, etc.).`;
+
+const showEmailLine = !compact;
 ---
 
-<div class="card">
-  <div style="font-weight:1000;">Local sponsor spot #{slotNumber}</div>
+<div class="card" style="padding:14px;">
+  <div style="font-weight:1000;">{title}</div>
   <div class="muted" style="margin-top:6px;">
-    Reserved for a {cityName} partner (training, gear, insurance, dealer, etc.)
+    {subtitle}
   </div>
-  <div class="muted" style="margin-top:10px; font-size:13px;">
-    Want this spot? Email: <a href="mailto:support@borrowmybike.ca">support@borrowmybike.ca</a>
-  </div>
+
+  {showEmailLine && (
+    <div class="muted" style="margin-top:10px;">
+      Want this spot? Email: <a href="mailto:support@borrowmybike.ca">support@borrowmybike.ca</a>
+    </div>
+  )}
 </div>

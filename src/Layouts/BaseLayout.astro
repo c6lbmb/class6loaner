@@ -1,11 +1,21 @@
 ---
 const {
   title = "Class6Loaner",
-  description = "Safety-first road test education for motorcycle Class 6.",
+  description = "Safety-first riding and road-test education for motorcycle Class 6.",
   canonicalPath = "/",
 } = Astro.props;
 
 const canonicalUrl = `https://class6loaner.com${canonicalPath}`;
+
+// Optional city context (used to keep sponsors + links local once a visitor picks a city)
+const citySlug = Astro.url.searchParams.get("city");
+
+// Helper: keep city context when navigating around the site
+function withCity(path: string) {
+  if (!citySlug) return path;
+  if (path.startsWith("http")) return path;
+  return `${path}${path.includes("?") ? "&" : "?"}city=${encodeURIComponent(citySlug)}`;
+}
 ---
 
 <!doctype html>
@@ -48,22 +58,25 @@ const canonicalUrl = `https://class6loaner.com${canonicalPath}`;
       }
       footer { border-top: 1px solid var(--border); margin-top: 28px; }
       .tiny { font-size: 13px; color: var(--muted); }
+      .pill { display:inline-flex; align-items:center; gap:8px; padding: 6px 10px; border-radius:999px; border:1px solid var(--border); background: rgba(255,255,255,.7); }
     </style>
   </head>
 
   <body>
     <header class="nav">
       <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:14px;">
-        <a class="brand" href="/">
+        <a class="brand" href={withCity("/")}>
           <img src="/images/logo.png" alt="Class6Loaner logo" />
           <span class="name">Class6Loaner</span>
+          {citySlug && <span class="pill" title="Local context is on">City mode ✓</span>}
         </a>
 
         <nav class="links" aria-label="Primary">
-          <a href="/how-it-works">How it works</a>
-          <a href="/road-test-guide">Road test guide</a>
-          <a href="/mentor-guide">Mentor guide</a>
-          <a href="/cities">Cities</a>
+          <a href={withCity("/how-it-works")}>How it works</a>
+          <a href={withCity("/road-test-guide")}>Road test guide</a>
+          <a href={withCity("/mentor-guide")}>Mentor guide</a>
+          <a href={withCity("/become-a-mentor")}>Become a mentor</a>
+          <a href={withCity("/cities")}>Cities</a>
         </nav>
 
         <a class="cta" href="https://borrowmybike.ca" rel="noopener" target="_blank">
@@ -79,13 +92,37 @@ const canonicalUrl = `https://class6loaner.com${canonicalPath}`;
     <footer>
       <div class="wrap">
         <div class="tiny" style="display:flex; gap:14px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
-          <div>© {new Date().getFullYear()} Class6Loaner • Education + safety-first community</div>
+          <div>© {new Date().getFullYear()} Class6Loaner • Canada-born • Education + safety-first community</div>
           <div>
-            This is educational content only. Bookings happen on <a href="https://borrowmybike.ca" rel="noopener" target="_blank">borrowmybike.ca</a>.
+            Educational content only. Bookings happen on <a href="https://borrowmybike.ca" rel="noopener" target="_blank">borrowmybike.ca</a>.
           </div>
         </div>
       </div>
     </footer>
+
+    <script is:inline>
+      // Persist "city mode" so visitors keep local sponsors across pages
+      (function () {
+        try {
+          const url = new URL(window.location.href);
+          const city = url.searchParams.get("city");
+          if (city) {
+            localStorage.setItem("c6l_city", city);
+          } else {
+            const saved = localStorage.getItem("c6l_city");
+            if (saved) {
+              // If user already picked a city, keep it on internal nav links
+              document.querySelectorAll('a[href^="/"]').forEach((a) => {
+                const href = a.getAttribute("href");
+                if (!href) return;
+                if (href.includes("city=")) return;
+                const joiner = href.includes("?") ? "&" : "?";
+                a.setAttribute("href", href + joiner + "city=" + encodeURIComponent(saved));
+              });
+            }
+          }
+        } catch {}
+      })();
+    </script>
   </body>
 </html>
- 
