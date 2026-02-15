@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://class6loaner.com/sitemap-index.xml

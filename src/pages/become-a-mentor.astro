@@ -27,12 +27,44 @@ const cityNameGuess = citySlug ? citySlug.replace(/-/g, " ") : null;
       Mentors are compensated for being prepared and showing up when it matters (details live inside the app).
     </p>
 
+    <!-- NEW: Clean 3-step "Why me / How it works" flow (mentor conversion) -->
+    <div class="grid grid-3" style="margin-top:14px;">
+      <div class="card" style="padding:14px;">
+        <div style="font-weight:1000;">1) List your bike</div>
+        <div class="muted" style="margin-top:6px;">
+          Add your bike once and set your basic details. Riders request specific test dates.
+        </div>
+      </div>
+
+      <div class="card" style="padding:14px;">
+        <div style="font-weight:1000;">2) You choose to accept</div>
+        <div class="muted" style="margin-top:6px;">
+          You control every request — accept or decline. Once accepted, the booking is confirmed.
+        </div>
+      </div>
+
+      <div class="card" style="padding:14px;">
+        <div style="font-weight:1000;">3) Get paid for very little effort</div>
+        <div class="muted" style="margin-top:6px;">
+          Show up prepared, support a calm test day, then get compensated. It’s essentially getting paid for going for a ride.
+        </div>
+      </div>
+    </div>
+
+    <!-- UPDATED: Messaging copy (policy-safe + your tone) -->
+    <div class="card" style="padding:14px; margin-top:12px;">
+      <div style="font-weight:1000;">In-app messaging = peace of mind</div>
+      <div class="muted" style="margin-top:6px; max-width:85ch;">
+        Use the in-app messaging to get to know who you're loaning your bike to, give a few quick pointers, and coordinate timing before test day.
+        Once a booking is accepted, it’s confirmed — messaging is there to keep everything smooth and predictable.
+      </div>
+    </div>
+
     <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
       <a class="cta" href="https://borrowmybike.ca" target="_blank" rel="noopener">
         Start onboarding in the app →
       </a>
       <a class="cta" href="/mentor-guide">Read the mentor guide →</a>
-      <a class="cta" href="/cities">See city pages →</a>
     </div>
 
     <div class="muted" style="margin-top:12px; font-size:13px;">
@@ -79,15 +111,15 @@ const cityNameGuess = citySlug ? citySlug.replace(/-/g, " ") : null;
       </div>
 
       <div class="card">
-       <h2 style="margin:18px 0 8px; font-weight:1000; font-size:25px; line-height:1.05;">
-  Built here. Grown by riders.
-</h2>
+        <h2 style="margin:18px 0 8px; font-weight:1000; font-size:25px; line-height:1.05;">
+          Built here. Grown by riders.
+        </h2>
 
-<p class="muted" style="margin:0; max-width:85ch;">
-  Class6Loaner is a Canada-born project. We’re starting here at home in Alberta — the roads we ride, the weather we know,
-  the community we’re part of — and we’ll bring this to more cities as local riders step up to mentor a
-  calm, safety-first mindset.
-</p>
+        <p class="muted" style="margin:0; max-width:85ch;">
+          Class6Loaner is a Canada-born project. We’re starting here at home in Alberta — the roads we ride, the weather we know,
+          the community we’re part of — and we’ll bring this to more cities as local riders step up to mentor a
+          calm, safety-first mindset.
+        </p>
 
         {citySlug && (
           <div class="grid" style="margin-top:12px;">
@@ -95,9 +127,6 @@ const cityNameGuess = citySlug ? citySlug.replace(/-/g, " ") : null;
             <SponsorSlot cityName={cityNameGuess ?? "Your city"} slotNumber={2} />
           </div>
         )}
-      </div>
-
-     
       </div>
     </div>
   </section>
