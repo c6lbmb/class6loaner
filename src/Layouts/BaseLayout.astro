@@ -17,6 +17,50 @@ const isActive = (href: string) => {
   return path === href || path.startsWith(href + "/");
 };
 
+// BMB conversion CTA (dynamic based on current page)
+const bmbCta = (() => {
+  const p = path;
+
+  // Default mentor CTA (home/most pages)
+  const mentorCta = {
+    text: "Apply as a Calgary Mentor — Spring Pilot",
+    href: "https://borrowmybike.ca/mentors/start?utm_source=class6loaner&utm_medium=website&utm_campaign=calgary_pilot&utm_content=header_cta_mentor",
+    audience: "mentor",
+    placement: "header",
+  };
+
+  const testTakerCta = {
+    text: "Sign up — be first to book this spring",
+    href: "https://borrowmybike.ca/test-takers?utm_source=class6loaner&utm_medium=website&utm_campaign=calgary_pilot&utm_content=header_cta_testtaker",
+    audience: "test_taker",
+    placement: "header",
+  };
+
+  // Shorter CTA label for internal guide pages (prevents nav crowding)
+  const mentorCtaShort = {
+    text: "Start Mentor Profile",
+    href: mentorCta.href,
+    audience: "mentor",
+    placement: "header",
+  };
+
+  const testTakerCtaShort = {
+    text: "Sign up to book",
+    href: testTakerCta.href,
+    audience: "test_taker",
+    placement: "header",
+  };
+
+  // Road-test intent
+  if (p.startsWith("/road-test")) return testTakerCtaShort;
+
+  // Mentor intent (mentor pages + anything mentor-oriented)
+  if (p.startsWith("/become-a-mentor") || p.startsWith("/mentor-guide")) return mentorCtaShort;
+
+  // Default: mentor-first (Calgary pilot)
+  return mentorCta;
+})();
+
 // Helper: keep city context when navigating around the site
 function withCity(p: string) {
   if (!citySlug) return p;
@@ -28,6 +72,15 @@ function withCity(p: string) {
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JNNHTK6EJT"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', 'G-JNNHTK6EJT');
+    </script>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>{title}</title>
@@ -41,12 +94,15 @@ function withCity(p: string) {
         --ink: #0f172a;
         --muted: #475569;
         --border: #e2e8f0;
-        --max: 1120px;
+        /* Slightly wider content container to reduce “dead space” on desktop */
+        --max: 1240px;
 
-        /* Brand accent (orange) */
-        --accent: #f59e0b;
-        --accent-ink: #7c2d12;
-        --accent-soft: rgba(245, 158, 11, 0.14);
+        /* Brand accent (gold) */
+        --accent: #C9A227;
+        --accent-ink: #0B1F3B;
+        --accent-soft: rgba(201, 162, 39, 0.16);
+
+        --shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
       }
 
       * { box-sizing: border-box; }
@@ -133,7 +189,7 @@ function withCity(p: string) {
       .links a.active {
         color: var(--accent-ink);
         background: var(--accent-soft);
-        border-color: rgba(245, 158, 11, 0.35);
+        border-color: rgba(201, 162, 39, 0.35);
       }
 
       .cta {
@@ -193,11 +249,11 @@ function withCity(p: string) {
       .menuPanel a.active {
         color: var(--accent-ink);
         background: var(--accent-soft);
-        border-color: rgba(245, 158, 11, 0.35);
+        border-color: rgba(201, 162, 39, 0.35);
       }
 
       /* LAYOUT + COMPONENTS */
-      .card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 18px; }
+      .card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 18px; box-shadow: var(--shadow); }
       .muted { color: var(--muted); }
       .grid { display:grid; gap: 14px; }
 
@@ -222,6 +278,48 @@ function withCity(p: string) {
       footer { border-top: 1px solid var(--border); margin-top: 28px; }
       .tiny { font-size: 13px; color: var(--muted); }
       .tiny a { text-decoration: underline; } /* keep footer link obvious */
+
+      /* Accordion / FAQ (native <details>) */
+      details.acc {
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: #fff;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+      details.acc + details.acc { margin-top: 10px; }
+      details.acc summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 14px 14px;
+        font-weight: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      details.acc summary::-webkit-details-marker { display:none; }
+      details.acc summary .accHint { color: var(--muted); font-weight: 800; font-size: 13px; }
+      details.acc summary .accIcon { color: var(--muted); font-weight: 1000; }
+      details.acc[open] summary { border-bottom: 1px solid var(--border); }
+      .accBody { padding: 14px; }
+      .accBody ul { margin: 10px 0 0; padding-left: 18px; }
+      .accBody li { margin: 6px 0; }
+
+      /* Subtle scroll reveal */
+      .revealItem {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 420ms ease, transform 420ms ease;
+      }
+      .revealItem.isVisible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .revealItem { opacity: 1; transform: none; transition: none; }
+      }
 
       /* RESPONSIVE: mobile nav becomes dropdown */
       @media (max-width: 860px) {
@@ -250,15 +348,21 @@ function withCity(p: string) {
           <a class={isActive("/how-it-works") ? "active" : ""} href={withCity("/how-it-works")}>How it works</a>
           <a class={isActive("/road-test-guide") ? "active" : ""} href={withCity("/road-test-guide")}>Road test guide</a>
           <a class={isActive("/mentor-guide") ? "active" : ""} href={withCity("/mentor-guide")}>Mentor guide</a>
-          <a class={isActive("/become-a-mentor") ? "active" : ""} href={withCity("/become-a-mentor")}>Become a mentor</a>
         </nav>
 
         <button class="menuBtn" type="button" aria-expanded="false" aria-controls="mobileMenu" id="menuBtn">
           Menu ▾
         </button>
 
-        <a class="cta" href="https://borrowmybike.ca" rel="noopener" target="_blank">
-          Go to app →
+        <a
+          class="cta"
+          href={bmbCta.href}
+          rel="noopener"
+          target="_blank"
+          data-cta="header"
+          data-audience={bmbCta.audience}
+        >
+          {bmbCta.text} →
         </a>
       </div>
 
@@ -268,7 +372,15 @@ function withCity(p: string) {
           <a class={isActive("/road-test-guide") ? "active" : ""} href={withCity("/road-test-guide")}>Road test guide</a>
           <a class={isActive("/mentor-guide") ? "active" : ""} href={withCity("/mentor-guide")}>Mentor guide</a>
           <a class={isActive("/become-a-mentor") ? "active" : ""} href={withCity("/become-a-mentor")}>Become a mentor</a>
-          <a href="https://borrowmybike.ca" rel="noopener" target="_blank">Go to app →</a>
+          <a
+            href={bmbCta.href}
+            rel="noopener"
+            target="_blank"
+            data-cta="header"
+            data-audience={bmbCta.audience}
+          >
+            {bmbCta.text} →
+          </a>
         </div>
       </div>
     </header>
@@ -337,6 +449,82 @@ function withCity(p: string) {
             setOpen(false);
           });
         });
+      })();
+
+      // Scroll reveal for cards + accordions
+      (function () {
+        try {
+          const items = Array.from(document.querySelectorAll('.card, details.acc'));
+          items.forEach((el) => el.classList.add('revealItem'));
+
+          if ('IntersectionObserver' in window) {
+            const io = new IntersectionObserver(
+              (entries) => {
+                entries.forEach((e) => {
+                  if (e.isIntersecting) {
+                    e.target.classList.add('isVisible');
+                    io.unobserve(e.target);
+                  }
+                });
+              },
+              { root: null, threshold: 0.12 }
+            );
+            items.forEach((el) => io.observe(el));
+          } else {
+            items.forEach((el) => el.classList.add('isVisible'));
+          }
+        } catch {}
+      })();
+
+      // Accordion icon toggle
+      (function () {
+        try {
+          document.querySelectorAll('details.acc').forEach((d) => {
+            const icon = d.querySelector('.accIcon');
+            if (!icon) return;
+            const set = () => (icon.textContent = d.open ? '−' : '+');
+            set();
+            d.addEventListener('toggle', set);
+          });
+        } catch {}
+      })();
+
+      // === ADDED: GA4 CTA click tracking (header + home hero CTAs) ===
+      (function () {
+        try {
+          if (typeof window.gtag !== "function") return;
+
+          const cityMode = (function () {
+            try {
+              return localStorage.getItem("c6l_city") ? "on" : "off";
+            } catch {
+              return "off";
+            }
+          })();
+
+          document.addEventListener("click", function (e) {
+            const target = e.target;
+            if (!(target instanceof Element)) return;
+
+            const a = target.closest("a");
+            if (!a) return;
+
+            // Track only our CTAs (header + hero)
+            const ctaPlacement = a.getAttribute("data-cta");
+            const audience = a.getAttribute("data-audience");
+            if (!ctaPlacement || !audience) return;
+
+            const href = a.getAttribute("href") || "";
+
+            window.gtag("event", "cta_click", {
+              placement: ctaPlacement,
+              audience,
+              href,
+              city_mode: cityMode,
+              page_path: window.location.pathname,
+            });
+          });
+        } catch {}
       })();
     </script>
   </body>

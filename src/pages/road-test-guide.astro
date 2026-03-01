@@ -1,166 +1,189 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Road test guide — calm confidence on test day";
+const description = "A practical, low-stress motorcycle road test guide: checklists, common mistakes, and a simple test-day flow.";
 ---
 
-<BaseLayout 
-  title="Road Test Guide — Calm, Safety-First Riding | Class6Loaner"
-  description="A practical, anxiety-reducing guide for motorcycle road test day. What to bring, what to expect, and how to stay calm and focused."
-  canonicalPath="/road-test-guide"
->
+<BaseLayout title={title} description={description} canonicalPath="/road-test-guide/">
   <section class="card">
-    <div class="muted" style="font-weight:900;">Safety-first guidance</div>
-
-    <h1 style="margin:8px 0 0; font-weight:1000;">
-      Road test day: calm, prepared, and predictable
-    </h1>
-
-    <p class="muted" style="margin:10px 0 0; max-width:85ch;">
-      Most test-day anxiety comes from uncertainty. This guide removes the unknowns.
-      When you know what to expect, your body settles — and calm riding follows.
-    </p>
-  </section>
-<section class="grid grid-2" style="margin-top:14px;">
-  <div class="card">
-    <h2 style="margin-top:0;">What examiners are really checking</h2>
-    <ul>
-      <li><strong>Observation:</strong> shoulder checks, scanning, and choosing safe gaps.</li>
-      <li><strong>Control:</strong> smooth throttle, clutch, and brakes — no abrupt inputs.</li>
-      <li><strong>Position:</strong> lane positioning that protects space around you.</li>
-      <li><strong>Decisions:</strong> full stops, yielding correctly, and patience under pressure.</li>
-    </ul>
-    <div class="muted" style="margin-top:10px;">
-      Think: “predictable and safe” more than “fast and perfect.”
-    </div>
-  </div>
-
-  <div class="card">
-    <h2 style="margin-top:0;">Common points people lose marks</h2>
-    <ul>
-      <li>Rolling stops (especially at stop signs).</li>
-      <li>Forgetting shoulder checks before lane changes or turns.</li>
-      <li>Speed creeping (too fast or too slow for conditions).</li>
-      <li>Wide turns, late braking, or rushed decisions.</li>
-      <li>Putting both feet down at stops. Keep your <strong>right foot on the rear brake</strong> and your <strong>left foot down for support</strong>.
-</li>
-
-    </ul>
-    <div class="muted" style="margin-top:10px;">
-      If you mess up once, reset and keep riding smoothly — don’t spiral.
-    </div>
-  </div>
-</section>
-
-<section class="card" style="margin-top:14px;">
-  <h2 style="margin-top:0;">A calm 5‑minute warm-up (before you meet the examiner)</h2>
-  <ol>
-    <li>Slow inhale 4 seconds, slow exhale 6 seconds (repeat 6 times).</li>
-    <li>Shoulders down, elbows soft. Relax your grip.</li>
-    <li>Check mirrors, signals, and lights. Confirm your helmet strap is secure.</li>
-    <li>One slow parking-lot loop (if permitted): feel clutch bite + brakes.</li>
-    <li>Pick one cue: “smooth and patient” — repeat it to yourself.</li>
-  </ol>
-  <div class="muted" style="margin-top:10px;">
-    Your goal is to show controlled riding — not to prove anything.
-  </div>
-</section>
-
-
-  <!-- BEFORE YOU LEAVE -->
-  <section class="grid grid-2" style="margin-top:14px;">
-    <div class="card">
-      <h2 style="margin-top:0;">Before you leave</h2>
-      <ul>
-        <li>Bring required ID and registry documentation.</li>
-        <li>Wear proper protective gear (helmet, gloves, jacket, long pants, boots).</li>
-        <li>Arrive early — rushing creates mistakes.</li>
-        <li>Hydrate. Breathe slowly before you mount the bike.</li>
-      </ul>
-      <div class="muted" style="margin-top:10px;">
-        Early arrival gives your nervous system time to settle.
-      </div>
-    </div>
-
-    <div class="card">
-      <h2 style="margin-top:0;">Getting familiar with the bike</h2>
-      <ul>
-        <li>Adjust mirrors and controls before moving.</li>
-        <li>Take a slow loop in the parking lot if permitted.</li>
-        <li>Feel the clutch engagement and brake response.</li>
-        <li>Don’t rush this moment — smooth beats fast.</li>
-      </ul>
-      <div class="muted" style="margin-top:10px;">
-        A few quiet minutes of familiarity builds confidence dramatically.
-      </div>
-    </div>
-  </section>
-
-  <section class="card" style="margin-top:14px;">
-    <h2 style="margin-top:0;">Coordinate with your mentor in-app</h2>
-    <ul>
-      <li>Use in-app messaging to confirm arrival timing and expectations.</li>
-      <li>Ask quick questions (gear, comfort level, what to bring) so there are no surprises.</li>
-      <li>Share exact meetup details after the booking is accepted.</li>
-    </ul>
-    <div class="muted" style="margin-top:10px; max-width:85ch;">
-      A short, respectful chat beforehand helps everyone feel calmer on test day.
-    </div>
-  </section>
-
-  <!-- DURING THE TEST -->
-  <section class="grid grid-2" style="margin-top:14px;">
-    <div class="card">
-      <h2 style="margin-top:0;">During the test</h2>
-      <ul>
-        <li>Listen carefully to the examiner’s instructions.</li>
-        <li>Ride smooth — not aggressive.</li>
-        <li>Keep your head up and look where you want to go.</li>
-        <li>If you make a small mistake, reset and continue calmly.</li>
-      </ul>
-      <div class="muted" style="margin-top:10px;">
-        The goal isn’t perfection. It’s controlled, predictable riding.
-      </div>
-    </div>
-
-    <div class="card">
-      <h2 style="margin-top:0;">If something unexpected happens</h2>
-      <ul>
-        <li>If weather turns unsafe — safety comes first.</li>
-        <li>If the examiner refuses the test after inspection, stay calm and ask for clarification.</li>
-        <li>If nerves spike, slow your breathing and reset your posture.</li>
-      </ul>
-      <div class="muted" style="margin-top:10px;">
-        Staying composed matters more than reacting emotionally.
-      </div>
-    </div>
-  </section>
-
-  <!-- AFTER THE TEST -->
-  <section class="card" style="margin-top:14px;">
-    <h2 style="margin-top:0;">After the test</h2>
-    <ul>
-      <li>Return the bike safely and professionally.</li>
-      <li>Confirm completion in the app (if applicable).</li>
-      <li>Leave feedback that helps the next rider feel calmer.</li>
-    </ul>
-
-    <div class="muted" style="margin-top:12px; max-width:85ch;">
-      Whether you pass or not, the win is showing up prepared and riding with control.
-      That mindset carries forward long after the test is over.
-    </div>
-  </section>
-
-  <!-- SOFT CTA -->
-  <section class="card" style="margin-top:14px;">
-    <h2 style="margin-top:0;">Need a bike for test day?</h2>
-    <p class="muted" style="max-width:85ch;">
-      When you already have your road test booked, you can request a prepared mentor and bike through BorrowMyBike.
-      Keep it simple. Show up early. Ride calm.
+    <div class="muted" style="font-weight:900;">Educational content • Canada-wide • Built for anxiety-free prep</div>
+    <h1 style="margin:8px 0 0; font-weight:1000;">Road test guide</h1>
+    <p class="muted" style="margin:10px 0 0; max-width:90ch;">
+      This is a <strong>practical checklist</strong> — not a riding lesson. The goal is calm confidence: know what to bring,
+      what to check, and how to avoid the classic “I forgot ___” moment.
     </p>
 
-    <div style="margin-top:12px;">
-      <a class="cta" href="https://borrowmybike.ca" target="_blank" rel="noopener">
-        Go to BorrowMyBike →
-      </a>
+    <div class="card" style="padding:14px; margin-top:12px;">
+      <div style="font-weight:1000;">Mentor coordination</div>
+      <div class="muted" style="margin-top:6px; max-width:90ch;">
+        If you book through the app, use in-app messaging for coordination, clarification, and experience-based safety tips.
+      </div>
+    </div>
+
+    <div class="grid grid-3" style="margin-top:14px; gap:10px;">
+      <div class="card" style="padding:14px;">
+        <div style="font-weight:1000;">Show up prepared</div>
+        <div class="muted" style="margin-top:6px;">Gear + paperwork + a simple plan for the day.</div>
+      </div>
+      <div class="card" style="padding:14px;">
+        <div style="font-weight:1000;">Avoid avoidable fails</div>
+        <div class="muted" style="margin-top:6px;">Signals, shoulder checks, stops, and lane positioning.</div>
+      </div>
+      <div class="card" style="padding:14px;">
+        <div style="font-weight:1000;">Less panic</div>
+        <div class="muted" style="margin-top:6px;">A short warm-up routine and a calm “reset” method.</div>
+      </div>
+    </div>
+
+    <div class="muted" style="margin-top:12px; font-size:13px;">
+      Note: Requirements vary by province/registry. Always follow your registry’s instructions.
+    </div>
+  </section>
+
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">Tap-to-expand checklists</h2>
+      <p class="muted" style="margin:0; max-width:92ch;">
+        We keep the page scannable. Expand only what you need right now.
+      </p>
+
+      <div style="margin-top:12px;">
+        <details class="acc">
+          <summary>
+            <span>Before you book</span>
+            <span class="accHint">60 seconds</span>
+            <span class="accIcon">+</span>
+          </summary>
+          <div class="accBody">
+            <div class="muted">Do this before you request a bike/mentor so test day isn’t chaos.</div>
+            <ul>
+              <li><strong>Confirm your road test time/location</strong> (and arrive early).</li>
+              <li><strong>Know the route area</strong>: do a calm drive-through the day before if possible.</li>
+              <li><strong>Bring the right documents</strong> (see checklist below).</li>
+              <li><strong>Practice the boring stuff</strong>: stops, signals, shoulder checks, lane position.</li>
+              <li><strong>Plan your warm-up</strong>: 10 minutes of slow-speed basics before the test.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary>
+            <span>Gear + documents checklist</span>
+            <span class="accHint">printable</span>
+            <span class="accIcon">+</span>
+          </summary>
+          <div class="accBody">
+            <ul>
+              <li><strong>Helmet</strong> (approved, fits properly, visor/eye protection).</li>
+              <li><strong>Jacket</strong> (ideally abrasion-resistant) + <strong>gloves</strong>.</li>
+              <li><strong>Long pants</strong> (no shorts) + <strong>over-the-ankle footwear</strong>.</li>
+              <li><strong>License</strong> + any registry paperwork / booking confirmation.</li>
+              <li><strong>Weather plan</strong>: warm layer, rain layer, and a backup date strategy.</li>
+            </ul>
+            <div class="muted" style="margin-top:10px;">
+              Tip: Put everything in one bag the night before. Your brain will thank you.
+            </div>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary>
+            <span>Bike sanity checks (quick)</span>
+            <span class="accHint">2 minutes</span>
+            <span class="accIcon">+</span>
+          </summary>
+          <div class="accBody">
+            <div class="muted">You’re not doing a full inspection — just avoid obvious issues.</div>
+            <ul>
+              <li><strong>Lights</strong>: headlight / brake light / signals.</li>
+              <li><strong>Horn</strong>: works.</li>
+              <li><strong>Tires</strong>: visibly okay, no obvious low pressure.</li>
+              <li><strong>Mirrors</strong>: positioned for you.</li>
+              <li><strong>Controls</strong>: clutch/throttle feel normal; brakes feel firm.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary>
+            <span>Test-day flow (simple)</span>
+            <span class="accHint">calm routine</span>
+            <span class="accIcon">+</span>
+          </summary>
+          <div class="accBody">
+            <ol>
+              <li><strong>Arrive early</strong>. Breathe. Don’t rush.
+                <div class="muted">Rushing is the #1 way people make dumb mistakes.</div>
+              </li>
+              <li><strong>Warm up</strong> (10 min): smooth starts/stops, turns, shoulder checks.</li>
+              <li><strong>During the test</strong>: scan far ahead, signal early, shoulder check before any move.</li>
+              <li><strong>If you make a mistake</strong>: don’t spiral. Fix the next decision.
+                <div class="muted">Reset phrase: “Next move only.”</div>
+              </li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary>
+            <span>Common mistakes (and how to avoid them)</span>
+            <span class="accHint">most fails</span>
+            <span class="accIcon">+</span>
+          </summary>
+          <div class="accBody">
+            <ul>
+              <li><strong>Late signals</strong> → signal earlier than feels necessary.</li>
+              <li><strong>No shoulder check</strong> → shoulder check becomes muscle memory: <em>mirror → signal → shoulder check → move</em>.</li>
+              <li><strong>Rolling stops</strong> → full stop, visibly.</li>
+              <li><strong>Lane position</strong> → be deliberate (don’t drift).
+                <div class="muted">Pick a track: left track / center / right track and hold it.</div>
+              </li>
+              <li><strong>Nerves = stiff controls</strong> → relax grip; smooth throttle.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="acc">
+          <summary>
+            <span>If the test can’t proceed</span>
+            <span class="accHint">weather • gear • bike</span>
+            <span class="accIcon">+</span>
+          </summary>
+          <div class="accBody">
+            <div class="muted">Sometimes things happen. The goal is a safe rebook — not a meltdown.</div>
+            <ul>
+              <li><strong>Unsafe weather</strong>: treat it like a reschedule, not a failure.</li>
+              <li><strong>Gear missing</strong>: don’t try to “wing it.” Fix the issue before the next attempt.</li>
+              <li><strong>Bike not road-test ready</strong>: stop and reschedule.</li>
+            </ul>
+            <div class="muted" style="margin-top:10px;">
+              On <a href="https://borrowmybike.ca" rel="noopener" target="_blank">BorrowMyBike</a>, the app handles the “what happens next” rules (deposits/credits) so both sides are treated fairly.
+            </div>
+          </div>
+        </details>
+      </div>
+
+
+      <div class="card" style="padding:14px; margin-top:14px;">
+        <div style="font-weight:1000;">Damage &amp; responsibility (quick clarity)</div>
+        <div class="muted" style="margin-top:6px; max-width:92ch;">
+          Deposits are for accountability and to discourage no-shows — they do not guarantee full damage coverage.
+          If something goes wrong on test day, <b>document first</b> and email <b>support@borrowmybike.ca</b> with a short summary and photos. Full details: <a href="https://borrowmybike.ca/legal#damage" rel="noopener" target="_blank" style="font-weight:950; text-decoration: underline;">Damage &amp; responsibility →</a>
+          The platform reviews both sides and applies the written rules fairly.
+        </div>
+      </div>
+
+      <div class="card" style="padding:14px; margin-top:14px;">
+        <div style="font-weight:1000;">Want a city-specific version?</div>
+        <div class="muted" style="margin-top:6px; max-width:90ch;">
+          Pick a city on the home page and we’ll keep “city mode” on — you’ll see local content across pages.
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+          <a class="cta" href="/">Go pick a city →</a>
+          <a class="cta" href="https://borrowmybike.ca" rel="noopener" target="_blank">Open the app →</a>
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>
