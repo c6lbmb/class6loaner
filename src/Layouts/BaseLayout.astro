@@ -17,21 +17,38 @@ const isActive = (href: string) => {
   return path === href || path.startsWith(href + "/");
 };
 
+// Helper: keep city context when navigating around the site
+function withCity(p: string) {
+  if (!citySlug) return p;
+  if (p.startsWith("http")) return p;
+  return `${p}${p.includes("?") ? "&" : "?"}city=${encodeURIComponent(citySlug)}`;
+}
+
+// Helper: pass city context into BorrowMyBike links (safe even if the app ignores it)
+function withBmbCity(url: string) {
+  if (!citySlug) return url;
+  if (url.includes("city=")) return url;
+  return `${url}${url.includes("?") ? "&" : "?"}city=${encodeURIComponent(citySlug)}`;
+}
+
 // BMB conversion CTA (dynamic based on current page)
 const bmbCta = (() => {
   const p = path;
 
-  // Default mentor CTA (home/most pages)
   const mentorCta = {
-    text: "Apply as a Calgary Mentor — Spring Pilot",
-    href: "https://borrowmybike.ca/mentors/start?utm_source=class6loaner&utm_medium=website&utm_campaign=calgary_pilot&utm_content=header_cta_mentor",
+    text: "Become a Mentor",
+    href: withBmbCity(
+      "https://borrowmybike.ca/mentors/start?utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=header_cta_mentor"
+    ),
     audience: "mentor",
     placement: "header",
   };
 
   const testTakerCta = {
-    text: "Sign up — be first to book this spring",
-    href: "https://borrowmybike.ca/test-takers?utm_source=class6loaner&utm_medium=website&utm_campaign=calgary_pilot&utm_content=header_cta_testtaker",
+    text: "Find a Mentor + Bike",
+    href: withBmbCity(
+      "https://borrowmybike.ca/test-takers?utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=header_cta_testtaker"
+    ),
     audience: "test_taker",
     placement: "header",
   };
@@ -51,22 +68,15 @@ const bmbCta = (() => {
     placement: "header",
   };
 
-  // Road-test intent
-  if (p.startsWith("/road-test")) return testTakerCtaShort;
+  // Test-taker intent
+  if (p.startsWith("/road-test-guide") || p.startsWith("/test-taker-guide")) return testTakerCtaShort;
 
-  // Mentor intent (mentor pages + anything mentor-oriented)
-  if (p.startsWith("/become-a-mentor") || p.startsWith("/mentor-guide")) return mentorCtaShort;
+  // Mentor intent
+  if (p.startsWith("/become-a-mentor") || p.startsWith("/mentor-guide") || p.startsWith("/about")) return mentorCtaShort;
 
-  // Default: mentor-first (Calgary pilot)
+  // Default: mentor-first (supply first, demand second)
   return mentorCta;
 })();
-
-// Helper: keep city context when navigating around the site
-function withCity(p: string) {
-  if (!citySlug) return p;
-  if (p.startsWith("http")) return p;
-  return `${p}${p.includes("?") ? "&" : "?"}city=${encodeURIComponent(citySlug)}`;
-}
 ---
 
 <!doctype html>
@@ -76,9 +86,9 @@ function withCity(p: string) {
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-JNNHTK6EJT"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
-      window.gtag('js', new Date());
-      window.gtag('config', 'G-JNNHTK6EJT');
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JNNHTK6EJT');
     </script>
 
     <meta charset="utf-8" />
@@ -345,9 +355,10 @@ function withCity(p: string) {
         </a>
 
         <nav class="links" aria-label="Primary">
+          <a class={isActive("/about") ? "active" : ""} href={withCity("/about")}>About</a>
           <a class={isActive("/how-it-works") ? "active" : ""} href={withCity("/how-it-works")}>How it works</a>
-          <a class={isActive("/road-test-guide") ? "active" : ""} href={withCity("/road-test-guide")}>Road test guide</a>
           <a class={isActive("/mentor-guide") ? "active" : ""} href={withCity("/mentor-guide")}>Mentor guide</a>
+          <a class={isActive("/road-test-guide") ? "active" : ""} href={withCity("/road-test-guide")}>Test-taker guide</a>
         </nav>
 
         <button class="menuBtn" type="button" aria-expanded="false" aria-controls="mobileMenu" id="menuBtn">
@@ -368,10 +379,12 @@ function withCity(p: string) {
 
       <div class="menuPanel" id="mobileMenu" hidden>
         <div class="wrap menuPanelInner">
+          <a class={isActive("/about") ? "active" : ""} href={withCity("/about")}>About</a>
           <a class={isActive("/how-it-works") ? "active" : ""} href={withCity("/how-it-works")}>How it works</a>
-          <a class={isActive("/road-test-guide") ? "active" : ""} href={withCity("/road-test-guide")}>Road test guide</a>
           <a class={isActive("/mentor-guide") ? "active" : ""} href={withCity("/mentor-guide")}>Mentor guide</a>
+          <a class={isActive("/road-test-guide") ? "active" : ""} href={withCity("/road-test-guide")}>Test-taker guide</a>
           <a class={isActive("/become-a-mentor") ? "active" : ""} href={withCity("/become-a-mentor")}>Become a mentor</a>
+
           <a
             href={bmbCta.href}
             rel="noopener"
@@ -396,6 +409,7 @@ function withCity(p: string) {
           <div>
             Educational content only. Bookings happen on <a href="https://borrowmybike.ca" rel="noopener" target="_blank">borrowmybike.ca</a>.
           </div>
+          <a href="mailto:support@borrowmybike.ca">support@borrowmybike.ca</a>
         </div>
       </div>
     </footer>
@@ -489,7 +503,7 @@ function withCity(p: string) {
         } catch {}
       })();
 
-      // === ADDED: GA4 CTA click tracking (header + home hero CTAs) ===
+      // === GA4 CTA click tracking (header + home hero CTAs) ===
       (function () {
         try {
           if (typeof window.gtag !== "function") return;

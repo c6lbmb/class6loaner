@@ -1,21 +1,29 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import SponsorSlot from "../components/SponsorSlot.astro";
+import SponsorSlot from "../components/SponsorSlot.astro"; 
 import { groupCitiesByProvince } from "../data/cities";
 
-const title = "Class6Loaner — Safety-first community + calm riding confidence (Canada)";
+const title = "Class6Loaner — Safety-first Class 6 road-test support (Canada)";
 const description =
-  "A Canada-born, safety-first community project: practical guidance for new riders and a clear way for experienced riders to mentor (and get compensated) on test day.";
+  "A safety-first, Canada-born community project connecting test-takers with experienced mentors and road-test-ready motorcycles through a structured process. Bookings run on our affiliated site"
 const canonicalPath = "/";
 
 // Ads are hidden by default. Flip PUBLIC_ADS_ENABLED=true when you have real sponsors.
 const ADS_ENABLED = (import.meta.env.PUBLIC_ADS_ENABLED ?? "false") === "true";
 
-// No Saskatchewan for marketing right now
-const byProvRaw = groupCitiesByProvince();
-delete (byProvRaw as any)["SK"];
+// ===== Launch control =====
+// Keep the national framing, but only enable certain provinces/cities until you open wider.
+// To expand later, just add province codes here (e.g., "BC", "ON") and remove city limits if desired.
+const ENABLED_PROVINCES = ["AB"];
 
-const provinces = Object.keys(byProvRaw).sort();
+// If you want to limit to specific cities during the pilot, list slugs per province here.
+// (Leave a province out to allow all its cities once enabled.)
+const ENABLED_CITY_SLUGS: Record<string, string[]> = {
+  AB: ["calgary"],
+};
+
+const byProvRaw = groupCitiesByProvince();
+const provincesAll = Object.keys(byProvRaw).sort();
 
 // Keep the embedded data small + safe for the client script
 const byProvClient = Object.fromEntries(
@@ -28,114 +36,99 @@ const byProvClient = Object.fromEntries(
 
 <BaseLayout title={title} description={description} canonicalPath={canonicalPath}>
   <section class="card">
-    <div class="muted" style="font-weight:900;">Calgary pilot • Safety-first • Canada-wide</div>
+    <!-- HERO (match BMB visual direction) -->
+    <div
+      class="card"
+      style="
+        padding: 0;
+        overflow: hidden;
+        border-radius: 18px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+      "
+    >
+      <div
+        style="
+          position: relative;
+          min-height: 360px;
+          background-image: url('/images/hero-bike.jpeg');
+          background-size: cover;
+          background-position: center;
+        "
+      >
+        <div
+          style="
+            position:absolute;
+            inset:0;
+            background: linear-gradient(90deg, rgba(11,31,59,.62), rgba(11,31,59,.35), rgba(11,31,59,.10));
+          "
+        ></div>
 
-    <h1 style="margin:8px 0 0; font-weight:1000;">
-      Earn $100 supporting a Class 6 road test — within a structured, safety-first process.
-    </h1>
+        <div style="position:relative; padding: 18px;">
+          <div class="muted" style="font-weight:1000; color: rgba(255,255,255,.88);">
+            Canada-wide vision • Safety-first • Structured process
+          </div>
 
-    {/* === ADDED: subtle urgency line (home hero) === */}
-    <div class="muted" style="margin:8px 0 0; font-weight:800;">
-      Calgary pilot launching Spring 2026 — currently onboarding founding mentors.
-    </div>
+          <h1 style="margin:10px 0 0; font-weight:1000; color:white; max-width: 26ch;">
+            Structured Class 6 road-test support — across Canada.
+          </h1>
 
-    <p class="muted" style="margin:10px 0 0; max-width:85ch;">
-      List your road-test-ready motorcycle. Accept bookings on your schedule. Provide calm coordination and practical test-day guidance. Clear policies. Defined responsibilities. Secure payments.
-    </p>
+          <p style="margin:10px 0 0; color: rgba(255,255,255,.90); max-width: 70ch; font-weight: 650;">
+            Connect with an experienced local mentor and a road-test-ready motorcycle through a clear, accountability-first process.
+            Bookings run on BorrowMyBike.ca.
+          </p>
 
-    {/* === ADDED: trust block (directly under hero) === */}
-    <div class="card" style="margin-top:14px; padding:14px;">
-      <div style="font-weight:1000;">Structured. Transparent. Protected.</div>
-      <ul class="muted" style="margin:8px 0 0; padding-left:18px; display:grid; gap:6px;">
-        <li>Secure payments and refunds processed through Stripe</li>
-        <li>Clear cancellation policies — no surprises</li>
-        <li>Clear process if something goes wrong — document and email support (see <a href="https://borrowmybike.ca/legal#damage" rel="noopener" target="_blank" style="font-weight:950; text-decoration: underline;">Damage &amp; responsibility →</a>)</li>
-        <li>Deposits discourage no-shows</li>
-        <li>Defined responsibilities on both sides</li>
-      </ul>
-    </div>
+         
 
-    <div class="grid grid-2" style="margin-top:14px; gap:10px;">
-      <div class="card" style="padding:14px;">
-        <div style="font-weight:1000;">You stay in control</div>
-        <div class="muted" style="margin-top:6px;">
-          Accept or decline any request. No obligation. No subscription. No listing fees.
-        </div>
-      </div>
+          <div style="margin-top:10px; color: rgba(255,255,255,.82); font-size: 13px; font-weight: 800;">
+            Pilot availability: <span style="color:white;">Calgary, Alberta</span>. Opening additional cities and provinces soon.
+          </div>
 
-      <div class="card" style="padding:14px;">
-        <div style="font-weight:1000;">Fairness on test day</div>
-        <div class="muted" style="margin-top:6px;">
-          Deposits discourage no-shows and protect the not-at-fault party if the test can’t proceed due to someone’s fault.
-        </div>
-      </div>
-
-      <div class="card" style="padding:14px;">
-        <div style="font-weight:1000;">Payments handled</div>
-        <div class="muted" style="margin-top:6px;">
-          Payments are handled through Stripe. Booking status is tracked clearly inside the app.
-        </div>
-      </div>
-
-      <div class="card" style="padding:14px;">
-        <div style="font-weight:1000;">In-app messaging</div>
-        <div class="muted" style="margin-top:6px;">
-          In-app messaging is for coordination, clarification, and an opportunity for mentors to pass on valuable experience-based safety tips. Once a booking is accepted, it is confirmed and subject to platform policies.
-        </div>
-      </div>
-
-      <div class="card" style="padding:14px;">
-        <div style="font-weight:1000;">Founding mentors</div>
-        <div class="muted" style="margin-top:6px;">
-          We’re onboarding the first <strong>20 Calgary mentors</strong> now (Calgary pilot).
+          <div style="margin-top:115px; color: rgba(255,255,255,.82); font-size: 13px; font-weight: 800;">
+            Secure Payment Processing through: <span style="color:white;">Stripe</span>. 
+          </div>
         </div>
       </div>
     </div>
 
-    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
-<a 
-  class="cta"
-  data-cta="home_hero"
-  data-audience="mentor"
-  href="https://borrowmybike.ca/mentors/start?utm_source=class6loaner&utm_medium=website&utm_campaign=calgary_pilot&utm_content=home_hero_mentor"
-  rel="noopener"
-  target="_blank"
->
-  Apply as a Calgary Mentor — Spring Pilot →
-</a>
-<a 
-  class="cta"
-  data-cta="home_hero"
-  data-audience="test_taker"
-  href="https://borrowmybike.ca/test-takers?utm_source=class6loaner&utm_medium=website&utm_campaign=calgary_pilot&utm_content=home_hero_testtaker"
-  rel="noopener"
-  target="_blank"
->
-  Sign up — be first to book this spring →
-</a>    
-</div>
+ <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+            <a
+              class="cta"
+              data-cta="home_hero"
+              data-audience="mentor"
+              href="https://borrowmybike.ca/mentors/start?utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=home_hero_mentor"
+              rel="noopener"
+              target="_blank"
+            >Become a Mentor →</a>
 
-    <div class="muted" style="margin-top:10px; display:flex; gap:14px; flex-wrap:wrap;">
-      <a href="/how-it-works">How it works</a>
-      <a href="/become-a-mentor">Mentor overview</a>
-      <a href="/mentor-guide">Mentor guide</a>
-      <a href="/road-test-guide">Road test guide</a>
-      <a href="https://borrowmybike.ca/auth?utm_source=class6loaner&utm_medium=website&utm_campaign=calgary_pilot&utm_content=home_open_app" rel="noopener" target="_blank">Open the app</a>
-    </div>
+            <a
+              class="cta"
+              data-cta="home_hero"
+              data-audience="test_taker"
+              href="https://borrowmybike.ca/test-takers?utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=home_hero_testtaker"
+              rel="noopener"
+              target="_blank"
+            >Find a Mentor + Bike →</a>
+          </div>
 
+    <!-- LOCATION SELECT -->
     <div class="grid" style="margin-top:14px; gap:10px;">
       <div class="card" style="padding:14px;">
-        <div style="font-weight:1000;">Find your city</div>
-        <div class="muted" style="margin-top:6px;">
-          Choose your location to see local guidance and a calm “test day” checklist.
-        </div>
+        <div style="font-weight:1000;">Choose your province and city</div>
+        <div class="muted" style="margin-top:6px; max-width: 90ch;">
+          Select your province and city to see information for your local registry area.     
+         </div>
 
         <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
           <label style="display:flex; flex-direction:column; gap:6px; font-weight:900; min-width:220px;">
             <span class="muted" style="font-size:13px;">Province</span>
             <select id="prov" class="card" style="padding:10px 12px; border-radius:12px;">
               <option value="">Select a province…</option>
-              {provinces.map((p) => <option value={p}>{p}</option>)}
+              {provincesAll.map((p) => (
+                <option value={p} disabled={!ENABLED_PROVINCES.includes(p)}>
+                  {p}{ENABLED_PROVINCES.includes(p) ? "" : " (opening soon)"}
+                </option>
+              ))}
             </select>
           </label>
 
@@ -148,7 +141,7 @@ const byProvClient = Object.fromEntries(
         </div>
 
         <div class="muted" style="margin-top:10px; font-size:13px;">
-          Tip: once you pick a city, we keep “city mode” on across pages so the content stays local.
+          Tip: once you pick a city, we keep your location saved so guides and information stay relevant to your area.
         </div>
       </div>
 
@@ -156,31 +149,70 @@ const byProvClient = Object.fromEntries(
         <div class="card" style="padding:14px;">
           <div style="font-weight:1000;">For test-takers</div>
           <div class="muted" style="margin-top:6px;">
-            Predictable steps. Practical checklists. Less anxiety — more calm confidence.
+            Clear steps, checklists, and less uncertainty before test day.
           </div>
         </div>
 
         <div class="card" style="padding:14px;">
           <div style="font-weight:1000;">For mentors</div>
           <div class="muted" style="margin-top:6px;">
-            Show up. Be prepared. Get paid — and help a rider start with a safety-first mindset.
+            Mentors earn <strong>$100</strong> per completed booking and help new riders start with a safety-first mindset.
           </div>
         </div>
 
         <div class="card" style="padding:14px;">
           <div style="font-weight:1000;">Bookings</div>
           <div class="muted" style="margin-top:6px;">
-            When you’re ready to request a mentor + bike, bookings happen on <a href="https://borrowmybike.ca" rel="noopener" target="_blank">BorrowMyBike</a>.ca.
+            All booking, payments, and rules are handled inside <a href="https://borrowmybike.ca" rel="noopener" target="_blank">BorrowMyBike</a>.ca.
           </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- ABOUT (short) -->
   <section class="grid" style="margin-top:14px;">
     <div class="card">
-      <h2 style="margin:0 0 10px; font-weight:1000;">Quick answers</h2>
-      <p class="muted" style="margin:0 0 12px; max-width:85ch;">Scan the questions. Expand only what you care about.</p>
+      <h2 style="margin:0 0 10px; font-weight:1000;">Why this exists</h2>
+
+      <p class="muted" style="margin:0 0 10px; max-width:90ch;">
+        Across Canada, many new riders face two practical problems: <strong>limited road test appointment availability</strong> and
+        <strong>limited access to a road-test-ready motorcycle</strong>. Some registries offer rentals, but availability can be inconsistent.
+      </p>
+
+      <p class="muted" style="margin:0; max-width:90ch;">
+        What started as helping riders bridge that gap evolved into a structured mentorship-first process. The goal isn’t just passing a test —
+        it’s building calm confidence and a safety-first mindset that carries into a rider’s first season.
+      </p>
+
+      <div class="muted" style="margin-top:10px; display:flex; gap:14px; flex-wrap:wrap;">
+        <a href="/about">Read the full story →</a>
+        <a href="/how-it-works">How it works →</a>
+        <a href="https://borrowmybike.ca/legal#damage" rel="noopener" target="_blank">Damage &amp; responsibility →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">FAQ (mentors + test-takers)</h2>
+      <p class="muted" style="margin:0 0 12px; max-width:90ch;">
+        Expand to see answers. We keep it structured so both sides know what they’re agreeing to.
+      </p>
+
+      <details class="acc">
+        <summary>
+          <span>Is this an open rental / joyride marketplace?</span>
+          <span class="accHint">no</span>
+          <span class="accIcon">+</span>
+        </summary>
+        <div class="accBody">
+          <div class="muted" style="max-width:95ch;">
+            No. This is built for short, registry-based Class 6 road tests. It is not designed for recreational rentals, lessons, or long rides.
+          </div>
+        </div>
+      </details>
 
       <details class="acc">
         <summary>
@@ -189,34 +221,100 @@ const byProvClient = Object.fromEntries(
           <span class="accIcon">+</span>
         </summary>
         <div class="accBody">
-          <div class="muted" style="max-width:90ch;">
-            No. Mentors are not instructors. Road tests are booked assuming the test-taker has already practiced riding. Mentors can share experience-based safety tips and calm coordination through in-app messaging — not lessons or last-minute coaching.
+          <div class="muted" style="max-width:95ch;">
+            No. Mentors are not instructors. They can share experience-based safety tips and calm coordination through messaging — not lessons or last‑minute coaching.
           </div>
         </div>
       </details>
 
       <details class="acc">
         <summary>
-          <span>Insurance & responsibility</span>
-          <span class="accHint">know your policy</span>
+          <span>What do mentors earn?</span>
+          <span class="accHint">$100</span>
           <span class="accIcon">+</span>
         </summary>
         <div class="accBody">
-          <div class="muted" style="max-width:90ch;">
-            <a href="https://borrowmybike.ca" rel="noopener" target="_blank">BorrowMyBike</a> is designed for short, registry-based road tests (not rentals, not lessons). Coverage and permitted use can vary by insurer and province, so both sides should understand their own policies and responsibilities. Full marketplace rules live inside the app.
+          <div class="muted" style="max-width:95ch;">
+            Mentors earn <strong>$100</strong> for a completed booking. Details and payouts are handled inside <a href="https://borrowmybike.ca" target="_blank" rel="noopener noreferrer">BorrowMyBike.ca</a>.
           </div>
         </div>
       </details>
 
       <details class="acc">
         <summary>
-          <span>Weather & reschedules</span>
-          <span class="accHint">safety first</span>
+          <span>What about deposits and no-shows?</span>
+          <span class="accHint">accountability</span>
           <span class="accIcon">+</span>
         </summary>
         <div class="accBody">
-          <div class="muted" style="max-width:90ch;">
-            If conditions are unsafe or the registry reschedules, the goal is a safe rebook under platform rules — not a stressful, last-minute scramble.
+          <div class="muted" style="max-width:95ch;">
+            Deposits are used for accountability and to discourage no‑shows. If the road test can’t proceed due to one party’s fault, platform rules determine forfeiture and any credit due to the not‑at‑fault party.
+          </div>
+        </div>
+      </details>
+
+      <details class="acc">
+        <summary>
+          <span>What if the bike gets damaged?</span>
+          <span class="accHint">clear rules</span>
+          <span class="accIcon">+</span>
+        </summary>
+        <div class="accBody">
+          <div class="muted" style="max-width:95ch;">
+            Responsibility depends on fault and the terms accepted at checkout. Both sides should understand their own insurance coverage. See the full damage section on <a href="https://borrowmybike.ca" target="_blank" rel="noopener noreferrer">BorrowMyBike.ca</a>:
+            <a href="https://borrowmybike.ca/legal#damage" rel="noopener" target="_blank">Damage &amp; responsibility →</a>
+          </div>
+        </div>
+      </details>
+
+      <details class="acc">
+        <summary>
+          <span>How do cancellations work?</span>
+          <span class="accHint">strict</span>
+          <span class="accIcon">+</span>
+        </summary>
+        <div class="accBody">
+          <div class="muted" style="max-width:95ch;">
+            Once a booking is accepted, it’s confirmed and subject to platform policies. Cancellation outcomes depend on timing and fault scenarios. Full rules live in the app.
+          </div>
+        </div>
+      </details>
+
+      <details class="acc">
+        <summary>
+          <span>What if the examiner cancels or weather is unsafe?</span>
+          <span class="accHint">rebook</span>
+          <span class="accIcon">+</span>
+        </summary>
+        <div class="accBody">
+          <div class="muted" style="max-width:95ch;">
+            If a test is rescheduled by the registry or conditions are unsafe, the goal is a safe rebook under platform rules — not a stressful last‑minute scramble.
+          </div>
+        </div>
+      </details>
+
+      <details class="acc">
+        <summary>
+          <span>How are payments handled?</span>
+          <span class="accHint">Stripe</span>
+          <span class="accIcon">+</span>
+        </summary>
+        <div class="accBody">
+          <div class="muted" style="max-width:95ch;">
+            Payments and refunds are processed through Stripe. Booking status and outcomes are tracked inside the app.
+          </div>
+        </div>
+      </details>
+
+      <details class="acc">
+        <summary>
+          <span>Do I have to accept every request as a mentor?</span>
+          <span class="accHint">no</span>
+          <span class="accIcon">+</span>
+        </summary>
+        <div class="accBody">
+          <div class="muted" style="max-width:95ch;">
+            No. Mentors can accept or decline requests. There’s no subscription and no obligation to accept.
           </div>
         </div>
       </details>
@@ -239,8 +337,11 @@ const byProvClient = Object.fromEntries(
     </section>
   ) : null}
 
-  <script is:inline data-cities={JSON.stringify(byProvClient)}>
+  <script is:inline data-cities={JSON.stringify(byProvClient)} data-enabled-provs={JSON.stringify(ENABLED_PROVINCES)} data-enabled-cities={JSON.stringify(ENABLED_CITY_SLUGS)}>
     const byProv = JSON.parse(document.currentScript.dataset.cities);
+    const enabledProvs = JSON.parse(document.currentScript.dataset.enabledProvs || "[]");
+    const enabledCitySlugs = JSON.parse(document.currentScript.dataset.enabledCities || "{}");
+
     const provSel = document.getElementById("prov");
     const citySel = document.getElementById("city");
 
@@ -248,20 +349,26 @@ const byProvClient = Object.fromEntries(
       console.warn("City selector elements not found.");
     } else {
       function setCityOptions(prov) {
-        const list = byProv[prov] || [];
+        const list = (byProv[prov] || []).slice();
+        const allowList = enabledCitySlugs[prov];
+
+        const filtered = Array.isArray(allowList) && allowList.length
+          ? list.filter((c) => allowList.includes(c.slug))
+          : list;
+
         const options =
           '<option value="">Select a city…</option>' +
-          list
+          filtered
             .slice()
             .sort((a, b) => a.name.localeCompare(b.name))
             .map((c) => `<option value="${c.slug}">${c.name}</option>`)
             .join("");
 
         citySel.innerHTML = options;
-        citySel.disabled = list.length === 0;
+        citySel.disabled = filtered.length === 0;
       }
 
-      // Preselect if saved
+      // If someone loads a city directly, keep things consistent
       try {
         const savedCity = localStorage.getItem("c6l_city");
         if (savedCity) {
@@ -272,7 +379,14 @@ const byProvClient = Object.fromEntries(
               break;
             }
           }
-          if (foundProv) {
+
+          // If the saved city isn't currently enabled, don't force-select it.
+          const allowList = enabledCitySlugs[foundProv];
+          const isEnabledCity =
+            enabledProvs.includes(foundProv) &&
+            (Array.isArray(allowList) && allowList.length ? allowList.includes(savedCity) : true);
+
+          if (foundProv && isEnabledCity) {
             provSel.value = foundProv;
             setCityOptions(foundProv);
             citySel.value = savedCity;
@@ -282,7 +396,13 @@ const byProvClient = Object.fromEntries(
       } catch {}
 
       provSel.addEventListener("change", () => {
-        setCityOptions(provSel.value);
+        const p = provSel.value;
+        if (!p || !enabledProvs.includes(p)) {
+          citySel.innerHTML = '<option value="">Select a city…</option>';
+          citySel.disabled = true;
+          return;
+        }
+        setCityOptions(p);
       });
 
       citySel.addEventListener("change", () => {
@@ -294,5 +414,19 @@ const byProvClient = Object.fromEntries(
         window.location.href = `/cities/${slug}?city=` + encodeURIComponent(slug);
       });
     }
+
+    // OPTIONAL: pass city into BMB links once city mode is on
+    (function () {
+      try {
+        const city = localStorage.getItem("c6l_city");
+        if (!city) return;
+
+        document.querySelectorAll('a[href^="https://borrowmybike.ca"]').forEach((a) => {
+          const href = a.getAttribute("href") || "";
+          if (!href || href.includes("city=")) return;
+          a.setAttribute("href", href + (href.includes("?") ? "&" : "?") + "city=" + encodeURIComponent(city));
+        });
+      } catch {}
+    })();
   </script>
 </BaseLayout>
