@@ -2,17 +2,27 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { CITIES, groupCitiesByProvince } from "../../data/cities";
 const grouped = groupCitiesByProvince();
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Motorcycle Road Test City Guides Across Canada | Class6Loaner",
+  description:
+    "Browse Class6Loaner city guides across Canada for motorcycle road test preparation, local expectations, and road-test-day checklists.",
+  url: "https://class6loaner.com/cities",
+};
 ---
 
 <BaseLayout
-  title="Cities — Class6Loaner"
-  description="City-by-city road test education and mentor guidance across Canada (excluding Saskatchewan)."
+  title="Motorcycle Road Test City Guides Across Canada | Class6Loaner"
+  description="Browse Class6Loaner city guides across Canada for motorcycle road test preparation, local expectations, and road-test-day checklists."
   canonicalPath="/cities"
+  schema={schema}
 >
   <section class="card">
     <h1 style="margin:0; font-weight:1000;">Cities</h1>
     <p class="muted" style="margin:10px 0 0; max-width:75ch;">
-      Choose your city to see a calm, practical road test guide and mentor info. Canada-wide marketing (excluding Saskatchewan).
+      Browse city-by-city motorcycle road test guides across Canada. Use these pages to prepare calmly, understand test-day expectations, and connect with the right next step on BorrowMyBike.
     </p>
   </section>
 
@@ -22,7 +32,16 @@ const grouped = groupCitiesByProvince();
         <div style="font-weight:1000; margin-bottom:10px;">{prov}</div>
         <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:10px;">
           {cities.map((c) => (
-            <a class="card" href={`/cities/${c.slug}`} style="text-decoration:none; padding:14px;">
+            <a
+              class="card"
+              href={`/cities/${c.slug}`}
+              style="text-decoration:none; padding:14px;"
+              data-event="city_card_click"
+              data-cta="cities_index_card"
+              data-audience="test_taker"
+              data-city={c.slug}
+              data-province={c.province}
+            >
               <div style="font-weight:1000;">{c.name}</div>
               <div class="muted" style="margin-top:4px; font-size:13px;">{c.province}, Canada</div>
             </a>

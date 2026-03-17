@@ -3,9 +3,34 @@ const {
   title = "Class6Loaner",
   description = "Safety-first riding and road-test education for motorcycle Class 6.",
   canonicalPath = "/",
+  schema = [],
 } = Astro.props;
 
 const canonicalUrl = `https://class6loaner.com${canonicalPath}`;
+const ogImage = "https://class6loaner.com/images/logo.png";
+const schemaList = Array.isArray(schema) ? schema : [schema];
+const baseSchema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Class6Loaner",
+    url: "https://class6loaner.com",
+    logo: "https://class6loaner.com/images/logo.png",
+    contactPoint: [{
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      email: "support@borrowmybike.ca",
+      availableLanguage: ["English"],
+    }],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Class6Loaner",
+    url: "https://class6loaner.com",
+  },
+  ...schemaList,
+];
 
 // Optional city context (used to keep sponsors + links local once a visitor picks a city)
 const citySlug = Astro.url.searchParams.get("city");
@@ -96,6 +121,21 @@ const bmbCta = (() => {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
+    <meta name="robots" content="index,follow" />
+
+    <meta property="og:site_name" content="Class6Loaner" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(baseSchema)} />
 
     <style is:global>
       :root {
@@ -544,18 +584,23 @@ details.bmb-acc .bmb-accBody {
         } catch {}
       })();
 
-      // === GA4 CTA click tracking (header + home hero CTAs) ===
+      // === GA4 helpers + click tracking ===
       (function () {
         try {
-          if (typeof window.gtag !== "function") return;
+          window.c6lTrackEvent = function (eventName, params) {
+            try {
+              if (typeof window.gtag !== "function") return;
+              window.gtag("event", eventName, params || {});
+            } catch {}
+          };
 
-          const cityMode = (function () {
+          const getCityMode = function () {
             try {
               return localStorage.getItem("c6l_city") ? "on" : "off";
             } catch {
               return "off";
             }
-          })();
+          };
 
           document.addEventListener("click", function (e) {
             const target = e.target;
@@ -564,19 +609,25 @@ details.bmb-acc .bmb-accBody {
             const a = target.closest("a");
             if (!a) return;
 
-            // Track only our CTAs (header + hero)
+            const eventName = a.getAttribute("data-event") || "cta_click";
             const ctaPlacement = a.getAttribute("data-cta");
             const audience = a.getAttribute("data-audience");
-            if (!ctaPlacement || !audience) return;
+            const trackedCity = a.getAttribute("data-city");
+            const trackedProvince = a.getAttribute("data-province");
+
+            if (!ctaPlacement && !audience && !trackedCity && !trackedProvince && !a.getAttribute("data-event")) return;
 
             const href = a.getAttribute("href") || "";
 
-            window.gtag("event", "cta_click", {
-              placement: ctaPlacement,
-              audience,
+            window.c6lTrackEvent(eventName, {
+              placement: ctaPlacement || undefined,
+              audience: audience || undefined,
               href,
-              city_mode: cityMode,
+              city: trackedCity || undefined,
+              province: trackedProvince || undefined,
+              city_mode: getCityMode(),
               page_path: window.location.pathname,
+              page_title: document.title,
             });
           });
         } catch {}

@@ -11,16 +11,7 @@ const canonicalPath = "/";
 // Ads are hidden by default. Flip PUBLIC_ADS_ENABLED=true when you have real sponsors.
 const ADS_ENABLED = (import.meta.env.PUBLIC_ADS_ENABLED ?? "false") === "true";
 
-// ===== Launch control =====
-// Keep the national framing, but only enable certain provinces/cities until you open wider.
-// To expand later, just add province codes here (e.g., "BC", "ON") and remove city limits if desired.
-const ENABLED_PROVINCES = ["AB"];
 
-// If you want to limit to specific cities during the pilot, list slugs per province here.
-// (Leave a province out to allow all its cities once enabled.)
-const ENABLED_CITY_SLUGS: Record<string, string[]> = {
-  AB: ["calgary"],
-};
 
 const byProvRaw = groupCitiesByProvince();
 const provincesAll = Object.keys(byProvRaw).sort();
@@ -81,7 +72,7 @@ const byProvClient = Object.fromEntries(
          
 
           <div style="margin-top:10px; color: rgba(255,255,255,.82); font-size: 13px; font-weight: 800;">
-            Pilot availability: <span style="color:white;">Calgary, Alberta</span>. Opening additional cities and provinces soon.
+             Select your province and city to view local road-test guidance. 
           </div>
 
           <div style="margin-top:115px; color: rgba(255,255,255,.82); font-size: 13px; font-weight: 800;">
@@ -105,7 +96,7 @@ const byProvClient = Object.fromEntries(
               class="cta"
               data-cta="home_hero"
               data-audience="test_taker"
-              href="https://borrowmybike.ca/test-takers?utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=home_hero_testtaker"
+              href="https://borrowmybike.ca/browse?utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=home_hero_testtaker"
               rel="noopener"
               target="_blank"
             >Find a Mentor + Bike →</a>
@@ -125,9 +116,7 @@ const byProvClient = Object.fromEntries(
             <select id="prov" class="card" style="padding:10px 12px; border-radius:12px;">
               <option value="">Select a province…</option>
               {provincesAll.map((p) => (
-                <option value={p} disabled={!ENABLED_PROVINCES.includes(p)}>
-                  {p}{ENABLED_PROVINCES.includes(p) ? "" : " (opening soon)"}
-                </option>
+                <option value={p}>{p}</option>
               ))}
             </select>
           </label>
@@ -372,10 +361,9 @@ const byProvClient = Object.fromEntries(
     </section>
   ) : null}
 
-  <script is:inline data-cities={JSON.stringify(byProvClient)} data-enabled-provs={JSON.stringify(ENABLED_PROVINCES)} data-enabled-cities={JSON.stringify(ENABLED_CITY_SLUGS)}>
+  <script is:inline data-cities={JSON.stringify(byProvClient)}>
     const byProv = JSON.parse(document.currentScript.dataset.cities);
-    const enabledProvs = JSON.parse(document.currentScript.dataset.enabledProvs || "[]");
-    const enabledCitySlugs = JSON.parse(document.currentScript.dataset.enabledCities || "{}");
+    
 
     const provSel = document.getElementById("prov");
     const citySel = document.getElementById("city");
@@ -384,65 +372,83 @@ const byProvClient = Object.fromEntries(
       console.warn("City selector elements not found.");
     } else {
       function setCityOptions(prov) {
-        const list = (byProv[prov] || []).slice();
-        const allowList = enabledCitySlugs[prov];
+  const list = (byProv[prov] || []).slice();
 
-        const filtered = Array.isArray(allowList) && allowList.length
-          ? list.filter((c) => allowList.includes(c.slug))
-          : list;
+  const options =
+    '<option value="">Select a city…</option>' +
+    list
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((c) => `<option value="${c.slug}">${c.name}</option>`)
+      .join("");
 
-        const options =
-          '<option value="">Select a city…</option>' +
-          filtered
-            .slice()
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .map((c) => `<option value="${c.slug}">${c.name}</option>`)
-            .join("");
+  citySel.innerHTML = options;
+  citySel.disabled = list.length === 0;
+}
 
-        citySel.innerHTML = options;
-        citySel.disabled = filtered.length === 0;
+      // If someone has a saved city, restore it
+try {
+  const savedCity = localStorage.getItem("c6l_city");
+  if (savedCity) {
+    let foundProv = "";
+    for (const p of Object.keys(byProv)) {
+      if ((byProv[p] || []).some((c) => c.slug === savedCity)) {
+        foundProv = p;
+        break;
       }
+    }
 
-      // If someone loads a city directly, keep things consistent
-      try {
-        const savedCity = localStorage.getItem("c6l_city");
-        if (savedCity) {
-          let foundProv = "";
-          for (const p of Object.keys(byProv)) {
-            if ((byProv[p] || []).some((c) => c.slug === savedCity)) {
-              foundProv = p;
-              break;
-            }
-          }
-
-          // If the saved city isn't currently enabled, don't force-select it.
-          const allowList = enabledCitySlugs[foundProv];
-          const isEnabledCity =
-            enabledProvs.includes(foundProv) &&
-            (Array.isArray(allowList) && allowList.length ? allowList.includes(savedCity) : true);
-
-          if (foundProv && isEnabledCity) {
-            provSel.value = foundProv;
-            setCityOptions(foundProv);
-            citySel.value = savedCity;
-            citySel.disabled = false;
-          }
-        }
-      } catch {}
+    if (foundProv) {
+      provSel.value = foundProv;
+      setCityOptions(foundProv);
+      citySel.value = savedCity;
+      citySel.disabled = false;
+    }
+  }
+} catch {}
 
       provSel.addEventListener("change", () => {
         const p = provSel.value;
-        if (!p || !enabledProvs.includes(p)) {
+        if (!p) {
           citySel.innerHTML = '<option value="">Select a city…</option>';
           citySel.disabled = true;
           return;
         }
+
+        if (typeof window.c6lTrackEvent === "function") {
+          window.c6lTrackEvent("select_province", {
+            province: p,
+            page_path: window.location.pathname,
+            page_title: document.title,
+          });
+        }
+
         setCityOptions(p);
       });
 
       citySel.addEventListener("change", () => {
         const slug = citySel.value;
         if (!slug) return;
+
+        let selectedProvince = provSel.value || "";
+        let selectedCityName = slug;
+        const list = byProv[selectedProvince] || [];
+        const match = list.find((c) => c.slug === slug);
+        if (match) {
+          selectedCityName = match.name;
+          selectedProvince = match.province || selectedProvince;
+        }
+
+        if (typeof window.c6lTrackEvent === "function") {
+          window.c6lTrackEvent("select_city", {
+            city: slug,
+            city_name: selectedCityName,
+            province: selectedProvince,
+            page_path: window.location.pathname,
+            page_title: document.title,
+          });
+        }
+
         try {
           localStorage.setItem("c6l_city", slug);
         } catch {}

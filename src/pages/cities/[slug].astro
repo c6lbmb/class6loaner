@@ -13,15 +13,166 @@ export function getStaticPaths() {
 const { city } = Astro.props;
 
 const cityDisplay = `${city.name}, ${city.province}`;
-const title = `${city.name} Motorcycle Road Test Guide — Calm, Safety-First | Class6Loaner`;
+const title = `${city.name} ${city.province} Motorcycle Road Test Guide | Class6Loaner`;
 const description =
-  `A practical, anxiety-reducing guide for ${cityDisplay}. What to expect, what to bring, and how mentors help test-takers stay calm and safe.`;
+  `Preparing for your motorcycle road test in ${cityDisplay}? Learn what to bring, what happens on test day, and how to prepare calmly with Class6Loaner.`;
 
 const canonicalPath = `/cities/${city.slug}`;
 const cityParam = `?city=${encodeURIComponent(city.slug)}`;
+
+type CityRow = (typeof CITIES)[number];
+
+const REGION_NEIGHBORS: Record<string, string[]> = {
+  // Alberta
+  "calgary-area": ["central-ab", "south-ab"],
+  "central-ab": ["calgary-area", "edmonton-area", "south-ab"],
+  "edmonton-area": ["central-ab", "north-ab"],
+  "south-ab": ["calgary-area", "central-ab"],
+  "north-ab": ["edmonton-area", "central-ab"],
+
+  // British Columbia
+  "lower-mainland": ["fraser-valley"],
+  "fraser-valley": ["lower-mainland", "interior-bc"],
+  "interior-bc": ["northern-bc", "fraser-valley"],
+  "northern-bc": ["interior-bc"],
+  "vancouver-island": [],
+
+  // Ontario
+  "gta-core": ["gta-west", "gta-east", "hamilton-niagara"],
+  "gta-west": ["gta-core", "tri-cities", "hamilton-niagara"],
+  "gta-east": ["gta-core", "east-on"],
+  "hamilton-niagara": ["gta-west", "gta-core"],
+  "tri-cities": ["gta-west", "guelph-area", "southwest-on"],
+  "guelph-area": ["tri-cities", "gta-west"],
+  "southwest-on": ["tri-cities"],
+  "ottawa-area": ["east-on"],
+  "east-on": ["ottawa-area", "gta-east"],
+  "simcoe-area": ["gta-core"],
+
+  // Quebec
+  "montreal-area": ["mauricie", "gatineau-area"],
+  "quebec-city-area": ["mauricie"],
+  "gatineau-area": ["montreal-area"],
+  "eastern-townships": ["montreal-area"],
+  "mauricie": ["montreal-area", "quebec-city-area"],
+
+  // Singles / smaller provinces
+  "halifax-area": [],
+  "moncton-area": ["saint-john-area"],
+  "saint-john-area": ["moncton-area"],
+  "st-johns-area": [],
+  "charlottetown-area": [],
+  "yellowknife-area": [],
+  "whitehorse-area": [],
+  "iqaluit-area": [],
+  "winnipeg-area": [],
+};
+
+function sortCities(list: CityRow[]) {
+  return list.slice().sort((a, b) => {
+    const aTier = a.tier ?? 3;
+    const bTier = b.tier ?? 3;
+    if (aTier !== bTier) return aTier - bTier;
+    return a.name.localeCompare(b.name);
+  });
+}
+
+function buildRelatedCities(current: CityRow) {
+  const provinceCities = CITIES.filter(
+    (c) => c.province === current.province && c.slug !== current.slug
+  );
+
+  const seen = new Set<string>();
+  const out: CityRow[] = [];
+
+  const pushList = (list: CityRow[]) => {
+    for (const item of sortCities(list)) {
+      if (seen.has(item.slug)) continue;
+      seen.add(item.slug);
+      out.push(item);
+      if (out.length >= 8) break;
+    }
+  };
+
+  // 1) same region first
+  const sameRegion = provinceCities.filter(
+    (c) => c.region && current.region && c.region === current.region
+  );
+  pushList(sameRegion);
+
+  // 2) then only approved neighbor regions
+  const neighborRegions = current.region ? REGION_NEIGHBORS[current.region] ?? [] : [];
+  for (const region of neighborRegions) {
+    if (out.length >= 8) break;
+    const regional = provinceCities.filter((c) => c.region === region);
+    pushList(regional);
+  }
+
+  // 3) only if we still have almost nothing, fill with remaining province cities
+  if (out.length < 2) {
+    const remainingProvinceCities = provinceCities.filter((c) => !seen.has(c.slug));
+    pushList(remainingProvinceCities);
+  }
+
+  return out.slice(0, 3);
+}
+
+const relatedCities = buildRelatedCities(city);
+
+const provinceLabels: Record<string, string> = {
+  AB: "Alberta",
+  BC: "British Columbia",
+  MB: "Manitoba",
+  NB: "New Brunswick",
+  NL: "Newfoundland and Labrador",
+  NS: "Nova Scotia",
+  NT: "Northwest Territories",
+  NU: "Nunavut",
+  ON: "Ontario",
+  PE: "Prince Edward Island",
+  QC: "Quebec",
+  YT: "Yukon",
+};
+
+const provinceLabel = provinceLabels[city.province] ?? city.province;
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: `${city.name} ${city.province} Motorcycle Road Test Guide`,
+    description,
+    url: `https://class6loaner.com${canonicalPath}`,
+    about: ["motorcycle road test", city.name, city.province],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://class6loaner.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Cities",
+        item: "https://class6loaner.com/cities",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: cityDisplay,
+        item: `https://class6loaner.com${canonicalPath}`,
+      },
+    ],
+  },
+];
 ---
 
-<BaseLayout title={title} description={description} canonicalPath={canonicalPath}>
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath} schema={schema}>
   <!-- HERO -->
   <section class="card">
     <div class="muted" style="font-weight:900;">City guide</div>
@@ -31,16 +182,42 @@ const cityParam = `?city=${encodeURIComponent(city.slug)}`;
     </h1>
 
     <p class="muted" style="margin:10px 0 0; max-width:85ch;">
-      If you’re stressed about test day, you’re not alone. This page is built to reduce anxiety by making things predictable:
-      what happens, what to bring, and how to avoid the most common mistakes — with a safety-first mindset.
+      Preparing for a motorcycle road test in {cityDisplay} can feel stressful. This guide is here to make things more predictable:
+      what happens, what to bring, and how to avoid the most common mistakes — with a calm, safety-first mindset.
     </p>
 
     <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
-      <a class="cta" href="https://borrowmybike.ca" rel="noopener" target="_blank">
+      <a
+        class="cta"
+        href={`https://borrowmybike.ca/browse${cityParam}&utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=city_hero_book`}
+        rel="noopener"
+        target="_blank"
+        data-event="book_click"
+        data-cta="city_hero"
+        data-audience="test_taker"
+        data-city={city.slug}
+        data-province={city.province}
+      >
         Book / Become a mentor →
       </a>
-      <a class="cta" href={`/road-test-guide${cityParam}`}>Read the full guide →</a>
-      <a class="cta" href={`/become-a-mentor${cityParam}`}>Become a mentor →</a>
+      <a
+        class="cta"
+        href={`/road-test-guide${cityParam}`}
+        data-event="guide_click"
+        data-cta="city_hero"
+        data-audience="test_taker"
+        data-city={city.slug}
+        data-province={city.province}
+      >Read the full guide →</a>
+      <a
+        class="cta"
+        href={`/become-a-mentor${cityParam}`}
+        data-event="mentor_click"
+        data-cta="city_hero"
+        data-audience="mentor"
+        data-city={city.slug}
+        data-province={city.province}
+      >Become a mentor →</a>
     </div>
 
     <div class="muted" style="margin-top:12px; font-size:13px;">
@@ -127,8 +304,8 @@ const cityParam = `?city=${encodeURIComponent(city.slug)}`;
         <div class="card" style="padding:14px;">
           <div style="font-weight:1000;">A smart meet-up pattern</div>
           <div class="muted" style="margin-top:6px;">
-            Meet 15–25 minutes early at the registry. If everyone’s comfortable and it’s safe, the test-taker can sit on the bike
-            and do a slow lap or two in the parking lot to get familiar — not “training,” just settling into the controls.
+            Meet about 30 minutes early at the registry. Use that time to confirm documents, gear, and expectations calmly before the test.
+            Avoid off-platform practice riding or “training” sessions on test day.
           </div>
         </div>
 
@@ -178,14 +355,59 @@ const cityParam = `?city=${encodeURIComponent(city.slug)}`;
         </div>
       </div>
 
+      <div class="card" style="padding:14px; margin-top:14px;">
+        <div style="font-weight:1000;">Why this {city.name} guide matters</div>
+        <div class="muted" style="margin-top:6px;">
+          Road-test expectations can vary by province, registry, examiner, weather, and traffic conditions. Use this page as a local preparation guide for {cityDisplay}, then confirm your exact booking details and always follow registry staff and examiner instructions.
+        </div>
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="cta" href="/cities">Browse all city guides →</a>
+          <a class="cta" href={`/road-test-guide${cityParam}`}>Read the full test-taker guide →</a>
+        </div>
+      </div>
+
+      {relatedCities.length > 0 ? (
+        <div class="card" style="margin-top:14px; padding:14px;">
+          <div style="font-weight:1000;">More {provinceLabel} city guides</div>
+          <div class="muted" style="margin-top:6px;">
+            Explore other motorcycle road-test guides in {provinceLabel}. These internal links help you compare locations and find the most relevant prep information for your area.
+          </div>
+          <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+            {relatedCities.map((c) => (
+              <a class="cta" href={`/cities/${c.slug}`} style="padding:10px 16px;">
+                {c.name} →
+              </a>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
       <div class="card" style="margin-top:14px; padding:14px;">
         <div style="font-weight:1000;">Ready to book?</div>
         <div class="muted" style="margin-top:6px;">
           When you have your test date/time, request a mentor and bike through the app. Keep it simple, show up early, ride safe.
         </div>
         <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
-          <a class="cta" href="https://borrowmybike.ca" rel="noopener" target="_blank">Go to BorrowMyBike →</a>
-          <a class="cta" href={`/become-a-mentor${cityParam}`}>Become a mentor →</a>
+          <a
+            class="cta"
+            href={`https://borrowmybike.ca/browse${cityParam}&utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=city_ready_book`}
+            rel="noopener"
+            target="_blank"
+            data-event="book_click"
+            data-cta="city_ready"
+            data-audience="test_taker"
+            data-city={city.slug}
+            data-province={city.province}
+          >Go to BorrowMyBike →</a>
+          <a
+            class="cta"
+            href={`/become-a-mentor${cityParam}`}
+            data-event="mentor_click"
+            data-cta="city_ready"
+            data-audience="mentor"
+            data-city={city.slug}
+            data-province={city.province}
+          >Become a mentor →</a>
         </div>
       </div>
     </div>
