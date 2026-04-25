@@ -1,137 +1,17 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import LocationGate from "../components/LocationGate.astro";
 
-const title = "Mentor guide — Class6Loaner";
-const description =
-  "Mentor guide: calm, safety-first expectations for supporting a new rider on test day (no teaching, no coaching).";
-const canonicalPath = "/mentor-guide";
+const title = 'Mentor guide — calm, structured, safety-first support | Class6Loaner';
+const description = 'Detailed mentor expectations for supporting a Class 6 road test: no rentals, no training, calm communication, safe handoff, and professional test-day support.';
+const canonicalPath = '/mentor-guide';
 ---
 
 <BaseLayout title={title} description={description} canonicalPath={canonicalPath}>
-  <section class="card">
-    <div class="muted" style="font-weight:900;">Mentor guide</div>
-    <h1 style="margin:8px 0 0; font-weight:1000;">Be the structured, calm part of someone’s test day.</h1>
-
-    <p class="muted" style="margin:10px 0 0; max-width:85ch;">
-      Mentoring is community safety — delivered through a structured process. Your job isn’t to teach or “coach the test.” It’s to provide a road-test-ready bike, clear coordination, and a predictable, safety-first experience.
-    </p>
-
-    <div class="card" style="padding:14px; margin-top:12px;">
-      <div style="font-weight:1000;">In-app messaging</div>
-      <div class="muted" style="margin-top:6px; max-width:90ch;">
-        In-app messaging is for coordination, clarification, and an opportunity for mentors to pass on valuable experience-based safety tips.
-        Once a booking is accepted, it is confirmed and subject to platform policies.
-      </div>
-    </div>
-
-    <div style="display:grid; gap:10px; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); margin-top:14px;">
-      <div style="border:1px solid #e5e7eb; border-radius:14px; padding:12px;">
-        <div style="font-weight:900;">Earn</div>
-        <div class="muted" style="margin-top:4px;">$100 after a completed road test.</div>
-      </div>
-      <div style="border:1px solid #e5e7eb; border-radius:14px; padding:12px;">
-        <div style="font-weight:900;">Stay in control</div>
-        <div class="muted" style="margin-top:4px;">Accept or decline every request — no obligation.</div>
-      </div>
-
-      <div style="border:1px solid #e5e7eb; border-radius:14px; padding:12px;">
-        <div style="font-weight:900;">In-app messaging</div>
-        <div class="muted" style="margin-top:4px;">In-app messaging is for coordination, clarification, and an opportunity for the mentor to pass on safety tips. Once a booking is accepted, it’s confirmed and subject to platform policies.</div>
-      </div>
-
-      <div style="border:1px solid #e5e7eb; border-radius:14px; padding:12px;">
-        <div style="font-weight:900;">Fairness on test day</div>
-        <div class="muted" style="margin-top:4px;">Deposits discourage no‑shows and protect both sides if the test can’t proceed due to fault.</div>
-      </div>
-      <div style="border:1px solid #e5e7eb; border-radius:14px; padding:12px;">
-        <div style="font-weight:900;">Founding mentors</div>
-        <div class="muted" style="margin-top:4px;">We’re onboarding the first <b>20 founding mentors</b>.</div>
-      </div>
-    </div>
-
-    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
-      <a class="cta" href="/become-a-mentor">Become a mentor →</a>
-      <a class="cta" href="https://borrowmybike.ca" rel="noopener" target="_blank">Go to the app →</a>
-    </div>
-
-    <div class="muted" style="margin-top:10px; font-size:13px;">
-      Educational guidance only. Registry procedures vary — always follow the examiner’s direction.
-    </div>
-  </section>
-
-  <section class="card" style="margin-top:14px;">
-    <h2 style="margin:0 0 10px; font-weight:1000;">Core expectations</h2>
-    <ul style="margin:0;">
-      <li><b>Safety-first</b>, calm communication.</li>
-      <li><b>Road-test-ready bike</b> (signals, brakes, tires, lights, mirrors).</li>
-      <li><b>Predictable meet-up</b>: clear time + location + what to bring.</li>
-      <li><b>Respect the examiner</b> and the process — no arguing, no pressure.</li>
-      <li><b>Compensation</b> is part of the model, but details are handled inside the app.</li>
-    </ul>
-  </section>
-
-  <section class="card" style="margin-top:14px;">
-    <h2 style="margin:0 0 10px; font-weight:1000;">Why mentors matter</h2>
-    <p class="muted" style="margin:0; max-width:85ch;">
-      Test days are stressful. A good mentor reduces panic, improves preparation, and keeps decisions safe and calm —
-      especially with weather, paperwork, or last-minute surprises.
-    </p>
-  </section>
-
-  <section class="card" style="margin-top:14px;">
-    <h2 style="margin:0 0 10px; font-weight:1000;">Meet-up timing + registry flow (keep it calm)</h2>
-
-    <h3 style="margin:14px 0 6px; font-weight:1000;">Meet 10–20 minutes early</h3>
-    <p class="muted" style="margin:0; max-width:85ch;">
-      Early meet-ups prevent rushed choices and reduce anxiety. The goal is <b>predictability</b>, not “training.”
-    </p>
-
-    <h3 style="margin:16px 0 6px; font-weight:1000;">“Get acquainted” — not a practice session</h3>
-    <p class="muted" style="margin:0; max-width:85ch;">
-      If the test-taker asks, it’s reasonable to give them a couple minutes to get comfortable:
-    </p>
-    <ul style="margin:10px 0 0;">
-      <li>sit on the bike and adjust mirrors</li>
-      <li>confirm where the controls are (signals, horn, high beam)</li>
-      <li>quick comfort check (feet, reach, balance)</li>
-    </ul>
-    <p class="muted" style="margin:10px 0 0; max-width:85ch;">
-      This is <b>not</b> lessons, drills, or “practice riding.” Road tests are booked under the assumption the rider has already practiced.
-    </p>
-
-    <h3 style="margin:16px 0 6px; font-weight:1000;">Keys + registration/insurance — options if you’re not comfortable</h3>
-    <p class="muted" style="margin:0; max-width:85ch;">
-      Some mentors prefer to keep documents until the examiner requests them — totally fair. Options:
-    </p>
-    <ul style="margin:10px 0 0;">
-      <li><b>Go inside</b> with the test-taker and hand over documents when requested, or</li>
-      <li><b>Stay by the bike</b> and provide documents when the examiner comes out for inspection.</li>
-    </ul>
-    <p class="muted" style="margin:10px 0 0; max-width:85ch;">
-      If an examiner wants the rider to handle documents directly (or wants you to step back), just comply calmly.
-    </p>
-    <p class="muted" style="margin:10px 0 0; max-width:85ch;">
-      If anything goes wrong on test day (damage, safety issue, dispute), document first (photos + notes) and email <b>support@borrowmybike.ca</b>. Full details: <a href="https://borrowmybike.ca/legal#damage" rel="noopener" target="_blank" style="font-weight:950; text-decoration: underline;">Damage &amp; responsibility →</a>
-      with a short summary as soon as reasonably possible.
-    </p>
-  </section>
-
-  <section class="card" style="margin-top:14px;">
-    <h2 style="margin:0 0 10px; font-weight:1000;">What mentors typically handle</h2>
-    <ul style="margin:0;">
-      <li>Bike readiness (signals, brakes, tires, lights).</li>
-      <li>Meet-up timing + expectations.</li>
-      <li>Calm, safety-first communication.</li>
-    </ul>
-  </section>
-
-  <section class="card" style="margin-top:14px;">
-    <h2 style="margin:0 0 10px; font-weight:1000;">What mentors should NOT do</h2>
-    <ul style="margin:0;">
-      <li>Argue with examiners or push unsafe choices.</li>
-      <li>Encourage riding beyond comfort or conditions.</li>
-      <li><b>Provide riding lessons</b> or “practice sessions” (the road test assumes prior practice).</li>
-      <li>Make promises about outcomes (“you’ll pass”) — nobody can guarantee that.</li>
-    </ul>
-  </section>
+  <LocationGate
+    targetBasePath={canonicalPath}
+    title="Choose your location"
+    body={'To show the correct mentor guide for your area, please choose your location.'}
+    note="Don't see your city? Choose the closest location for now and email support@borrowmybike.ca and we'll add it."
+  />
 </BaseLayout>

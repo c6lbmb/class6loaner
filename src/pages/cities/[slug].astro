@@ -13,12 +13,8 @@ export function getStaticPaths() {
 const { city } = Astro.props;
 
 const cityDisplay = `${city.name}, ${city.province}`;
-const title = `${city.name} ${city.province} Motorcycle Road Test Guide | Class6Loaner`;
-const description =
-  `Preparing for your motorcycle road test in ${cityDisplay}? Learn what to bring, what happens on test day, and how to prepare calmly with Class6Loaner.`;
-
 const canonicalPath = `/cities/${city.slug}`;
-const cityParam = `?city=${encodeURIComponent(city.slug)}`;
+const isBC = city.province === "BC";
 
 type CityRow = (typeof CITIES)[number];
 
@@ -94,13 +90,11 @@ function buildRelatedCities(current: CityRow) {
     }
   };
 
-  // 1) same region first
   const sameRegion = provinceCities.filter(
     (c) => c.region && current.region && c.region === current.region
   );
   pushList(sameRegion);
 
-  // 2) then only approved neighbor regions
   const neighborRegions = current.region ? REGION_NEIGHBORS[current.region] ?? [] : [];
   for (const region of neighborRegions) {
     if (out.length >= 8) break;
@@ -108,7 +102,6 @@ function buildRelatedCities(current: CityRow) {
     pushList(regional);
   }
 
-  // 3) only if we still have almost nothing, fill with remaining province cities
   if (out.length < 2) {
     const remainingProvinceCities = provinceCities.filter((c) => !seen.has(c.slug));
     pushList(remainingProvinceCities);
@@ -135,15 +128,23 @@ const provinceLabels: Record<string, string> = {
 };
 
 const provinceLabel = provinceLabels[city.province] ?? city.province;
+const title = `${city.name} Motorcycle for Class 6 Road Test | ${provinceLabel} Guide | Class6Loaner`;
+const description = `Need a motorcycle for your Class 6 road test in ${cityDisplay}? Class6Loaner explains how road-test-ready bike access works, what to bring, and what to expect on test day.`;
 
 const schema = [
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: `${city.name} ${city.province} Motorcycle Road Test Guide`,
+    headline: `${city.name} Motorcycle for Class 6 Road Test | ${provinceLabel} Guide`,
     description,
     url: `https://class6loaner.com${canonicalPath}`,
-    about: ["motorcycle road test", city.name, city.province],
+    about: [
+      "Class 6 road test",
+      "motorcycle for road test",
+      city.name,
+      city.province,
+      provinceLabel,
+    ],
   },
   {
     "@context": "https://schema.org",
@@ -173,23 +174,50 @@ const schema = [
 ---
 
 <BaseLayout title={title} description={description} canonicalPath={canonicalPath} schema={schema}>
-  <!-- HERO -->
   <section class="card">
-    <div class="muted" style="font-weight:900;">City guide</div>
+    <div class="muted" style="font-weight:900;">{provinceLabel} city guide</div>
 
     <h1 style="margin:8px 0 0; font-weight:1000;">
-      {city.name}: calm, confident, safety-first riding starts here
+      {city.name} motorcycle for Class 6 road test — local guide + next steps
     </h1>
 
     <p class="muted" style="margin:10px 0 0; max-width:85ch;">
-      Preparing for a motorcycle road test in {cityDisplay} can feel stressful. This guide is here to make things more predictable:
-      what happens, what to bring, and how to avoid the most common mistakes — with a calm, safety-first mindset.
+      Need a motorcycle for your Class 6 road test in {cityDisplay}? This page explains what to bring, what happens on test day,
+      and how road-test-ready bike access works through BorrowMyBike. The goal is simple: reduce last-minute stress and help you show up prepared.
     </p>
+
+    {isBC ? (
+      <div class="card" style="padding:14px; margin-top:12px;">
+        <div style="font-weight:1000;">BC note: MST may come before the road test</div>
+        <div class="muted" style="margin-top:6px; max-width:90ch;">
+          In British Columbia, some riders may need to complete a <strong>Motorcycle Skills Test (MST)</strong> before the road test, depending on their licensing stage. Check ICBC first so you know whether you may need a bike for one appointment or two.
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+          <a
+            class="cta"
+            href="https://icbc.com/driver-licensing/types-licences/Get-your-motorcycle-licence"
+            target="_blank"
+            rel="noopener"
+          >
+            ICBC motorcycle licensing →
+          </a>
+          <a
+            class="cta"
+            href="https://icbc.com/driver-licensing/visit-dl-office/Book-a-road-test"
+            target="_blank"
+            rel="noopener"
+          >
+            Book ICBC MST / road test →
+          </a>
+        </div>
+      </div>
+    ) : null}
 
     <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
       <a
         class="cta"
-        href={`https://borrowmybike.ca/browse${cityParam}&utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=city_hero_book`}
+        href={`https://borrowmybike.ca/browse?city=${encodeURIComponent(city.slug)}&utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=city_hero_find_bike`}
         rel="noopener"
         target="_blank"
         data-event="book_click"
@@ -198,11 +226,11 @@ const schema = [
         data-city={city.slug}
         data-province={city.province}
       >
-        Book / Become a mentor →
+        Find a mentor + bike →
       </a>
       <a
         class="cta"
-        href={`/road-test-guide${cityParam}`}
+        href={`/road-test-guide/${city.slug}`}
         data-event="guide_click"
         data-cta="city_hero"
         data-audience="test_taker"
@@ -211,7 +239,7 @@ const schema = [
       >Read the full guide →</a>
       <a
         class="cta"
-        href={`/become-a-mentor${cityParam}`}
+        href="/become-a-mentor"
         data-event="mentor_click"
         data-cta="city_hero"
         data-audience="mentor"
@@ -220,16 +248,44 @@ const schema = [
       >Become a mentor →</a>
     </div>
 
-    <div class="muted" style="margin-top:12px; font-size:13px;">
-      Educational content only. Registry rules vary — always follow the examiner’s direction.
+    <div class="muted" style="margin-top:12px; font-size:13px; max-width:90ch;">
+      Need a motorcycle for your Class 6 road test?
+      <a href="https://borrowmybike.ca">BorrowMyBike</a> connects you with local mentors who provide a road-test-ready bike.
+      Available in and around Calgary, Edmonton, and growing across Alberta and British Columbia.
     </div>
   </section>
 
-  <!-- MAIN + SPONSORS -->
   <section class="grid grid-2" style="margin-top:14px;">
-    <!-- LEFT CONTENT -->
     <div class="card">
-      <h2 style="margin:0 0 10px; font-weight:1000;">What happens on test day (simple timeline)</h2>
+      <h2 style="margin:0 0 10px; font-weight:1000;">Need a motorcycle for your road test in {city.name}?</h2>
+
+      <p class="muted" style="margin:0 0 10px; max-width:85ch;">
+        Many new riders in {city.name} can book a Class 6 test before they have reliable access to a road-test-ready bike.
+        BorrowMyBike helps close that gap by connecting test-takers with local mentors who can make test day more predictable.
+      </p>
+
+      <p class="muted" style="margin:0 0 10px; max-width:85ch;">
+        The booking is for registry road tests only. It is not a recreational ride, an open-ended rental, or a riding lesson.
+        Mentors are there to show up prepared, communicate clearly, and help the test day run smoothly.
+      </p>
+
+      <div class="card" style="padding:14px; margin-top:10px;">
+        <div style="font-weight:1000;">Best fit for test-takers in {city.name}</div>
+        <ul style="margin:8px 0 0; padding-left:18px;">
+          <li>You already have a road test date or expect to book one soon.</li>
+          <li>You have practice riding experience and need a road-test-ready motorcycle.</li>
+          <li>You want a structured, accountability-first process instead of last-minute scrambling.</li>
+        </ul>
+      </div>
+
+      <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="cta" href={`https://borrowmybike.ca/browse&utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=city_need_bike`} rel="noopener" target="_blank">
+          Browse bikes for {city.name} →
+        </a>
+        <a class="cta" href="/cities">Browse all city guides →</a>
+      </div>
+
+      <h2 style="margin:18px 0 10px; font-weight:1000;">What happens on test day (simple timeline)</h2>
 
       <ol style="margin:0; padding-left:18px;">
         <li><b>Arrive early</b> so you’re not making rushed decisions under pressure.</li>
@@ -278,7 +334,7 @@ const schema = [
       <h2 style="margin:18px 0 10px; font-weight:1000;">Weather & reschedules</h2>
 
       <p class="muted" style="margin:0; max-width:85ch;">
-        Weather can change fast. If the registry reschedules due to conditions, the goal is that nobody gets penalized —
+        Weather can change fast in {city.name}. If the registry reschedules due to conditions, the goal is that nobody gets penalized —
         especially if nobody has checked in yet. Safety &gt; forcing a test.
       </p>
 
@@ -294,10 +350,10 @@ const schema = [
       <h2 style="margin:18px 0 10px; font-weight:1000;">For mentors in {city.name}</h2>
 
       <p class="muted" style="margin:0; max-width:85ch;">
-        Mentors help by making test day calm and predictable. You’re not an instructor, and you’re not “coaching during the test.”
+        Mentors help by making test day calm and predictable. You’re not an instructor, and you’re not coaching during the test.
         Road tests are booked under the assumption the test-taker has already practiced riding.
-        Mentors can offer calm reassurance and a few common-sense pointers through in-app messaging — but we recommend no teaching sessions and no last-minute “training” on test day.
-        Bookings are short, and mentors are compensated for being prepared, punctual, and professional (details are inside the app).
+        Mentors can offer calm reassurance and common-sense coordination through in-app messaging — but no riding lessons, no paid practice sessions, and no last-minute training on test day.
+        Mentors are compensated for their time, fuel, and the effort of showing up prepared with a road-test-ready motorcycle.
       </p>
 
       <div class="grid" style="grid-template-columns: 1fr; gap:10px; margin-top:10px;">
@@ -312,7 +368,7 @@ const schema = [
         <div class="card" style="padding:14px;">
           <div style="font-weight:1000;">Documents + keys on test day</div>
           <div class="muted" style="margin-top:6px;">
-            If the mentor prefers not to hand over papers/keys immediately, they can go into the registry with the test-taker and
+            If the mentor prefers not to hand over papers or keys immediately, they can go into the registry with the test-taker and
             provide documents to staff, or wait by the bike until the examiner comes out for the visual inspection.
           </div>
         </div>
@@ -322,8 +378,8 @@ const schema = [
           <ul style="margin:8px 0 0; padding-left:18px;">
             <li>Argue with examiners or push unsafe choices</li>
             <li>Encourage riding beyond comfort or conditions</li>
-            <li>Provide riding lessons or “practice sessions” (the road test assumes prior practice)</li>
-            <li>Make promises about outcomes (“you’ll pass”) — nobody can guarantee that</li>
+            <li>Provide riding lessons or “practice sessions”</li>
+            <li>Make promises about outcomes (“you’ll pass”)</li>
           </ul>
         </div>
       </div>
@@ -349,8 +405,8 @@ const schema = [
         <div class="card" style="padding:14px;">
           <div style="font-weight:1000;">Do mentors teach people how to ride?</div>
           <div class="muted" style="margin-top:6px;">
-            No. Mentors are there to provide a road-test-ready bike and a calm, safety-first experience.
-            The test-taker should already have practice riding before booking a road test.
+            No. Mentors provide a road-test-ready motorcycle and a calm, safety-first experience.
+            The test-taker should already have riding practice before booking a road test.
           </div>
         </div>
       </div>
@@ -362,57 +418,38 @@ const schema = [
         </div>
         <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
           <a class="cta" href="/cities">Browse all city guides →</a>
-          <a class="cta" href={`/road-test-guide${cityParam}`}>Read the full test-taker guide →</a>
+          <a class="cta" href={`/road-test-guide/${city.slug}`}>Read the full test-taker guide →</a>
         </div>
       </div>
 
-      {relatedCities.length > 0 ? (
-        <div class="card" style="margin-top:14px; padding:14px;">
+      {relatedCities.length > 0 && (
+        <div class="card" style="padding:14px; margin-top:14px;">
           <div style="font-weight:1000;">More {provinceLabel} city guides</div>
-          <div class="muted" style="margin-top:6px;">
+          <div class="muted" style="margin-top:6px; max-width:85ch;">
             Explore other motorcycle road-test guides in {provinceLabel}. These internal links help you compare locations and find the most relevant prep information for your area.
           </div>
-          <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-            {relatedCities.map((c) => (
-              <a class="cta" href={`/cities/${c.slug}`} style="padding:10px 16px;">
-                {c.name} →
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+            {relatedCities.map((related) => (
+              <a class="cta" href={`/cities/${related.slug}?city=${encodeURIComponent(related.slug)}`}>
+                {related.name} →
               </a>
             ))}
           </div>
         </div>
-      ) : null}
+      )}
 
       <div class="card" style="margin-top:14px; padding:14px;">
-        <div style="font-weight:1000;">Ready to book?</div>
+        <div style="font-weight:1000;">Ready to move forward?</div>
         <div class="muted" style="margin-top:6px;">
-          When you have your test date/time, request a mentor and bike through the app. Keep it simple, show up early, ride safe.
+          When you have your test date and time, request a mentor and road-test-ready bike through the app. Keep it simple, show up early, and ride safe.
         </div>
         <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
-          <a
-            class="cta"
-            href={`https://borrowmybike.ca/browse${cityParam}&utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=city_ready_book`}
-            rel="noopener"
-            target="_blank"
-            data-event="book_click"
-            data-cta="city_ready"
-            data-audience="test_taker"
-            data-city={city.slug}
-            data-province={city.province}
-          >Go to BorrowMyBike →</a>
-          <a
-            class="cta"
-            href={`/become-a-mentor${cityParam}`}
-            data-event="mentor_click"
-            data-cta="city_ready"
-            data-audience="mentor"
-            data-city={city.slug}
-            data-province={city.province}
-          >Become a mentor →</a>
+          <a class="cta" href={`https://borrowmybike.ca/browse&utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=city_footer_browse`} rel="noopener" target="_blank">Go to BorrowMyBike →</a>
+          <a class="cta" href="/become-a-mentor">Become a mentor →</a>
         </div>
       </div>
     </div>
 
-    <!-- RIGHT SIDEBAR (SPONSORS) -->
     <div class="grid">
       <SponsorSlot cityName={city.name} slotNumber={1} />
       <SponsorSlot cityName={city.name} slotNumber={2} />

@@ -1,0 +1,156 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SponsorSlot from "../../components/SponsorSlot.astro";
+import { CITIES } from "../../data/cities";
+
+export function getStaticPaths() {
+  return CITIES.map((city) => ({
+    params: { slug: city.slug },
+    props: { city },
+  }));
+}
+
+const { city } = Astro.props;
+
+const title = `Become a mentor in ${city.name} — Earn $100 per road test | Class6Loaner`;
+const description = `If you're in ${city.name} and have a road-test-ready motorcycle, you can become a mentor and earn $100 per road test.`;
+const canonicalPath = "/become-a-mentor/";
+
+const ADS_ENABLED = (import.meta.env.PUBLIC_ADS_ENABLED ?? "false") === "true";
+
+const citySlug = city?.slug ?? null;
+const cityName = city?.name ?? null;
+const provinceName = city?.province ?? null;
+
+function withBmbCity(url: string) {
+  if (!citySlug) return url;
+  if (url.includes("city=")) return url;
+  return `${url}${url.includes("?") ? "&" : "?"}city=${encodeURIComponent(citySlug)}`;
+}
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath}>
+  <section class="card">
+    <div class="muted" style="font-weight:900;">Become a mentor</div>
+
+    <h1 style="margin:8px 0 0; font-weight:1000; line-height:1.02;">
+      Earn $100 per road test.
+      <br />
+      Not a rental. No training.
+    </h1>
+
+    <p class="muted" style="margin:12px 0 0; max-width:85ch;">
+      If you have a road-test-ready motorcycle in <b>{cityName}</b>, you can help a test-taker show up calm, prepared, and on time for their Class 6 road test.
+      This is <b>not a rental business</b>. It is <b>not rider training</b>. Mentors do <b>not</b> teach, coach, or provide lessons.
+      You simply bring a road-test-ready bike, meet at the registry, support a smooth handoff, and get compensated for showing up prepared.
+    </p>
+
+    {cityName ? (
+      <p class="muted" style="margin-top:8px;">
+        Riders in <b>{cityName}</b> need reliable, road-test-ready motorcycles. Local mentors help reduce last-minute stress — and earn <b>$100 per road test</b>.
+      </p>
+    ) : null}
+
+    {ADS_ENABLED ? (
+      <div style="margin-top:14px;">
+        <SponsorSlot
+          cityName={cityName}
+          slotNumber={1}
+          tier="premium"
+          placement="top"
+          compact={false}
+        />
+      </div>
+    ) : null}
+
+    <div class="grid grid-3" style="margin-top:14px;">
+      <div class="card" style="padding:14px;">
+        <div style="font-weight:1000;">1) List your bike</div>
+        <div class="muted" style="margin-top:6px;">
+          Add your motorcycle, service area, and general availability in the app.
+        </div>
+      </div>
+
+      <div class="card" style="padding:14px;">
+        <div style="font-weight:1000;">2) Accept only what works for you</div>
+        <div class="muted" style="margin-top:6px;">
+          You choose which requests to accept. No one is forced into anything.
+        </div>
+      </div>
+
+      <div class="card" style="padding:14px;">
+        <div style="font-weight:1000;">3) Meet at the registry and get paid</div>
+        <div class="muted" style="margin-top:6px;">
+          Show up prepared, keep it professional, and earn <b>$100 per road test</b>.
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:14px; margin-top:14px;">
+      <div style="font-weight:1000;">Fast summary</div>
+      <div class="grid grid-2" style="margin-top:10px;">
+        <div class="card" style="padding:14px;">
+          <div style="font-weight:1000;">What this is</div>
+          <ul class="muted" style="margin:8px 0 0; padding-left:18px; display:grid; gap:6px;">
+            <li>A road-test-day support service for people who do not have access to a suitable motorcycle</li>
+            <li>A structured meetup at or near the registry for a government road test</li>
+            <li>A way for experienced riders to help someone show up calm and prepared</li>
+          </ul>
+        </div>
+
+        <div class="card" style="padding:14px;">
+          <div style="font-weight:1000;">What this is not</div>
+          <ul class="muted" style="margin:8px 0 0; padding-left:18px; display:grid; gap:6px;">
+            <li><b>Not a rental</b></li>
+            <li><b>Not training</b></li>
+            <li><b>Not a riding lesson</b></li>
+            <li><b>Not open-ended borrowing</b></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+      <a class="cta" href={withBmbCity("https://borrowmybike.ca/mentors/start")} target="_blank" rel="noopener">
+        Become a mentor in the app →
+      </a>
+      <a class="cta" href={withBmbCity("https://borrowmybike.ca/mentors/new")} target="_blank" rel="noopener">
+        Start / edit your bike →
+      </a>
+      <a class="cta" href={`/mentor-guide/${citySlug}`}>
+        Read the mentor guide →
+      </a>
+    </div>
+
+    <div class="muted" style="margin-top:12px; font-size:13px;">
+      Compensation, live availability, and booking flow are handled inside BorrowMyBike.
+    </div>
+  </section>
+
+  <section class="grid grid-2" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">What mentors actually do</h2>
+
+      <ul style="margin:0; padding-left:18px; line-height:1.6;">
+        <li><strong>Bring a road-test-ready bike</strong>: lights, brakes, tires, mirrors, and no obvious issues</li>
+        <li><strong>Share road-test tips via in-app messaging</strong> after a booking is confirmed — help the test-taker stay calm and prepared</li>
+        <li><strong>Meet about 25–30 minutes early</strong> so the test-taker can get comfortable with the bike</li>
+        <li><strong>Allow time to adjust</strong>: mirrors, controls, clutch friction point, and brakes</li>
+        <li><strong>Optionally allow a short parking-lot lap</strong> to get familiar with the bike (not training or practice riding)</li>
+        <li><strong>Keep things professional and respectful</strong> — calm, predictable, and safety-focused</li>
+        <li><strong>Wait nearby during the test</strong> — grab a coffee while the road test is in progress</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">What mentors should NOT do</h2>
+      <ul style="margin:0; padding-left:18px; line-height:1.6;">
+        <li><strong>Do not train</strong> the test-taker</li>
+        <li><strong>Do not provide riding lessons</strong> or “practice sessions”</li>
+        <li><strong>Do not promise a pass</strong></li>
+        <li><strong>Do not argue with examiners</strong> or push unsafe choices</li>
+        <li><strong>Do not treat this like a rental</strong> or open-ended bike borrowing arrangement</li>
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

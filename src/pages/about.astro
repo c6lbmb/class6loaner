@@ -1,45 +1,17 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import LocationGate from "../components/LocationGate.astro";
 
-const title = "About — Class6Loaner";
-const description =
-  "Why Class6Loaner exists: a safety-first community project that evolved from solving a practical road-test problem into a mentorship-first process.";
-const canonicalPath = "/about";
+const title = 'About Class6Loaner';
+const description = 'Why Class6Loaner exists: a safety-first community project that grew from a real road-test problem into a structured mentor-supported platform.';
+const canonicalPath = '/about';
 ---
 
 <BaseLayout title={title} description={description} canonicalPath={canonicalPath}>
-  <section class="card">
-    <h1 style="margin:0 0 10px; font-weight:1000;">About Class6Loaner</h1>
-
-    <p class="muted" style="max-width:95ch; margin:0 0 10px;">
-      Class6Loaner started with a simple, practical problem: many new riders can book a Class 6 road test,
-      but don’t have reliable access to a <strong>road-test-ready motorcycle</strong> on the right day — and time slots can be limited.
-    </p>
-
-    <p class="muted" style="max-width:95ch; margin:0 0 10px;">
-      Over time, something bigger became obvious. A short amount of calm, experience-based guidance before test day
-      (through messaging, checklists, and clear expectations) can help a test-taker show up prepared and reduce anxiety.
-    </p>
-
-    <p class="muted" style="max-width:95ch; margin:0 0 10px;">
-      Just as important: when experienced riders consistently push a <strong>safety-first mindset</strong>,
-      new riders are more likely to pace themselves, respect their limits, and build confidence responsibly.
-      That carries into their first season — and helps them find the right riding partners and habits.
-    </p>
-
-    <div class="card" style="padding:14px; margin-top:12px;">
-      <div style="font-weight:1000;">What Class6Loaner is (and isn’t)</div>
-      <ul class="muted" style="margin:10px 0 0; max-width:95ch;">
-        <li><strong>Is:</strong> structured Class 6 road-test support, focused on preparation, coordination, and accountability.</li>
-        <li><strong>Is not:</strong> a joyride rental marketplace, and not a riding school or lesson platform.</li>
-      </ul>
-    </div>
-
-    <div class="muted" style="margin-top:12px; display:flex; gap:14px; flex-wrap:wrap;">
-      <a href="/how-it-works">How it works →</a>
-      <a href="/mentor-guide">Mentor guide →</a>
-      <a href="/road-test-guide">Test-taker guide →</a>
-      <a href="https://borrowmybike.ca/legal#damage" rel="noopener" target="_blank">Damage &amp; responsibility →</a>
-    </div>
-  </section>
+  <LocationGate
+    targetBasePath={canonicalPath}
+    title="Choose your location"
+    body={'To show accurate road test information and local resources, please choose your location.'}
+    note="Don't see your city? Choose the closest location for now and email support@borrowmybike.ca and we'll add it."
+  />
 </BaseLayout>

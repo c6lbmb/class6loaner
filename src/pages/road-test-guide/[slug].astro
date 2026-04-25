@@ -1,0 +1,658 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SponsorSlot from "../../components/SponsorSlot.astro";
+import { CITIES } from "../../data/cities";
+import { getProvinceRoadTestResources } from "../../data/roadTestResources";
+import shoulderChecksImg from "../../assets/diagrams/shoulder-check.png";
+import laneLeftOfCenterImg from "../../assets/diagrams/lane-position-left-of-center.png";
+import laneRightTurnImg from "../../assets/diagrams/lane-position-right-turn.png";
+import stoppingDistanceImg from "../../assets/diagrams/stopping-distance.png";
+
+export function getStaticPaths() {
+  return CITIES.map((city) => ({
+    params: { slug: city.slug },
+    props: { city },
+  }));
+}
+
+const title = "Road test guide — calm confidence on test day";
+const description = "A practical, low-stress motorcycle road test guide: checklists, common mistakes, and a simple test-day flow.";
+const canonicalPath = "/road-test-guide/";
+
+const ADS_ENABLED = (import.meta.env.PUBLIC_ADS_ENABLED ?? "false") === "true";
+
+const { city } = Astro.props;
+const citySlug = city?.slug ?? null;
+const cityName = city?.name ?? null;
+const provinceName = city?.province ?? null;
+const provinceResources = getProvinceRoadTestResources(provinceName);
+const isBC = provinceName === "BC";
+---
+
+<BaseLayout title={title} description={description} canonicalPath={`/road-test-guide/${citySlug}`}>
+  <section class="card">
+    <div class="muted" style="font-weight:900;">Educational content • Canada-wide • Built for anxiety-free prep</div>
+    <h1 style="margin:8px 0 0; font-weight:1000;">Motorcycle road test guide</h1>
+    <p class="muted" style="margin:10px 0 0; max-width:90ch;">
+      This is a <strong>practical checklist</strong> — not a riding lesson. The goal is calm confidence: know what to bring,
+      what to check, and how to avoid the classic “I forgot ___” moment.
+    </p>
+
+    {cityName ? (
+      <p class="muted" style="margin-top:8px;">
+        Preparing for your Class 6 road test in <b>{cityName}</b>? This guide walks you through what to expect and how to have a bike ready on test day.
+      </p>
+    ) : null}
+
+    <div class="card" style="padding:14px; margin-top:12px;">
+      <div style="font-weight:1000;">Mentor coordination</div>
+      <div class="muted" style="margin-top:6px; max-width:90ch;">
+        If you book through the app, use in-app messaging for coordination, clarification, and experience-based safety tips.
+      </div>
+    </div>
+
+    {ADS_ENABLED && cityName ? (
+      <div style="margin-top:14px;">
+        <SponsorSlot
+          cityName={cityName}
+          slotNumber={1}
+          tier="premium"
+          placement="top"
+          compact={false}
+        />
+      </div>
+    ) : null}
+
+    <div class="grid grid-3" style="margin-top:14px; gap:10px;">
+      <div class="card" style="padding:14px;">
+        <div style="font-weight:1000;">Show up prepared</div>
+        <div class="muted" style="margin-top:6px;">Gear + paperwork + a simple plan for the day.</div>
+      </div>
+      <div class="card" style="padding:14px;">
+        <div style="font-weight:1000;">Avoid common mistakes</div>
+        <div class="muted" style="margin-top:6px;">Signals, shoulder checks, stops, and lane positioning.</div>
+      </div>
+      <div class="card" style="padding:14px;">
+        <div style="font-weight:1000;">Less panic</div>
+        <div class="muted" style="margin-top:6px;">A short warm-up routine and a calm “reset” method.</div>
+      </div>
+    </div>
+
+    <div class="muted" style="margin-top:12px; font-size:13px;">
+      Note: Requirements vary by province and registry. Always follow your registry’s instructions.
+    </div>
+  </section>
+
+  {isBC ? (
+    <section class="grid" style="margin-top:14px;">
+      <div class="card">
+        <h2 style="margin:0 0 10px; font-weight:1000;">BC riders: MST may come before the road test</h2>
+
+        <p class="muted" style="margin:0; max-width:90ch;">
+          In British Columbia, many riders need to complete a <strong>Motorcycle Skills Test (MST)</strong> before the road test. Depending on where you are in the licensing process, that can mean needing access to a motorcycle for <strong>two separate appointments</strong> — one for the MST and one for the road test.
+        </p>
+
+        <p class="muted" style="margin:10px 0 0; max-width:90ch;">
+          We keep the BC explanation brief on purpose and point you to ICBC for the official rules, timelines, and booking details.
+        </p>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+          <a
+            class="cta"
+            href="https://icbc.com/driver-licensing/types-licences/Get-your-motorcycle-licence"
+            target="_blank"
+            rel="noopener"
+          >
+            ICBC motorcycle licensing →
+          </a>
+
+          <a
+            class="cta"
+            href="https://icbc.com/driver-licensing/visit-dl-office/Book-a-road-test"
+            target="_blank"
+            rel="noopener"
+          >
+            Book ICBC MST / road test →
+          </a>
+
+          <a
+            class="cta"
+            href="https://icbc.com/driver-licensing/driving-guides/Learn-to-Ride-Smart"
+            target="_blank"
+            rel="noopener"
+          >
+            ICBC Learn to Ride Smart →
+          </a>
+        </div>
+
+        <div style="margin-top:12px;">
+          <details class="bmb-acc">
+            <summary>
+              <span>BC quick FAQ</span>
+            </summary>
+            <div class="bmb-accBody">
+              <ul>
+                <li><strong>Do all BC riders take the same path?</strong> No. The path depends on what licence you already hold, so always confirm your exact ICBC requirements before booking.</li>
+                <li><strong>Why mention the MST here?</strong> Because some BC riders will need a motorcycle before the actual road test appointment.</li>
+                <li><strong>Should I rely on this page instead of ICBC?</strong> No. Use this page as practical guidance, then confirm the official details with ICBC.</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+  ) : null}
+
+  <section class="grid grid-2" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">What examiners are watching for</h2>
+      <ul style="margin:0; padding-left:18px; display:grid; gap:8px;">
+        <li>Clear shoulder checks before any lane change or movement</li>
+        <li>Full, visible stops</li>
+        <li>Controlled speed and smooth inputs</li>
+        <li>Proper lane positioning and intersection setup</li>
+        <li>Observation, mirror use, and general awareness</li>
+      </ul>
+      <div class="muted" style="margin-top:10px;">
+        Examiners are usually looking for safe, predictable riding — not flashy riding.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">Safe riding habits that also help on test day</h2>
+      <ul style="margin:0; padding-left:18px; display:grid; gap:8px;">
+        <li>Keep a space cushion instead of crowding traffic</li>
+        <li>Check mirrors often and scan well ahead</li>
+        <li>Keep your head moving so your observation is obvious</li>
+        <li>Brake progressively instead of grabbing at the last second</li>
+        <li>Ride your own pace — calm and predictable beats rushed</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="grid grid-2" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">Lane position</h2>
+      <p class="muted" style="margin:0 0 12px; max-width:90ch;">
+        Deliberate lane position helps with visibility, setup, and space management. On test day, do not drift around randomly — choose your track position on purpose.
+      </p>
+      <div class="grid grid-2" style="gap:10px;">
+        <div class="card" style="padding:12px;">
+          <img
+            src={laneLeftOfCenterImg.src}
+            alt="Lane position diagram showing the left-of-center track position"
+            loading="lazy"
+            style="width:100%; height:auto; display:block; border-radius:14px;"
+          />
+          <div class="muted" style="margin-top:10px;">
+            <strong style="color:inherit;">Left-of-center track:</strong> commonly used to improve sight lines and visibility while maintaining space from parked cars or curb-side hazards.
+          </div>
+        </div>
+        <div class="card" style="padding:12px;">
+          <img
+            src={laneRightTurnImg.src}
+            alt="Lane position diagram showing setup for a right turn"
+            loading="lazy"
+            style="width:100%; height:auto; display:block; border-radius:14px;"
+          />
+          <div class="muted" style="margin-top:10px;">
+            <strong style="color:inherit;">Right-turn setup:</strong> position intentionally before the turn so your path looks controlled, predictable, and examiner-friendly.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">Stopping distance</h2>
+      <p class="muted" style="margin:0 0 12px; max-width:90ch;">
+        Stopping distance is not just braking power. It includes reaction time, road conditions, speed, and how early you recognize what is developing ahead.
+      </p>
+      <div class="card" style="padding:12px;">
+        <img
+          src={stoppingDistanceImg.src}
+          alt="Stopping distance diagram showing the space needed to stop safely"
+          loading="lazy"
+          style="width:100%; height:auto; display:block; border-radius:14px;"
+        />
+        <div class="muted" style="margin-top:10px;">
+          <strong style="color:inherit;">Test-day takeaway:</strong> scan early, leave space, and brake progressively instead of reacting late and grabbing at the controls.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">Observation / shoulder checks</h2>
+      <p class="muted" style="margin:0 0 12px; max-width:90ch;">
+        Make your observation obvious. Examiners want to clearly see that you checked before changing position, moving away from the curb, or turning into traffic.
+      </p>
+      <div class="card" style="padding:12px; max-width:860px;">
+        <img
+          src={shoulderChecksImg.src}
+          alt="Shoulder check diagram showing when and where to look before moving"
+          loading="lazy"
+          style="width:100%; height:auto; display:block; border-radius:14px;"
+        />
+        <div class="muted" style="margin-top:10px;">
+          <strong style="color:inherit;">Simple sequence:</strong> mirror → signal → shoulder check → move. Do it early enough that it looks deliberate, not rushed.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">Tap-to-expand checklists</h2>
+      <p class="muted" style="margin:0; max-width:92ch;">
+        We keep the page scannable. Expand only what you need right now.
+      </p>
+
+      <div style="margin-top:12px;">
+        <details class="bmb-acc">
+          <summary>
+            <span>Before you book</span>
+          </summary>
+          <div class="bmb-accBody">
+            <div class="muted">Do this before you request a bike and mentor so test day isn’t chaos.</div>
+            <ul>
+              <li><strong>Confirm your road test time and location</strong> and plan to arrive <strong>30 minutes early</strong> unless your registry says otherwise.</li>
+              <li><strong>Know the route area</strong>: do a calm drive-through the day before if possible.</li>
+              <li><strong>Bring the right documents</strong> (see checklist below).</li>
+              <li><strong>Practice the boring stuff</strong>: stops, signals, shoulder checks, lane position.</li>
+              <li><strong>Plan your warm-up</strong>: 10 minutes of slow-speed basics before the test.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="bmb-acc">
+          <summary>
+            <span>Gear + documents checklist</span>
+          </summary>
+          <div class="bmb-accBody">
+            <ul>
+              <li><strong>Helmet</strong> (approved, fits properly, visor or eye protection).</li>
+              <li><strong>Jacket</strong> (ideally abrasion-resistant) + <strong>gloves</strong>.</li>
+              <li><strong>Long pants</strong> + <strong>over-the-ankle footwear</strong>.</li>
+              <li><strong>License</strong> + any registry paperwork or booking confirmation.</li>
+              <li><strong>Weather plan</strong>: warm layer, rain layer, and a backup strategy.</li>
+            </ul>
+            <div class="muted" style="margin-top:10px;">
+              Tip: Put everything in one bag the night before. Your brain will thank you.
+            </div>
+          </div>
+        </details>
+
+        <details class="bmb-acc">
+          <summary>
+            <span>Bike sanity checks (quick)</span>
+          </summary>
+          <div class="bmb-accBody">
+            <div class="muted">You’re not doing a full inspection — just avoid obvious issues.</div>
+            <ul>
+              <li><strong>Lights</strong>: headlight, brake light, signals.</li>
+              <li><strong>Horn</strong>: works.</li>
+              <li><strong>Tires</strong>: visibly okay, no obvious low pressure.</li>
+              <li><strong>Mirrors</strong>: positioned for you.</li>
+              <li><strong>Controls</strong>: clutch, throttle, and brakes feel normal.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="bmb-acc">
+          <summary>
+            <span>Test-day flow (simple)</span>
+          </summary>
+          <div class="bmb-accBody">
+            <ol>
+              <li><strong>Arrive early</strong>. Breathe. Don’t rush.
+                <div class="muted">Rushing is the fastest way to make avoidable mistakes.</div>
+              </li>
+              <li><strong>Warm up</strong> (10 min): smooth starts and stops, turns, shoulder checks.</li>
+              <li><strong>During the test</strong>: scan far ahead, signal early, shoulder check before any move.</li>
+              <li><strong>If you make a mistake</strong>: don’t spiral. Fix the next decision.
+                <div class="muted">Reset phrase: “Next move only.”</div>
+              </li>
+            </ol>
+          </div>
+        </details>
+
+        <details class="bmb-acc">
+          <summary>
+            <span>Common mistakes (and how to avoid them)</span>
+          </summary>
+          <div class="bmb-accBody">
+            <ul>
+              <li><strong>Late signals</strong> → signal earlier than feels necessary.</li>
+              <li><strong>No shoulder check</strong> → make it a sequence: <em>mirror → signal → shoulder check → move</em>.</li>
+              <li><strong>Rolling stops</strong> → full stop, visibly.</li>
+              <li><strong>Lane position drift</strong> → pick a line and hold it deliberately.</li>
+              <li><strong>Nerves = stiff controls</strong> → relax grip and smooth out your throttle inputs.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="bmb-acc">
+          <summary>
+            <span>If the test can’t proceed</span>
+          </summary>
+          <div class="bmb-accBody">
+            <div class="muted">Sometimes things happen. The goal is a safe rebook — not a meltdown.</div>
+            <ul>
+              <li><strong>Unsafe weather</strong>: treat it like a reschedule, not a failure.</li>
+              <li><strong>Gear missing</strong>: don’t try to wing it. Fix the issue first.</li>
+              <li><strong>Bike not road-test ready</strong>: stop and reschedule.</li>
+            </ul>
+            <div class="muted" style="margin-top:10px;">
+              On <a href="https://borrowmybike.ca" rel="noopener" target="_blank">BorrowMyBike</a>, the app handles the “what happens next” rules so both sides are treated fairly.
+            </div>
+          </div>
+        </details>
+
+        <details class="bmb-acc">
+          <summary>
+            <span>Province-specific notes</span>
+          </summary>
+          <div class="bmb-accBody">
+            {provinceResources?.notes?.length ? (
+              <>
+                <ul>
+                  {provinceResources.notes.map((note) => (
+                    <li>{note}</li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <div class="muted">Province-specific notes can be added here as the rollout expands.</div>
+            )}
+
+            {provinceResources?.roadTestSchedulerUrl ? (
+              <div style="margin-top:10px;">
+                <a
+                  class="cta"
+                  href={provinceResources.roadTestSchedulerUrl}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  {provinceResources.roadTestSchedulerLabel ?? "Official road test scheduler"} →
+                </a>
+              </div>
+            ) : (
+              <div class="muted" style="margin-top:10px;">
+                Official scheduler link will be connected through the province helper when you add it.
+              </div>
+            )}
+          </div>
+        </details>
+
+        <details class="bmb-acc">
+          <summary>
+            <span>What bikes are not suitable for a Class 6 road test?</span>
+          </summary>
+          <div class="bmb-accBody">
+            <ul>
+              <li><strong>50cc and under</strong> should be treated as moped territory, not a full motorcycle road-test bike.</li>
+              <li><strong>Automatic motorcycles may be allowed depending on province</strong>, but always confirm the local rules.</li>
+              <li><strong>3-wheeled motorcycles may be allowed</strong>, but they can result in a restricted licence depending on province.</li>
+            </ul>
+            <div class="muted" style="margin-top:10px;">
+              Always confirm exact requirements with your registry if anything about the bike or booking feels unclear.
+            </div>
+          </div>
+        </details>
+
+        {isBC ? (
+          <details class="bmb-acc">
+            <summary>
+              <span>BC MST + road test FAQ</span>
+            </summary>
+            <div class="bmb-accBody">
+              <ul>
+                <li><strong>What is the MST?</strong> It is the Motorcycle Skills Test used in BC as part of the motorcycle licensing process.</li>
+                <li><strong>Do I always take the MST right before the road test?</strong> Not necessarily. Check your specific ICBC path and timing before booking.</li>
+                <li><strong>Could I need a bike twice?</strong> Yes. Some BC riders may need one appointment for the MST and another for the road test.</li>
+                <li><strong>Where should I confirm the official details?</strong> Directly with ICBC using the official motorcycle licensing and booking pages linked above.</li>
+              </ul>
+            </div>
+          </details>
+        ) : null}
+      </div>
+    </div>
+  </section>
+
+  {ADS_ENABLED && cityName ? (
+    <section class="grid" style="margin-top:14px;">
+      <div class="card">
+        <h2 style="margin:0 0 10px; font-weight:1000;">{cityName} partner spot</h2>
+        <p class="muted" style="margin:0; max-width:92ch;">
+          Local businesses relevant to riders and road-test traffic in {cityName} can appear here without cluttering the page.
+        </p>
+
+        <div style="margin-top:12px;">
+          <SponsorSlot
+            cityName={cityName}
+            slotNumber={2}
+            tier="standard"
+            placement="mid"
+            compact={false}
+          />
+        </div>
+      </div>
+    </section>
+  ) : null}
+
+  {isBC ? (
+    <section class="grid grid-2" style="margin-top:14px;">
+      <div class="card">
+        <h2 style="margin:0 0 10px; font-weight:1000;">BC MST walkthrough video</h2>
+        <div class="muted" style="margin:0 0 12px; max-width:90ch;">
+          This walkthrough-style video helps explain how the BC Motorcycle Skills Test is set up and what the rider is expected to do.
+        </div>
+
+        <div
+          style="
+            position:relative;
+            width:100%;
+            padding-bottom:56.25%;
+            height:0;
+            overflow:hidden;
+            border-radius:14px;
+            background:#000;
+            margin-top:10px;
+          "
+        >
+          <iframe
+            src="https://www.youtube.com/embed/LQEjFzqi_Q8?start=210"
+            title="BC Motorcycle Skills Test walkthrough"
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+            style="
+              position:absolute;
+              top:0;
+              left:0;
+              width:100%;
+              height:100%;
+              border:0;
+            "
+          ></iframe>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin:0 0 10px; font-weight:1000;">BC road test example video</h2>
+        <div class="muted" style="margin:0 0 12px; max-width:90ch;">
+          This real-world BC road test example lets you hear directions and get a better feel for the pace and flow of the appointment.
+        </div>
+
+        <div
+          style="
+            position:relative;
+            width:100%;
+            padding-bottom:56.25%;
+            height:0;
+            overflow:hidden;
+            border-radius:14px;
+            background:#000;
+            margin-top:10px;
+          "
+        >
+          <iframe
+            src="https://www.youtube.com/embed/qI-9_Q947zw?start=29"
+            title="BC motorcycle road test example"
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+            style="
+              position:absolute;
+              top:0;
+              left:0;
+              width:100%;
+              height:100%;
+              border:0;
+            "
+          ></iframe>
+        </div>
+      </div>
+    </section>
+  ) : (
+    <section class="grid grid-2" style="margin-top:14px;">
+      <div class="card">
+        <h2 style="margin:0 0 10px; font-weight:1000;">
+          {provinceResources?.videoTitle ?? "Video / resource spot"}
+        </h2>
+
+        {provinceResources?.videoIntro ? (
+          <div class="muted" style="margin:0 0 12px; max-width:90ch;">
+            {provinceResources.videoIntro}
+          </div>
+        ) : (
+          <div class="muted" style="margin:0 0 12px; max-width:90ch;">
+            Relevant province-specific video resources will appear here when available.
+          </div>
+        )}
+
+        {provinceResources?.videoEmbedUrl ? (
+          <div
+            style="
+              position:relative;
+              width:100%;
+              padding-bottom:56.25%;
+              height:0;
+              overflow:hidden;
+              border-radius:14px;
+              background:#000;
+              margin-top:10px;
+            "
+          >
+            <iframe
+              src={provinceResources.videoEmbedUrl}
+              title={provinceResources.videoTitle ?? "Motorcycle road test video"}
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+              style="
+                position:absolute;
+                top:0;
+                left:0;
+                width:100%;
+                height:100%;
+                border:0;
+              "
+            ></iframe>
+          </div>
+        ) : null}
+      </div>
+
+      <div class="card">
+        <h2 style="margin:0 0 10px; font-weight:1000;">Foot placement at stops</h2>
+        <div class="muted" style="margin:0; max-width:90ch;">
+          <strong>Left foot down, right foot covering the rear brake</strong> when stopped, unless the surface or situation forces a safe adjustment. What matters most on test day is that your stop looks controlled and stable.
+        </div>
+      </div>
+    </section>
+  )}
+
+  {isBC ? (
+    <section class="grid" style="margin-top:14px;">
+      <div class="card">
+        <h2 style="margin:0 0 10px; font-weight:1000;">Foot placement at stops</h2>
+        <div class="muted" style="margin:0; max-width:90ch;">
+          <strong>Left foot down, right foot covering the rear brake</strong> when stopped, unless the surface or situation forces a safe adjustment. What matters most on test day is that your stop looks controlled and stable.
+        </div>
+      </div>
+    </section>
+  ) : null}
+
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <div style="font-weight:1000;">Damage &amp; responsibility (quick clarity)</div>
+      <div class="muted" style="margin-top:6px; max-width:92ch;">
+        Deposits are for accountability and to discourage no-shows — they do not guarantee full damage coverage.
+        If something goes wrong on test day, <b>document first</b> and email <b>support@borrowmybike.ca</b> with a short summary and photos.
+        Full details: <a href="https://borrowmybike.ca/legal#damage" rel="noopener" target="_blank" style="font-weight:950; text-decoration: underline;">Damage &amp; responsibility →</a>
+        The platform reviews both sides and applies the written rules fairly.
+      </div>
+    </div>
+  </section>
+
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <div style="font-weight:1000;">Related guides</div>
+      <div class="muted" style="margin-top:6px; max-width:92ch;">
+        These guides work together to reduce stress and help you prepare calmly.
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+        <a class="cta" href={`/how-it-works/${citySlug}`}>
+          How it works →
+        </a>
+
+        <a class="cta" href={`/become-a-mentor`}>
+          Become a mentor →
+        </a>
+
+        <a class="cta" href={`/cities/${citySlug}`}>
+          City guides →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <div style="font-weight:1000;">Want a city-specific version?</div>
+      <div class="muted" style="margin-top:6px; max-width:90ch;">
+        Pick a city on the home page and we’ll keep city mode on, so local contents stay relevant across pages.
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+        <a class="cta" href="/">Go pick a city →</a>
+        <a class="cta" href="https://borrowmybike.ca" rel="noopener" target="_blank">Open the app →</a>
+      </div>
+    </div>
+  </section>
+
+  {ADS_ENABLED && cityName ? (
+    <section class="grid" style="margin-top:14px;">
+      <div class="card">
+        <h2 style="margin:0 0 10px; font-weight:1000;">More {cityName} partner visibility</h2>
+        <p class="muted" style="margin:0; max-width:92ch;">
+          A lower slot can be used for a second local partner or sponsor package.
+        </p>
+
+        <div style="margin-top:12px;">
+          <SponsorSlot
+            cityName={cityName}
+            slotNumber={3}
+            tier="standard"
+            placement="bottom"
+            compact={false}
+          />
+        </div>
+      </div>
+    </section>
+  ) : null}
+</BaseLayout>

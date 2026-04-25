@@ -1,33 +1,38 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import SponsorSlot from "../components/SponsorSlot.astro"; 
-import { groupCitiesByProvince } from "../data/cities";
+import SponsorSlot from "../components/SponsorSlot.astro";
+import { CITIES, groupCitiesByProvince } from "../data/cities";
 
-const title = "Class6Loaner — Safety-first Class 6 road-test support (Canada)";
+const title = "Class6Loaner — Class 6 road-test bike help and city guides";
 const description =
-  "A safety-first, Canada-born community project connecting test-takers with experienced mentors and road-test-ready motorcycles through a structured process. Bookings run on our affiliated site"
+  "Find city-by-city Class 6 road test guidance, understand what to expect on test day, and learn how BorrowMyBike helps test-takers connect with mentors who provide a road-test-ready motorcycle through a structured, safety-first process.";
 const canonicalPath = "/";
 
-// Ads are hidden by default. Flip PUBLIC_ADS_ENABLED=true when you have real sponsors.
 const ADS_ENABLED = (import.meta.env.PUBLIC_ADS_ENABLED ?? "false") === "true";
-
-
 
 const byProvRaw = groupCitiesByProvince();
 const provincesAll = Object.keys(byProvRaw).sort();
 
-// Keep the embedded data small + safe for the client script
 const byProvClient = Object.fromEntries(
   Object.entries(byProvRaw).map(([prov, list]) => [
     prov,
     (list ?? []).map((c) => ({ slug: c.slug, name: c.name, province: c.province })),
   ])
 );
+
+const featuredCitySlugs = ["calgary", "edmonton", "airdrie", "red-deer", "lethbridge"];
+const featuredCities = featuredCitySlugs
+  .map((slug) => CITIES.find((c) => c.slug === slug))
+  .filter(Boolean);
+
+const selectedCitySlug = null;
+const selectedCity = null;
+const selectedCityName = null;
+const selectedProvince = null;
 ---
 
 <BaseLayout title={title} description={description} canonicalPath={canonicalPath}>
   <section class="card">
-    <!-- HERO (match BMB visual direction) -->
     <div
       class="card"
       style="
@@ -41,163 +46,310 @@ const byProvClient = Object.fromEntries(
       <div
         style="
           position: relative;
-          min-height: 360px;
+          min-height: 430px;
           background-image: url('/images/hero-bike.jpeg');
           background-size: cover;
-          background-position: center;
+          background-position: center bottom;
         "
       >
         <div
           style="
             position:absolute;
             inset:0;
-            background: linear-gradient(90deg, rgba(11,31,59,.62), rgba(11,31,59,.35), rgba(11,31,59,.10));
+            background: linear-gradient(90deg, rgba(11,31,59,.72), rgba(11,31,59,.46), rgba(11,31,59,.14));
           "
         ></div>
 
         <div style="position:relative; padding: 18px;">
           <div class="muted" style="font-weight:1000; color: rgba(255,255,255,.88);">
-            Canada-wide vision • Safety-first • Structured process
+            Registry road tests only • Not a rental • Safety-first
           </div>
 
-          <h1 style="margin:10px 0 0; font-weight:1000; color:white; max-width: 26ch;">
-            Structured Class 6 road-test support — across Canada.
+          <h1 style="margin:10px 0 0; font-weight:1000; color:white; max-width: 22ch; line-height:1.03;">
+            Need a motorcycle for your Class 6 road test?
           </h1>
 
-          <p style="margin:10px 0 0; color: rgba(255,255,255,.90); max-width: 70ch; font-weight: 650;">
-            Connect with an experienced local mentor and a road-test-ready motorcycle through a clear, accountability-first process.
-            Bookings run on BorrowMyBike.ca.
+          <p style="margin:12px 0 0; color: rgba(255,255,255,.92); max-width: 72ch; font-weight: 650;">
+            Class6Loaner is the educational front door for test-takers. Learn what test day looks like, what to bring, and how BorrowMyBike helps riders connect with mentors who provide a road-test-ready motorcycle through a structured, accountability-first process.
           </p>
 
-         
-
-          <div style="margin-top:10px; color: rgba(255,255,255,.82); font-size: 13px; font-weight: 800;">
-             Select your province and city to view local road-test guidance. 
+          <div style="margin-top:12px; color: rgba(255,255,255,.84); font-size: 13px; font-weight: 800; max-width:72ch;">
+            This is built for short, government road tests — not open-ended borrowing, not lessons, and not recreational riding.
           </div>
 
-          <div style="margin-top:115px; color: rgba(255,255,255,.82); font-size: 13px; font-weight: 800;">
-            Secure Payment Processing through: <span style="color:white;">Stripe</span>. 
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;">
+            <a
+              class="cta"
+              data-cta="home_hero"
+              data-audience="test_taker"
+              href={selectedCitySlug
+                ? `https://borrowmybike.ca/browse?city=${encodeURIComponent(selectedCitySlug)}&utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=home_hero_testtaker`
+                : "https://borrowmybike.ca/browse?utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=home_hero_testtaker"}
+              rel="noopener"
+              target="_blank"
+            >
+              Find a mentor + bike →
+            </a>
+
+            <a class="cta" href="/road-test-guide">
+              Read the road test guide →
+            </a>
+
+            <a class="cta" href="/become-a-mentor">
+              Become a mentor →
+            </a>
+          </div>
+
+          <div style="margin-top:16px; color: rgba(255,255,255,.82); font-size: 13px; font-weight: 800;">
+            Booking, payments, and status tracking happen on: <span style="color:white;">BorrowMyBike.ca</span>
           </div>
         </div>
       </div>
     </div>
 
- <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
-            <a
-              class="cta"
-              data-cta="home_hero"
-              data-audience="mentor"
-              href="https://borrowmybike.ca/mentors/start?utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=home_hero_mentor"
-              rel="noopener"
-              target="_blank"
-            >Become a Mentor →</a>
+    {ADS_ENABLED ? (
+      <div style="margin-top:14px;">
+        {selectedCityName ? (
+          <SponsorSlot
+            cityName={selectedCityName}
+            slotNumber={1}
+            tier="premium"
+            placement="top"
+            compact={false}
+          />
+        ) : (
+          <SponsorSlot
+            cityName="Canada"
+            slotNumber={1}
+            scope="national"
+            tier="premium"
+            placement="top"
+            compact={false}
+          />
+        )}
+      </div>
+    ) : null}
 
-            <a
-              class="cta"
-              data-cta="home_hero"
-              data-audience="test_taker"
-              href="https://borrowmybike.ca/browse?utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=home_hero_testtaker"
-              rel="noopener"
-              target="_blank"
-            >Find a Mentor + Bike →</a>
-          </div>
-
-    <!-- LOCATION SELECT -->
-    <div class="grid" style="margin-top:14px; gap:10px;">
+    <div class="grid grid-3" style="margin-top:14px;">
       <div class="card" style="padding:14px;">
-        <div style="font-weight:1000;">Choose your province and city</div>
-        <div class="muted" style="margin-top:6px; max-width: 90ch;">
-          Select your province and city to see information for your local registry area.     
-         </div>
-
-        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
-          <label style="display:flex; flex-direction:column; gap:6px; font-weight:900; min-width:220px;">
-            <span class="muted" style="font-size:13px;">Province</span>
-            <select id="prov" class="card" style="padding:10px 12px; border-radius:12px;">
-              <option value="">Select a province…</option>
-              {provincesAll.map((p) => (
-                <option value={p}>{p}</option>
-              ))}
-            </select>
-          </label>
-
-          <label style="display:flex; flex-direction:column; gap:6px; font-weight:900; min-width:260px;">
-            <span class="muted" style="font-size:13px;">City</span>
-            <select id="city" class="card" style="padding:10px 12px; border-radius:12px;" disabled>
-              <option value="">Select a city…</option>
-            </select>
-          </label>
-        </div>
-
-        <div class="muted" style="margin-top:10px; font-size:13px;">
-          Tip: once you pick a city, we keep your location saved so guides and information stay relevant to your area.
+        <div style="font-weight:1000;">1) Get your test date</div>
+        <div class="muted" style="margin-top:6px;">
+          Confirm your registry appointment first so your day and time are locked in.
         </div>
       </div>
 
-      <div class="grid grid-3">
-        <div class="card" style="padding:14px;">
-          <div style="font-weight:1000;">For test-takers</div>
-          <div class="muted" style="margin-top:6px;">
-            Clear steps, checklists, and less uncertainty before test day.
-          </div>
+      <div class="card" style="padding:14px;">
+        <div style="font-weight:1000;">2) Learn what to expect</div>
+        <div class="muted" style="margin-top:6px;">
+          Use the city guides and test-taker pages to reduce stress and avoid surprises.
         </div>
+      </div>
 
-        <div class="card" style="padding:14px;">
-          <div style="font-weight:1000;">For mentors</div>
-          <div class="muted" style="margin-top:6px;">
-            Mentors earn <strong>$100</strong> per completed booking and help new riders start with a safety-first mindset.
-          </div>
-        </div>
-
-        <div class="card" style="padding:14px;">
-          <div style="font-weight:1000;">Bookings</div>
-          <div class="muted" style="margin-top:6px;">
-            All booking, payments, and rules are handled inside <a href="https://borrowmybike.ca" rel="noopener" target="_blank">BorrowMyBike</a>.ca.
-          </div>
+      <div class="card" style="padding:14px;">
+        <div style="font-weight:1000;">3) Request a mentor + bike</div>
+        <div class="muted" style="margin-top:6px;">
+          When you’re ready, go to BorrowMyBike and request a road-test-ready motorcycle.
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ABOUT (short) -->
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">Choose your province and city</h2>
+      <p class="muted" style="margin:0 0 12px; max-width: 90ch;">
+        Pick your province and city so we can keep guides, links, and sponsor space relevant to your local area.
+      </p>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+        <label style="display:flex; flex-direction:column; gap:6px; font-weight:900; min-width:220px;">
+          <span class="muted" style="font-size:13px;">Province</span>
+          <select id="prov" class="card" style="padding:10px 12px; border-radius:12px;">
+            <option value="">Select a province…</option>
+            {provincesAll.map((p) => (
+              <option value={p}>{p}</option>
+            ))}
+          </select>
+        </label>
+
+        <label style="display:flex; flex-direction:column; gap:6px; font-weight:900; min-width:260px;">
+          <span class="muted" style="font-size:13px;">City</span>
+          <select id="city" class="card" style="padding:10px 12px; border-radius:12px;" disabled>
+            <option value="">Select a city…</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="muted" style="margin-top:10px; font-size:13px;">
+        Tip: once you pick a city, we keep it saved so Class6Loaner stays local and relevant.
+      </div>
+
+      {selectedCityName && selectedProvince ? (
+        <div class="card" style="margin-top:12px; padding:14px;">
+          <div style="font-weight:1000;">
+            Your current area: {selectedCityName}, {selectedProvince}
+          </div>
+          <div class="muted" style="margin-top:6px;">
+            We’ll use this to localize guides and outgoing marketplace links.
+          </div>
+        </div>
+      ) : null}
+    </div>
+  </section>
+
+  <section class="grid grid-2" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">For test-takers</h2>
+      <p class="muted" style="margin:0; max-width:85ch;">
+        If you already have your road test booked but do not have a suitable motorcycle, Class6Loaner helps you understand the process and points you to the next step.
+      </p>
+
+      <ul style="margin:12px 0 0; padding-left:18px; display:grid; gap:8px;">
+        <li>What to bring</li>
+        <li>What happens on test day</li>
+        <li>How mentors fit into the process</li>
+        <li>How to request a road-test-ready bike</li>
+      </ul>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+        <a class="cta" href="/road-test-guide">Road test guide →</a>
+        <a
+          class="cta"
+          href={selectedCitySlug
+            ? `https://borrowmybike.ca/browse?city=${encodeURIComponent(selectedCitySlug)}&utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=home_testtaker_block`
+            : "https://borrowmybike.ca/browse?utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=home_testtaker_block"}
+          rel="noopener"
+          target="_blank"
+        >
+          Go to BorrowMyBike →
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">For mentors</h2>
+      <p class="muted" style="margin:0; max-width:85ch;">
+        Experienced riders can help a test-taker show up calm and prepared with a road-test-ready motorcycle. This is <b>not a rental</b> and <b>not training</b>.
+      </p>
+
+      <ul style="margin:12px 0 0; padding-left:18px; display:grid; gap:8px;">
+        <li>Accept only the requests that work for you</li>
+        <li>Meet at the registry and keep the handoff professional</li>
+        <li>Earn $100 per completed road test</li>
+        <li>Read the deeper guide before joining if you want more detail</li>
+      </ul>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+        <a class="cta" href="/become-a-mentor">Become a mentor →</a>
+        <a class="cta" href="/mentor-guide">Mentor guide →</a>
+      </div>
+    </div>
+  </section>
+
+  {ADS_ENABLED ? (
+    <section class="grid" style="margin-top:14px;">
+      <div class="card">
+        <h2 style="margin:0 0 10px; font-weight:1000;">
+          {selectedCityName ? `${selectedCityName} partner spots` : "Founding sponsor spots"}
+        </h2>
+        <p class="muted" style="margin:0; max-width:85ch;">
+          {selectedCityName
+            ? `These spots are reserved for local businesses relevant to riders in ${selectedCityName}.`
+            : "National spots live here until a visitor selects a city. Once a city is selected, local placements become more relevant."}
+        </p>
+
+        {selectedCityName ? (
+          <div class="grid grid-2" style="margin-top:12px;">
+            <SponsorSlot
+              cityName={selectedCityName}
+              slotNumber={2}
+              tier="standard"
+              placement="mid"
+              compact={false}
+            />
+            <SponsorSlot
+              cityName={selectedCityName}
+              slotNumber={3}
+              tier="standard"
+              placement="bottom"
+              compact={false}
+            />
+          </div>
+        ) : (
+          <div class="grid grid-2" style="margin-top:12px;">
+            <SponsorSlot
+              cityName="Canada"
+              slotNumber={2}
+              scope="national"
+              tier="standard"
+              placement="mid"
+              compact={false}
+            />
+            <SponsorSlot
+              cityName="Canada"
+              slotNumber={3}
+              scope="national"
+              tier="standard"
+              placement="bottom"
+              compact={false}
+            />
+          </div>
+        )}
+      </div>
+    </section>
+  ) : null}
+
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">Popular Alberta city guides</h2>
+      <p class="muted" style="margin:0 0 12px; max-width:90ch;">
+        These are the city pages most likely to attract early traffic and help riders find the right local next step.
+      </p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        {featuredCities.map((city) => (
+          <a class="cta" href={`/cities/${city.slug}`}>
+            {city.name} →
+          </a>
+        ))}
+        <a class="cta" href="/cities/">All city guides →</a>
+      </div>
+    </div>
+  </section>
+
   <section class="grid" style="margin-top:14px;">
     <div class="card">
       <h2 style="margin:0 0 10px; font-weight:1000;">Why this exists</h2>
 
       <p class="muted" style="margin:0 0 10px; max-width:90ch;">
-        Across Canada, many new riders face two practical problems: <strong>limited road test appointment availability</strong> and
-        <strong>limited access to a road-test-ready motorcycle</strong>. Some registries offer rentals, but availability can be inconsistent.
+        Many riders can book a Class 6 road test before they have reliable access to a road-test-ready motorcycle. Some registries offer their own options, but availability is inconsistent and last-minute scrambling is common.
       </p>
 
       <p class="muted" style="margin:0; max-width:90ch;">
-        What started as helping riders bridge that gap evolved into a structured mentorship-first process. The goal isn’t just passing a test —
-        it’s building calm confidence and a safety-first mindset that carries into a rider’s first season.
+        Class6Loaner exists to reduce that uncertainty. BorrowMyBike handles the structured marketplace side; Class6Loaner handles the educational side so riders and mentors understand what they’re stepping into.
       </p>
 
       <div class="muted" style="margin-top:10px; display:flex; gap:14px; flex-wrap:wrap;">
         <a href="/about">Read the full story →</a>
         <a href="/how-it-works">How it works →</a>
-        <a href="https://borrowmybike.ca/legal#damage" rel="noopener" target="_blank">Damage &amp; responsibility →</a>
+        <a href="/become-a-mentor">Become a mentor →</a>
       </div>
     </div>
   </section>
 
-  <!-- FAQ -->
   <section class="grid" style="margin-top:14px;">
     <div class="card">
-      <h2 style="margin:0 0 10px; font-weight:1000;">FAQ (mentors + test-takers)</h2>
+      <h2 style="margin:0 0 10px; font-weight:1000;">FAQ (test-takers + mentors)</h2>
       <p class="muted" style="margin:0 0 12px; max-width:90ch;">
-        Expand to see answers. We keep it structured so both sides know what they’re agreeing to.
+        Expand to see the short version. We keep expectations clear because this works best when everyone understands the model.
       </p>
 
       <details class="bmb-acc">
         <summary>
-          <span>Is this an open rental / joyride marketplace?</span>
-         
+          <span>Is this an open rental or joyride marketplace?</span>
         </summary>
         <div class="bmb-accBody">
           <div class="muted" style="max-width:95ch;">
-            No. This is built for short, registry-based Class 6 road tests. It is not designed for recreational rentals, lessons, or long rides.
+            No. This is built for short, registry-based Class 6 road tests. It is not designed for recreational rentals, lessons, or open-ended bike borrowing.
           </div>
         </div>
       </details>
@@ -205,165 +357,46 @@ const byProvClient = Object.fromEntries(
       <details class="bmb-acc">
         <summary>
           <span>Do mentors teach people how to ride?</span>
-         
         </summary>
         <div class="bmb-accBody">
           <div class="muted" style="max-width:95ch;">
-            No. Mentors are not instructors. They can share experience-based safety tips and calm coordination through messaging — not lessons or last‑minute coaching.
+            No. Mentors are not instructors. They may share calm, practical reminders, but this is not rider training or coaching.
           </div>
         </div>
       </details>
 
       <details class="bmb-acc">
         <summary>
-          <span>What do mentors earn?</span>
-          
+          <span>Where do bookings happen?</span>
         </summary>
         <div class="bmb-accBody">
           <div class="muted" style="max-width:95ch;">
-            Mentors earn <strong>$100</strong> for a completed booking. Details and payouts are handled inside <a href="https://borrowmybike.ca" target="_blank" rel="noopener noreferrer">BorrowMyBike.ca</a>.
+            Bookings, payments, messaging, and platform rules are handled on <a href="https://borrowmybike.ca" rel="noopener" target="_blank">BorrowMyBike.ca</a>.
           </div>
         </div>
       </details>
 
       <details class="bmb-acc">
         <summary>
-          <span>What about deposits and no-shows?</span>
-         
+          <span>What about no-shows, cancellations, and damage?</span>
         </summary>
         <div class="bmb-accBody">
           <div class="muted" style="max-width:95ch;">
-            Deposits are used for accountability and to discourage no‑shows. If the road test can’t proceed due to one party’s fault, platform rules determine forfeiture and any credit due to the not‑at‑fault party.
+            Accountability rules, cancellation outcomes, and damage/responsibility details live on BorrowMyBike. The short version: clear expectations and documentation matter.
           </div>
         </div>
       </details>
 
-      <details class="bmb-acc">
-        <summary>
-          <span>What if the bike gets damaged?</span>
-         
-        </summary>
-        <div class="bmb-accBody">
-          <div class="muted" style="max-width:95ch;">
-            Responsibility depends on fault and the terms accepted at checkout. Both sides should understand their own insurance coverage. See the full damage section on <a href="https://borrowmybike.ca" target="_blank" rel="noopener noreferrer">BorrowMyBike.ca</a>:
-            <a href="https://borrowmybike.ca/legal#damage" rel="noopener" target="_blank">Damage &amp; responsibility →</a>
-          </div>
-        </div>
-      </details>
-
-      <details class="bmb-acc">
-        <summary>
-          <span>How do cancellations work?</span>
-          
-        </summary>
-        <div class="bmb-accBody">
-          <div class="muted" style="max-width:95ch;">
-            Once a booking is accepted, it’s confirmed and subject to platform policies. Cancellation outcomes depend on timing and fault scenarios. Full rules live in the app.
-          </div>
-        </div>
-      </details>
-
-      <details class="bmb-acc">
-        <summary>
-          <span>What if the examiner cancels or weather is unsafe?</span>
-         
-        </summary>
-        <div class="bmb-accBody">
-          <div class="muted" style="max-width:95ch;">
-            If a test is rescheduled by the registry or conditions are unsafe, the goal is a safe rebook under platform rules — not a stressful last‑minute scramble.
-          </div>
-        </div>
-      </details>
-
-      <details class="bmb-acc">
-  <summary>
-    <span>Can I take an Alberta Class 6 road test on an automatic motorcycle?</span>
-  </summary>
-  <div class="bmb-accBody">
-    <div class="muted" style="max-width:95ch;">
-      Yes. Alberta’s Class 6 information does not list an automatic-transmission restriction for a standard Class 6 road test. The separate restriction Alberta does call out is for <strong>3-wheeled motorcycles</strong>.
-    </div>
-  </div>
-</details>
-
-<details class="bmb-acc">
-  <summary>
-    <span>Can I use a 50cc scooter or moped for a Class 6 road test?</span>
-  </summary>
-  <div class="bmb-accBody">
-    <div class="muted" style="max-width:95ch;">
-      No. In Alberta, vehicles with an engine displacement of <strong>not more than 50cc</strong> fall into the moped category. For practical Class 6 road-test purposes, the safer rule is: <strong>50cc and under is not suitable for a full motorcycle road test; 51cc and up is the motorcycle category you should plan around.</strong>
-    </div>
-  </div>
-</details>
-
-<details class="bmb-acc">
-  <summary>
-    <span>What happens if I take my road test on a 3-wheeled motorcycle?</span>
-  </summary>
-  <div class="bmb-accBody">
-    <div class="muted" style="max-width:95ch;">
-      In Alberta, if you take your Class 6 road test on a <strong>3-wheeled motorcycle</strong>, your licence will be restricted to operating <strong>3-wheeled motorcycles only</strong>.
-    </div>
-  </div>
-</details>
-
-<details class="bmb-acc">
-  <summary>
-    <span>How early should I arrive for my road test?</span>
-  </summary>
-  <div class="bmb-accBody">
-    <div class="muted" style="max-width:95ch;">
-      Plan to arrive <strong>30 minutes early</strong> unless your registry tells you otherwise. That gives you time for check-in, documents, and any last-minute instructions without adding stress.
-    </div>
-  </div>
-</details>
-
-      <details class="bmb-acc">
-        <summary>
-          <span>How are payments handled?</span>
-          
-        </summary>
-        <div class="bmb-accBody">
-          <div class="muted" style="max-width:95ch;">
-            Payments and refunds are processed through Stripe. Booking status and outcomes are tracked inside the app.
-          </div>
-        </div>
-      </details>
-
-      <details class="bmb-acc">
-        <summary>
-          <span>Do I have to accept every request as a mentor?</span>
-          
-        </summary>
-        <div class="bmb-accBody">
-          <div class="muted" style="max-width:95ch;">
-            No. Mentors can accept or decline requests. There’s no subscription and no obligation to accept.
-          </div>
-        </div>
-      </details>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+        <a class="cta" href="/road-test-guide">Read the road test guide →</a>
+        <a class="cta" href="/become-a-mentor">Read the mentor page →</a>
+        <a href="https://borrowmybike.ca/legal" target="_blank" rel="noopener" class="cta">Rules & Responsibilities →</a>
+      </div>
     </div>
   </section>
 
-  {ADS_ENABLED ? (
-    <section class="grid" style="margin-top:14px;">
-      <div class="card">
-        <h2 style="margin:0 0 10px; font-weight:1000;">Founding sponsor spots</h2>
-        <p class="muted" style="margin:0; max-width:85ch;">
-          Canada-wide spots live here. City pages show local sponsor spots once a visitor picks a city.
-        </p>
-        <div class="grid grid-3" style="margin-top:12px;">
-          <SponsorSlot cityName="Canada" slotNumber={1} scope="national" />
-          <SponsorSlot cityName="Canada" slotNumber={2} scope="national" />
-          <SponsorSlot cityName="Canada" slotNumber={3} scope="national" />
-        </div>
-      </div>
-    </section>
-  ) : null}
-
   <script is:inline data-cities={JSON.stringify(byProvClient)}>
     const byProv = JSON.parse(document.currentScript.dataset.cities);
-    
 
     const provSel = document.getElementById("prov");
     const citySel = document.getElementById("city");
@@ -372,40 +405,19 @@ const byProvClient = Object.fromEntries(
       console.warn("City selector elements not found.");
     } else {
       function setCityOptions(prov) {
-  const list = (byProv[prov] || []).slice();
+        const list = (byProv[prov] || []).slice();
 
-  const options =
-    '<option value="">Select a city…</option>' +
-    list
-      .slice()
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .map((c) => `<option value="${c.slug}">${c.name}</option>`)
-      .join("");
+        const options =
+          '<option value="">Select a city…</option>' +
+          list
+            .slice()
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((c) => `<option value="${c.slug}">${c.name}</option>`)
+            .join("");
 
-  citySel.innerHTML = options;
-  citySel.disabled = list.length === 0;
-}
-
-      // If someone has a saved city, restore it
-try {
-  const savedCity = localStorage.getItem("c6l_city");
-  if (savedCity) {
-    let foundProv = "";
-    for (const p of Object.keys(byProv)) {
-      if ((byProv[p] || []).some((c) => c.slug === savedCity)) {
-        foundProv = p;
-        break;
+        citySel.innerHTML = options;
+        citySel.disabled = list.length === 0;
       }
-    }
-
-    if (foundProv) {
-      provSel.value = foundProv;
-      setCityOptions(foundProv);
-      citySel.value = savedCity;
-      citySel.disabled = false;
-    }
-  }
-} catch {}
 
       provSel.addEventListener("change", () => {
         const p = provSel.value;
@@ -414,49 +426,16 @@ try {
           citySel.disabled = true;
           return;
         }
-
-        if (typeof window.c6lTrackEvent === "function") {
-          window.c6lTrackEvent("select_province", {
-            province: p,
-            page_path: window.location.pathname,
-            page_title: document.title,
-          });
-        }
-
         setCityOptions(p);
       });
 
-      citySel.addEventListener("change", () => {
+            citySel.addEventListener("change", () => {
         const slug = citySel.value;
         if (!slug) return;
-
-        let selectedProvince = provSel.value || "";
-        let selectedCityName = slug;
-        const list = byProv[selectedProvince] || [];
-        const match = list.find((c) => c.slug === slug);
-        if (match) {
-          selectedCityName = match.name;
-          selectedProvince = match.province || selectedProvince;
-        }
-
-        if (typeof window.c6lTrackEvent === "function") {
-          window.c6lTrackEvent("select_city", {
-            city: slug,
-            city_name: selectedCityName,
-            province: selectedProvince,
-            page_path: window.location.pathname,
-            page_title: document.title,
-          });
-        }
-
-        try {
-          localStorage.setItem("c6l_city", slug);
-        } catch {}
-        window.location.href = `/cities/${slug}?city=` + encodeURIComponent(slug);
+        window.location.href = `/cities/${slug}`;
       });
     }
 
-    // OPTIONAL: pass city into BMB links once city mode is on
     (function () {
       try {
         const city = localStorage.getItem("c6l_city");

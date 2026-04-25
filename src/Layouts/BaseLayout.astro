@@ -32,8 +32,14 @@ const baseSchema = [
   ...schemaList,
 ];
 
+import { CITIES } from "../data/cities";
+
 // Optional city context (used to keep sponsors + links local once a visitor picks a city)
-const citySlug = Astro.url.searchParams.get("city");
+const pathParts = Astro.url.pathname.split("/").filter(Boolean);
+const routeCityCandidate = pathParts.length >= 2 ? pathParts[pathParts.length - 1] : null;
+const citySlug = CITIES.some((c) => c.slug === routeCityCandidate)
+  ? routeCityCandidate
+  : Astro.url.searchParams.get("city");
 
 // Active nav highlight
 const path = Astro.url.pathname;
@@ -46,7 +52,20 @@ const isActive = (href: string) => {
 function withCity(p: string) {
   if (!citySlug) return p;
   if (p.startsWith("http")) return p;
-  return `${p}${p.includes("?") ? "&" : "?"}city=${encodeURIComponent(citySlug)}`;
+
+  if (
+    p === "/about" ||
+    p === "/how-it-works" ||
+    p === "/mentor-guide" ||
+    p === "/road-test-guide" ||
+    p === "/become-a-mentor"
+  ) {
+    return `${p}/${encodeURIComponent(citySlug)}`;
+  }
+
+  if (p === "/cities") return `/cities/${encodeURIComponent(citySlug)}`;
+
+  return p;
 }
 
 // Helper: pass city context into BorrowMyBike links (safe even if the app ignores it)
@@ -72,7 +91,7 @@ const bmbCta = (() => {
   const testTakerCta = {
     text: "Find a Mentor + Bike",
     href: withBmbCity(
-      "https://borrowmybike.ca/test-takers?utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=header_cta_testtaker"
+      "https://borrowmybike.ca/auth?utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=header_cta_testtaker"
     ),
     audience: "test_taker",
     placement: "header",
@@ -94,7 +113,7 @@ const bmbCta = (() => {
   };
 
   // Test-taker intent
-  if (p.startsWith("/road-test-guide") || p.startsWith("/test-taker-guide")) return testTakerCtaShort;
+  if (p.startsWith("/road-test-guide")) return testTakerCtaShort;
 
   // Mentor intent
   if (p.startsWith("/become-a-mentor") || p.startsWith("/mentor-guide") || p.startsWith("/about")) return mentorCtaShort;
@@ -117,8 +136,15 @@ const bmbCta = (() => {
     </script>
 
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>{title}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- Favicon -->
+<link rel="icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+<title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
     <meta name="robots" content="index,follow" />
@@ -430,16 +456,24 @@ details.bmb-acc .bmb-accBody {
   <body>
     <header class="nav">
       <div class="wrap navInner">
-        <a class="brand" href={withCity("/")}>
-          <img src="/images/logo.png" alt="Class6Loaner logo" />
-          {citySlug && <span class="pill" title="Local context is on">City mode ✓</span>}
-        </a>
+        <div class="brand">
+  <a href={citySlug ? `/cities/${citySlug}` : "/"}>
+    <img src="/images/logo.png" alt="Class6Loaner logo" />
+  </a>
+
+  {citySlug && (
+    <a href="/cities" class="pill" title="Change city">
+      City mode ✓
+    </a>
+  )}
+</div>
 
         <nav class="links" aria-label="Primary">
-          <a class={isActive("/about") ? "active" : ""} href={withCity("/about")}>About</a>
-          <a class={isActive("/how-it-works") ? "active" : ""} href={withCity("/how-it-works")}>How it works</a>
-          <a class={isActive("/mentor-guide") ? "active" : ""} href={withCity("/mentor-guide")}>Mentor guide</a>
-          <a class={isActive("/road-test-guide") ? "active" : ""} href={withCity("/road-test-guide")}>Test-taker guide</a>
+        <a class={isActive("/about") ? "active" : ""} href={withCity("/about")}>About</a>
+        <a class={isActive("/how-it-works") ? "active" : ""} href={withCity("/how-it-works")}>How it works</a>
+        <a class={isActive("/mentor-guide") ? "active" : ""} href={withCity("/mentor-guide")}>Mentor guide</a>
+        <a class={isActive("/road-test-guide") ? "active" : ""} href={withCity("/road-test-guide")}>Road-test guide</a>
+        <a class={isActive("/become-a-mentor") ? "active" : ""} href={withCity("/become-a-mentor")}>Become a mentor</a>
         </nav>
 
         <button class="menuBtn" type="button" aria-expanded="false" aria-controls="mobileMenu" id="menuBtn">
@@ -463,7 +497,7 @@ details.bmb-acc .bmb-accBody {
           <a class={isActive("/about") ? "active" : ""} href={withCity("/about")}>About</a>
           <a class={isActive("/how-it-works") ? "active" : ""} href={withCity("/how-it-works")}>How it works</a>
           <a class={isActive("/mentor-guide") ? "active" : ""} href={withCity("/mentor-guide")}>Mentor guide</a>
-          <a class={isActive("/road-test-guide") ? "active" : ""} href={withCity("/road-test-guide")}>Test-taker guide</a>
+          <a class={isActive("/road-test-guide") ? "active" : ""} href={withCity("/road-test-guide")}>Road-test guide</a>
           <a class={isActive("/become-a-mentor") ? "active" : ""} href={withCity("/become-a-mentor")}>Become a mentor</a>
 
           <a
@@ -494,29 +528,7 @@ details.bmb-acc .bmb-accBody {
         </div>
       </div>
     </footer>
-
     <script is:inline>
-      // Persist "city mode" so visitors keep local context across pages
-      (function () {
-        try {
-          const url = new URL(window.location.href);
-          const city = url.searchParams.get("city");
-          if (city) {
-            localStorage.setItem("c6l_city", city);
-          } else {
-            const saved = localStorage.getItem("c6l_city");
-            if (saved) {
-              document.querySelectorAll('a[href^="/"]').forEach((a) => {
-                const href = a.getAttribute("href");
-                if (!href) return;
-                if (href.includes("city=")) return;
-                const joiner = href.includes("?") ? "&" : "?";
-                a.setAttribute("href", href + joiner + "city=" + encodeURIComponent(saved));
-              });
-            }
-          }
-        } catch {}
-      })();
 
       // Mobile menu toggle
       (function () {
@@ -596,7 +608,7 @@ details.bmb-acc .bmb-accBody {
 
           const getCityMode = function () {
             try {
-              return localStorage.getItem("c6l_city") ? "on" : "off";
+              return /^(?:\/about|\/how-it-works|\/mentor-guide|\/road-test-guide|\/cities)\/.+/.test(window.location.pathname) ? "on" : "off";
             } catch {
               return "off";
             }

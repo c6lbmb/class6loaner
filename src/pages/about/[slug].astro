@@ -1,0 +1,256 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SponsorSlot from "../../components/SponsorSlot.astro";
+import { CITIES } from "../../data/cities";
+
+const title = "About Class6Loaner";
+const description =
+  "Why Class6Loaner exists: a safety-first community project that grew from a real road-test problem into a structured mentor-supported platform.";
+const canonicalPath = "/about";
+
+export function getStaticPaths() {
+  return CITIES.map((city) => ({ params: { slug: city.slug }, props: { city } }));
+}
+
+const { city } = Astro.props;
+
+const ADS_ENABLED = (import.meta.env.PUBLIC_ADS_ENABLED ?? "false") === "true";
+
+const citySlug = city.slug;
+const selectedCity = city;
+const cityName = city.name;
+const provinceName = city.province;
+
+function withCity(p: string) {
+  if (!citySlug) return p;
+  if (p.startsWith("http")) return p;
+  return `${p}${p.includes("?") ? "&" : "?"}city=${encodeURIComponent(citySlug)}`;
+}
+
+function withBmbCity(url: string) {
+  if (!citySlug) return url;
+  if (url.includes("city=")) return url;
+  return `${url}${url.includes("?") ? "&" : "?"}city=${encodeURIComponent(citySlug)}`;
+}
+---
+
+<BaseLayout title={title} description={description} canonicalPath={`/about/${citySlug}`}>
+  <section class="card">
+    <div class="muted" style="font-weight:900;">About Class6Loaner</div>
+    <h1 style="margin:8px 0 0; font-weight:1000;">Why this exists</h1>
+
+    <p class="muted" style="margin:10px 0 0; max-width:92ch;">
+      Class6Loaner started with a simple problem: getting licensed should be straightforward, but finding a road-test-ready motorcycle often is not.
+      Many riders are ready for their Class 6 test long before they have reliable access to a suitable bike on the right day and at the right time.
+    </p>
+
+    {ADS_ENABLED && cityName ? (
+      <div style="margin-top:14px;">
+        <SponsorSlot
+          cityName={cityName}
+          slotNumber={1}
+          tier="premium"
+          placement="top"
+          compact={false}
+        />
+      </div>
+    ) : null}
+  </section>
+
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">How it started</h2>
+
+      <p class="muted" style="margin:0 0 10px; max-width:95ch;">
+        The idea came from a real gap. When I wanted to get my Class 6 license, I wanted to move quickly, but I could not find a bike.
+        Registries that had bikes available were often booked weeks out, and borrowing from friends was not always realistic or reliable.
+      </p>
+
+      <p class="muted" style="margin:0; max-width:95ch;">
+        After getting licensed, I bought a small 125cc bike and posted a single ad on Kijiji offering it for road tests.
+        That one ad turned into more than 20 road-test bookings. After doing this for a few years, it became obvious this was not just my problem — it was a real need.
+      </p>
+    </div>
+  </section>
+
+  <section class="grid grid-2" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">What I discovered</h2>
+
+      <p class="muted" style="margin:0 0 10px; max-width:85ch;">
+        Over time, I realized it was not just about giving someone access to a bike.
+        My presence, communication, and calm approach before the test helped people show up with a better mindset.
+      </p>
+
+      <p class="muted" style="margin:0; max-width:85ch;">
+        Test-takers had questions about gear, lane positioning, basic road-test expectations, and safe riding habits.
+        Sharing a few practical reminders by text helped reduce nerves, improve focus, and make test day feel more predictable.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">Why that matters</h2>
+
+      <p class="muted" style="margin:0 0 10px; max-width:85ch;">
+        When riders have someone calm and experienced to talk to, they tend to be more aware of their own limits, more open to practical reminders, and more measured on test day.
+      </p>
+
+      <p class="muted" style="margin:0; max-width:85ch;">
+        That changes the experience. It reduces panic, improves confidence, and helps riders start their journey with a safer mindset.
+      </p>
+    </div>
+  </section>
+
+  {ADS_ENABLED && cityName ? (
+    <section class="grid" style="margin-top:14px;">
+      <div class="card">
+        <h2 style="margin:0 0 10px; font-weight:1000;">{cityName} partner spot</h2>
+        <p class="muted" style="margin:0; max-width:92ch;">
+          A mid-page local sponsor can sit here without interrupting the story or making the page feel cluttered.
+        </p>
+
+        <div style="margin-top:12px;">
+          <SponsorSlot
+            cityName={cityName}
+            slotNumber={2}
+            tier="standard"
+            placement="mid"
+            compact={false}
+          />
+        </div>
+      </div>
+    </section>
+  ) : null}
+
+  <section class="grid grid-2" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">What Class6Loaner is</h2>
+      <ul style="margin:0; padding-left:18px; display:grid; gap:8px;">
+        <li>Structured Class 6 road-test support</li>
+        <li>Education and clarity before test day</li>
+        <li>A safety-first, mentor-supported process</li>
+        <li>A bridge between preparation and the actual booking platform</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">What Class6Loaner is not</h2>
+      <ul style="margin:0; padding-left:18px; display:grid; gap:8px;">
+        <li><b>Not a rental marketplace</b></li>
+        <li><b>Not rider training</b></li>
+        <li><b>Not a riding school</b></li>
+        <li><b>Not open-ended recreational borrowing</b></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">Working alongside training schools</h2>
+
+      <p class="muted" style="margin:0 0 10px; max-width:95ch;">
+        Motorcycle training schools are valuable, and riders should strongly consider professional training whenever possible.
+        Training schools help build skills, discipline, and safe habits — and they are worth it.
+      </p>
+
+      <p class="muted" style="margin:0; max-width:95ch;">
+        Class6Loaner is not a replacement for training schools. It complements them.
+        Training helps riders learn. Class6Loaner helps riders access a road-test-ready motorcycle, reduce test-day stress, and approach the process with more confidence and structure.
+      </p>
+    </div>
+  </section>
+
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">How Class6Loaner connects to BorrowMyBike</h2>
+
+      <p class="muted" style="margin:0 0 10px; max-width:95ch;">
+        Class6Loaner provides guidance, clarity, and context around the Class 6 road test.
+        BorrowMyBike is where the actual booking happens.
+      </p>
+
+      <ul style="margin:0; padding-left:18px; display:grid; gap:8px;">
+        <li>Class6Loaner explains the process and reduces uncertainty</li>
+        <li>BorrowMyBike handles bookings, payments, deposits, and messaging</li>
+        <li>Together, they create a structured path from preparation to test day</li>
+      </ul>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+        <a class="cta" href={withCity("/how-it-works")}>How it works →</a>
+        <a class="cta" href={withCity("/road-test-guide")}>Road test guide →</a>
+        <a class="cta" href={withBmbCity("https://borrowmybike.ca")} rel="noopener" target="_blank">Go to BorrowMyBike →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid grid-2" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">Who this is for</h2>
+
+      <p class="muted" style="margin:0 0 10px; max-width:85ch;">
+        This is for test-takers who need a road-test-ready bike and want test day to feel more predictable, calm, and professional.
+      </p>
+
+      <p class="muted" style="margin:0; max-width:85ch;">
+        It is also for experienced riders who want to help, share practical wisdom, and support new riders through a structured process.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">Bigger than a booking</h2>
+
+      <p class="muted" style="margin:0 0 10px; max-width:85ch;">
+        This project is also about growing the riding community.
+        Riders get introduced to each other, test-takers gain confidence, and mentors pass on the kind of practical advice that only comes from experience.
+      </p>
+
+      <p class="muted" style="margin:0; max-width:85ch;">
+        Sometimes all a rider needs is the right bike, the right mindset, and someone calm who has been there before.
+      </p>
+    </div>
+  </section>
+
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">Starting local, growing nationally</h2>
+
+      <p class="muted" style="margin:0; max-width:95ch;">
+        Class6Loaner is being built city by city and province by province.
+        The long-term vision is national, but the model works best when local riders, local businesses, and local road-test demand are connected in a way that feels relevant and grounded.
+      </p>
+    </div>
+  </section>
+
+  {ADS_ENABLED && cityName ? (
+    <section class="grid" style="margin-top:14px;">
+      <div class="card">
+        <h2 style="margin:0 0 10px; font-weight:1000;">More {cityName} partner visibility</h2>
+        <p class="muted" style="margin:0; max-width:92ch;">
+          A lower slot can be used for a second local partner or sponsor package.
+        </p>
+
+        <div style="margin-top:12px;">
+          <SponsorSlot
+            cityName={cityName}
+            slotNumber={3}
+            tier="standard"
+            placement="bottom"
+            compact={false}
+          />
+        </div>
+      </div>
+    </section>
+  ) : null}
+
+  <section class="card" style="margin-top:14px;">
+    <h2 style="margin:0 0 10px; font-weight:1000;">Explore the project</h2>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <a class="cta" href={withCity("/how-it-works")}>How it works →</a>
+      <a class="cta" href={withCity("/road-test-guide")}>Road test guide →</a>
+      <a class="cta" href={withCity("/mentor-guide")}>Mentor guide →</a>
+      <a class="cta" href={withCity("/become-a-mentor")}>Become a mentor →</a>
+      <a class="cta" href={withBmbCity("https://borrowmybike.ca/legal#damage")} rel="noopener" target="_blank">Damage & Responsibility →</a>
+    </div>
+  </section>
+</BaseLayout>

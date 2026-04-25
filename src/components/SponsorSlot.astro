@@ -3,10 +3,16 @@ type Props = {
   cityName?: string;
   slotNumber: number;
 
-  // Optional: local vs national labeling
+  // local or national sponsor
   scope?: "local" | "national";
 
-  // Optional: hide the “email us” line (useful for tighter layouts)
+  // premium or standard slot
+  tier?: "premium" | "standard";
+
+  // top, mid, bottom placement
+  placement?: "top" | "mid" | "bottom";
+
+  // tighter layout if needed
   compact?: boolean;
 };
 
@@ -14,40 +20,50 @@ const {
   cityName = "Your city",
   slotNumber,
   scope = "local",
+  tier = "standard",
+  placement = "bottom",
   compact = false,
 } = Astro.props;
 
-// Global kill-switch: if ads aren’t enabled, render nothing.
-// Default = hidden unless you explicitly turn it on.
+// Global kill-switch
 const ADS_ENABLED = (import.meta.env.PUBLIC_ADS_ENABLED ?? "false") === "true";
+
 if (!ADS_ENABLED) {
-  // IMPORTANT: This makes sponsor placeholders invisible to users everywhere.
-  // When ready, set PUBLIC_ADS_ENABLED=true.
   return null;
 }
 
 const isNational = scope === "national";
+const isPremium = tier === "premium";
 
 const title = isNational
-  ? `National sponsor spot #${slotNumber}`
-  : `Local sponsor spot #${slotNumber}`;
+  ? "Founding national partner opportunity"
+  : `Founding partner opportunity — ${cityName}`;
 
 const subtitle = isNational
-  ? "Reserved for a Canada-wide partner (training, gear, insurance, dealer, etc.)."
-  : `Reserved for a ${cityName} partner (training, gear, insurance, dealer, etc.).`;
+  ? "We're highlighting a small number of trusted businesses as Class6Loaner expands across Canada."
+  : `We're highlighting a small number of trusted local businesses as we launch in ${cityName}.`;
 
 const showEmailLine = !compact;
+
+const borderColor = isPremium ? "#f59e0b" : "#e5e7eb";
+const background = isPremium ? "#fff7ed" : "#fff";
 ---
 
-<div class="card" style="padding:14px;">
-  <div style="font-weight:1000;">{title}</div>
+<div class="card" style={`padding:14px; border:1px solid ${borderColor}; background:${background};`}>
+  <div style="font-weight:1000;">
+    {title}
+  </div>
+
   <div class="muted" style="margin-top:6px;">
     {subtitle}
   </div>
 
   {showEmailLine && (
     <div class="muted" style="margin-top:10px;">
-      Want this spot? Email: <a href="mailto:support@borrowmybike.ca">support@borrowmybike.ca</a>
+      Interested in this placement?{" "}
+      <a href="mailto:support@borrowmybike.ca">
+        support@borrowmybike.ca
+      </a>
     </div>
   )}
 </div>

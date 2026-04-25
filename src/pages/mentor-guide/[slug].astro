@@ -1,0 +1,295 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SponsorSlot from "../../components/SponsorSlot.astro";
+import { CITIES } from "../../data/cities";
+
+const title = "Mentor guide — calm, structured, safety-first support | Class6Loaner";
+const description =
+  "Detailed mentor expectations for supporting a Class 6 road test: no rentals, no training, calm communication, safe handoff, and professional test-day support.";
+const canonicalPath = "/mentor-guide";
+
+export function getStaticPaths() {
+  return CITIES.map((city) => ({ params: { slug: city.slug }, props: { city } }));
+}
+
+const { city } = Astro.props;
+
+const ADS_ENABLED = (import.meta.env.PUBLIC_ADS_ENABLED ?? "false") === "true";
+
+const citySlug = city.slug;
+const selectedCity = city;
+const cityName = city.name;
+const provinceName = city.province;
+
+function withCity(p: string) {
+  if (!citySlug) return p;
+  if (p.startsWith("http")) return p;
+  return `${p}${p.includes("?") ? "&" : "?"}city=${encodeURIComponent(citySlug)}`;
+}
+
+function withBmbCity(url: string) {
+  if (!citySlug) return url;
+  if (url.includes("city=")) return url;
+  return `${url}${url.includes("?") ? "&" : "?"}city=${encodeURIComponent(citySlug)}`;
+}
+---
+
+<BaseLayout title={title} description={description} canonicalPath={`/mentor-guide/${citySlug}`}>
+  <section class="card">
+    <div class="muted" style="font-weight:900;">Mentor guide</div>
+
+    <h1 style="margin:8px 0 0; font-weight:1000;">
+      Be the calm, prepared part of someone’s test day.
+    </h1>
+
+    <p class="muted" style="margin:10px 0 0; max-width:85ch;">
+      This page is for mentors who want the deeper version of what good support looks like on test day.
+      The role is simple: bring a road-test-ready motorcycle, communicate clearly, keep everything calm, and help the handoff feel professional.
+      It is <b>not a rental</b>, and it is <b>not rider training</b>.
+    </p>
+
+    <div class="card" style="padding:14px; margin-top:12px;">
+      <div style="font-weight:1000;">What this guide is for</div>
+      <div class="muted" style="margin-top:6px; max-width:90ch;">
+        This guide exists to help mentors understand expectations, reduce uncertainty, and support test-takers in a way that is safety-first, predictable, and professional.
+      </div>
+    </div>
+
+   {cityName ? (
+  <p class="muted" style="margin-top:8px;">
+    <b>{cityName}</b> mentors help reduce last-minute stress for test-takers — and earn $100 per road test.
+  </p>
+) : null}
+
+    {ADS_ENABLED && cityName ? (
+      <div style="margin-top:14px;">
+        <SponsorSlot
+          cityName={cityName}
+          slotNumber={1}
+          tier="premium"
+          placement="top"
+          compact={false}
+        />
+      </div>
+    ) : null}
+
+    <div style="display:grid; gap:10px; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); margin-top:14px;">
+      <div style="border:1px solid #e5e7eb; border-radius:14px; padding:12px;">
+        <div style="font-weight:900;">Earn</div>
+        <div class="muted" style="margin-top:4px;">$100 after a completed road test.</div>
+      </div>
+
+      <div style="border:1px solid #e5e7eb; border-radius:14px; padding:12px;">
+        <div style="font-weight:900;">Stay in control</div>
+        <div class="muted" style="margin-top:4px;">Accept or decline every request — no obligation.</div>
+      </div>
+
+      <div style="border:1px solid #e5e7eb; border-radius:14px; padding:12px;">
+        <div style="font-weight:900;">Keep it structured</div>
+        <div class="muted" style="margin-top:4px;">Short, registry-based, accountability-first bookings.</div>
+      </div>
+
+      <div style="border:1px solid #e5e7eb; border-radius:14px; padding:12px;">
+        <div style="font-weight:900;">Keep it professional</div>
+        <div class="muted" style="margin-top:4px;">Calm communication beats hype, pressure, or last-minute chaos.</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+      <a class="cta" href={withCity("/become-a-mentor")}>Become a mentor →</a>
+      <a class="cta" href={withBmbCity("https://borrowmybike.ca/mentors/start?utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=mentor_guide_top_cta") } rel="noopener" target="_blank">Start your mentor profile →</a>
+    </div>
+
+    <div class="muted" style="margin-top:10px; font-size:13px;">
+      Educational guidance only. Booking, payments, and live availability happen inside BorrowMyBike.
+    </div>
+  </section>
+
+  <section class="card" style="margin-top:14px;">
+    <h2 style="margin:0 0 10px; font-weight:1000;">What mentors actually do</h2>
+
+    <ul style="margin:0; padding-left:18px; line-height:1.65; display:grid; gap:10px;">
+      <li>
+        <b>Bring a road-test-ready bike</b>: lights, brakes, tires, mirrors, and no obvious issues.
+      </li>
+      <li>
+        <b>Help the test-taker stay calm</b> and pass on practical road-test and safety tips through in-app messaging once the booking is confirmed.
+      </li>
+      <li>
+        <b>Show up about 25–30 minutes early</b> so there is time to settle nerves and keep things unhurried.
+      </li>
+      <li>
+        <b>Allow the test-taker to get acquainted with the bike</b>: adjust mirrors, find the controls, feel the clutch friction point, and get comfortable with the brakes.
+      </li>
+      <li>
+        <b>If safe and everyone is comfortable, allow a short lap in the parking lot</b> to get familiar with the bike — not training, not a lesson, just familiarity.
+      </li>
+      <li>
+        <b>Keep everything professional and respectful</b> from first message to hand-back.
+      </li>
+      <li>
+        <b>Wait nearby while the test is in progress</b> — coffee is fine, disappearing completely is not.
+      </li>
+    </ul>
+  </section>
+
+  <section style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:14px; margin-top:14px;">
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">What mentors should NOT do</h2>
+      <ul style="margin:0; padding-left:18px; display:grid; gap:8px;">
+        <li><b>Do not train</b> the rider</li>
+        <li><b>Do not provide riding lessons</b> or “practice sessions”</li>
+        <li><b>Do not pressure</b> the test-taker into riding beyond comfort</li>
+        <li><b>Do not argue</b> with examiners</li>
+        <li><b>Do not promise</b> they will pass</li>
+        <li><b>Do not treat this like a rental</b> or open-ended borrowing</li>
+      </ul>
+      <div class="muted" style="margin-top:10px;">
+        Detailed responsibilities and expectations are outlined on
+        <a href={withBmbCity("https://borrowmybike.ca/legal?utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=mentor_guide_rules") } target="_blank" rel="noopener">
+          BorrowMyBike rules
+        </a>.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 style="margin:0 0 10px; font-weight:1000;">Experience matters</h2>
+      <p class="muted" style="margin:0; max-width:85ch;">
+        Mentors often bring years — sometimes decades — of riding experience. While this is not training, sharing a few calm, practical safety reminders through in-app messaging can help test-takers feel more prepared and confident. Simple tips like keeping the right foot on the rear brake at stops, making shoulder checks deliberate and easy to see, or ensuring head movement is visible to the examiner can make a meaningful difference. Some mentors also suggest small visibility tricks, such as placing a contrasting strip of tape on the helmet so head movement is easier to spot. These are not lessons — just helpful reminders from experienced riders who understand what examiners typically look for.
+      </p>
+
+      <div class="card" style="margin-top:12px; padding:14px;">
+        <div style="font-weight:900;">Ready to become a mentor?</div>
+        <div class="muted" style="margin-top:6px;">
+          Set up your mentor profile and start receiving requests in your area.
+        </div>
+        <div style="margin-top:10px;">
+          <a class="cta" href={withCity("/become-a-mentor")}>Become a mentor →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {ADS_ENABLED && cityName ? (
+    <section class="grid" style="margin-top:14px;">
+      <div class="card">
+        <h2 style="margin:0 0 10px; font-weight:1000;">{cityName} partner spot</h2>
+        <p class="muted" style="margin:0; max-width:85ch;">
+          A mid-page local sponsor can sit here without interrupting the educational flow.
+        </p>
+
+        <div style="margin-top:12px;">
+          <SponsorSlot
+            cityName={cityName}
+            slotNumber={2}
+            tier="standard"
+            placement="mid"
+            compact={false}
+          />
+        </div>
+      </div>
+    </section>
+  ) : null}
+
+  <section class="card" style="margin-top:14px;">
+    <h2 style="margin:0 0 10px; font-weight:1000;">Meet-up timing and test-day flow</h2>
+
+    <h3 style="margin:14px 0 6px; font-weight:1000;">Meet 25–30 minutes early</h3>
+    <p class="muted" style="margin:0; max-width:85ch;">
+      Early meet-ups prevent rushed choices and reduce anxiety. The goal is predictability, not “cramming” at the last minute.
+    </p>
+
+    <h3 style="margin:16px 0 6px; font-weight:1000;">Let the rider get familiar with the bike</h3>
+    <p class="muted" style="margin:0; max-width:85ch;">
+      It is reasonable to give the rider a few minutes to settle in:
+    </p>
+    <ul style="margin:10px 0 0; padding-left:18px; display:grid; gap:6px;">
+      <li>sit on the bike and adjust mirrors</li>
+      <li>confirm the controls</li>
+      <li>feel the clutch friction point</li>
+      <li>test the brakes carefully</li>
+      <li>if safe, take a short parking-lot lap</li>
+    </ul>
+    <p class="muted" style="margin:10px 0 0; max-width:85ch;">
+      This is still <b>not training</b>. It is simply helping the rider get comfortable with the machine they are about to use for a government road test.
+    </p>
+
+    <h3 style="margin:16px 0 6px; font-weight:1000;">During the road test</h3>
+    <p class="muted" style="margin:0; max-width:85ch;">
+      Stay nearby and reachable. Grabbing a coffee is fine. The point is to be available for the hand-back and any immediate issue that might come up.
+    </p>
+  </section>
+
+  <section class="card" style="margin-top:14px;">
+    <h2 style="margin:0 0 10px; font-weight:1000;">Documents, damage, and accountability</h2>
+
+    <p class="muted" style="margin:0; max-width:85ch;">
+      If anything goes wrong on test day — damage, a dispute, or a safety issue — document first, then contact support.
+      Full rules, damage responsibility, and expectations are outlined on BorrowMyBike.
+    </p>
+
+    <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+      <a href={withBmbCity("https://borrowmybike.ca/legal?utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=mentor_guide_legal") } target="_blank" rel="noopener" class="cta">Rules & Legal →</a>
+      <a href={withBmbCity("https://borrowmybike.ca/legal?utm_source=class6loaner&utm_medium=website&utm_campaign=canada_launch&utm_content=mentor_guide_damage#damage") } target="_blank" rel="noopener" class="cta">Damage & Responsibility →</a>
+    </div>
+
+    <div class="card" style="padding:14px; margin-top:12px;">
+      <div style="font-weight:1000;">Important reminder</div>
+      <div class="muted" style="margin-top:6px;">
+        Deposits are for accountability and discouraging no-shows. They are not a substitute for understanding your own responsibilities and coverage.
+      </div>
+    </div>
+  </section>
+
+  <section class="card" style="margin-top:14px;">
+    <h2 style="margin:0 0 10px; font-weight:1000;">Why mentors matter</h2>
+    <p class="muted" style="margin:0; max-width:85ch;">
+      A good mentor can take a chaotic test day and make it feel calm, structured, and safe. That matters. It helps new riders start their journey with the right mindset and reduces panic-driven decisions when it matters most.
+    </p>
+  </section>
+
+  <section class="card" style="margin-top:14px;">
+    <h2 style="margin:0 0 10px; font-weight:1000;">Related reads and next steps</h2>
+    <p class="muted" style="margin:0; max-width:85ch;">
+      Mentors usually do best when they understand both sides of the platform: what the test-taker is trying to manage, and how the booking flow works from start to finish.
+    </p>
+
+    <div style="display:grid; gap:10px; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); margin-top:12px;">
+      <a class="card" href={withCity("/how-it-works")} style="padding:14px; display:block;">
+        <div style="font-weight:1000;">How it works</div>
+        <div class="muted" style="margin-top:6px;">See the full booking flow, expectations, and how BorrowMyBike keeps both sides accountable.</div>
+      </a>
+
+      <a class="card" href={withCity("/road-test-guide")} style="padding:14px; display:block;">
+        <div style="font-weight:1000;">Road test guide</div>
+        <div class="muted" style="margin-top:6px;">Understand what test-takers are focused on so your support stays relevant, calm, and useful.</div>
+      </a>
+
+      <a class="card" href={withCity("/become-a-mentor")} style="padding:14px; display:block;">
+        <div style="font-weight:1000;">Become a mentor</div>
+        <div class="muted" style="margin-top:6px;">Ready to move from reading to action? Set up your mentor profile and start getting requests.</div>
+      </a>
+    </div>
+  </section>
+
+  {ADS_ENABLED && cityName ? (
+    <section class="grid" style="margin-top:14px;">
+      <div class="card">
+        <h2 style="margin:0 0 10px; font-weight:1000;">More {cityName} partner visibility</h2>
+        <p class="muted" style="margin:0; max-width:85ch;">
+          A lower slot can be used for a second local partner or sponsor package.
+        </p>
+
+        <div style="margin-top:12px;">
+          <SponsorSlot
+            cityName={cityName}
+            slotNumber={3}
+            tier="standard"
+            placement="bottom"
+            compact={false}
+          />
+        </div>
+      </div>
+    </section>
+  ) : null}
+</BaseLayout>

@@ -1,0 +1,353 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SponsorSlot from "../../components/SponsorSlot.astro";
+import { CITIES } from "../../data/cities";
+import { getProvinceRoadTestResources } from "../../data/roadTestResources";
+
+const title = "How it works — Class6Loaner";
+const description =
+  "How Class6Loaner reduces uncertainty around Class 6 road tests and how BorrowMyBike handles the structured booking side.";
+const canonicalPath = "/how-it-works";
+
+export function getStaticPaths() {
+  return CITIES.map((city) => ({ params: { slug: city.slug }, props: { city } }));
+}
+
+const { city } = Astro.props;
+
+const ADS_ENABLED = (import.meta.env.PUBLIC_ADS_ENABLED ?? "false") === "true";
+
+const citySlug = city.slug;
+const selectedCity = city;
+const cityName = city.name;
+const provinceName = city.province;
+const provinceResources = getProvinceRoadTestResources(provinceName);
+const isBC = provinceName === "BC";
+
+const withCity = (path) => {
+  if (path === "/about" || path === "/how-it-works" || path === "/mentor-guide" || path === "/road-test-guide") return `${path}/${citySlug}`;
+  return path;
+};
+
+const withBmbCity = (path) =>
+  `${path}${path.includes("?") ? "&" : "?"}city=${encodeURIComponent(citySlug)}`;
+
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath={`/how-it-works/${citySlug}`}
+>
+  <section class="card">
+    <div class="muted" style="font-weight:900;">Simple. Predictable. Safety-first.</div>
+
+    <h1 style="margin:8px 0 0; font-weight:1000;">
+      How it works
+    </h1>
+
+    <p class="muted" style="margin:10px 0 0; max-width:85ch;">
+      Class6Loaner sets expectations and reduces uncertainty so test day feels predictable and safety-first.
+      BorrowMyBike runs the structured booking process, payments, deposits, messaging, and status tracking.
+    </p>
+
+    {cityName ? (
+      <p class="muted" style="margin-top:8px;">
+        If you're taking your Class 6 road test in <b>{cityName}</b>, here's how the process works from start to finish.
+      </p>
+    ) : null}
+
+    {ADS_ENABLED && cityName ? (
+      <div style="margin-top:14px;">
+        <SponsorSlot
+          cityName={cityName}
+          slotNumber={1}
+          tier="premium"
+          placement="top"
+          compact={false}
+        />
+      </div>
+    ) : null}
+  </section>
+
+  {provinceResources?.roadTestSchedulerUrl ? (
+    <section class="grid" style="margin-top:14px;">
+      <div class="card">
+        <h2 style="margin-top:0;">Book your road test first</h2>
+
+        <p class="muted" style="max-width:85ch; margin:0;">
+          Before booking a bike and mentor, confirm your road test date and time through the official scheduler for your province. Once that is locked in, the rest of the process becomes much easier.
+        </p>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+          <a
+            class="cta"
+            href={provinceResources.roadTestSchedulerUrl}
+            target="_blank"
+            rel="noopener"
+          >
+            {provinceResources.roadTestSchedulerLabel ?? "Official road test scheduler"} →
+          </a>
+        </div>
+
+        <div class="muted" style="margin-top:10px; font-size:13px; max-width:85ch;">
+          Choose your registry, date, and time first — then come back to BorrowMyBike when you’re ready to request a road-test-ready motorcycle.
+        </div>
+      </div>
+    </section>
+  ) : null}
+
+  {isBC ? (
+    <section class="grid" style="margin-top:14px;">
+      <div class="card">
+        <h2 style="margin-top:0;">BC riders: there may be two test steps</h2>
+
+        <p class="muted" style="max-width:85ch; margin:0;">
+          In British Columbia, riders may need to complete a <strong>Motorcycle Skills Test (MST)</strong> before the road test, depending on where they are in the licensing process. That means some BC riders may need a motorcycle for <strong>more than one appointment</strong>.
+        </p>
+
+        <div class="muted" style="margin-top:10px; max-width:85ch;">
+          We keep the BC explanation brief here on purpose. For official details, timelines, and booking information, use ICBC directly.
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+          <a
+            class="cta"
+            href="https://icbc.com/driver-licensing/types-licences/Get-your-motorcycle-licence"
+            target="_blank"
+            rel="noopener"
+          >
+            ICBC motorcycle licensing →
+          </a>
+
+          <a
+            class="cta"
+            href="https://icbc.com/driver-licensing/visit-dl-office/Book-a-road-test"
+            target="_blank"
+            rel="noopener"
+          >
+            Book ICBC MST / road test →
+          </a>
+        </div>
+
+        <div class="muted" style="margin-top:10px; font-size:13px; max-width:85ch;">
+          We recommend checking ICBC first, then using BorrowMyBike when you know which appointment you need the bike for.
+        </div>
+      </div>
+    </section>
+  ) : null}
+
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin-top:0;">1. Start with practical guidance</h2>
+      <p class="muted" style="max-width:85ch;">
+        We keep guidance practical and checklist-based so test day feels more controlled — fewer unknowns, less stress, and safer decisions.
+      </p>
+
+      <ul>
+        <li>What to bring</li>
+        <li>What to wear</li>
+        <li>What happens on test day</li>
+        <li>How to handle weather or unexpected issues</li>
+        {isBC ? <li>What the MST is and why some BC riders may need a bike twice</li> : null}
+      </ul>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+        <a class="cta" href={withCity("/road-test-guide")}>Read the road test guide →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin-top:0;">2. Mentors step in</h2>
+
+      <p class="muted" style="max-width:85ch;">
+        Mentors help make test day calm and predictable. They are not instructors, and they are not running lessons.
+        Road tests are booked under the assumption that the rider has already practiced.
+      </p>
+
+      <ul>
+        <li>Provide a road-test-ready bike</li>
+        <li>Communicate clearly before the booking</li>
+        <li>Show up prepared and on time</li>
+        <li>Keep the tone calm and safety-first</li>
+      </ul>
+
+      <div class="card" style="margin-top:12px; padding:14px;">
+        <div style="font-weight:1000;">What mentors don’t do</div>
+        <ul style="margin-top:8px;">
+          <li>No riding lessons</li>
+          <li>No last-minute training sessions</li>
+          <li>No promises about passing</li>
+        </ul>
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+        <a class="cta" href={withCity("/become-a-mentor")}>Become a mentor →</a>
+        <a class="cta" href={withCity("/mentor-guide")}>Mentor guide →</a>
+      </div>
+    </div>
+  </section>
+
+  {ADS_ENABLED && cityName ? (
+    <section class="grid" style="margin-top:14px;">
+      <div class="card">
+        <h2 style="margin-top:0;">{cityName} partner spot</h2>
+        <p class="muted" style="max-width:85ch; margin:0;">
+          Local businesses relevant to riders and road-test traffic in {cityName} can appear here.
+        </p>
+
+        <div style="margin-top:12px;">
+          <SponsorSlot
+            cityName={cityName}
+            slotNumber={2}
+            tier="standard"
+            placement="mid"
+            compact={false}
+          />
+        </div>
+      </div>
+    </section>
+  ) : null}
+
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin-top:0;">3. Booking happens on BorrowMyBike</h2>
+
+      <p class="muted" style="max-width:85ch;">
+        When a rider has their date and time confirmed, they request a mentor and bike through BorrowMyBike.
+        That is where the structured booking flow, messaging, payments, and platform rules live.
+      </p>
+
+      <ul>
+        <li>Request based on city</li>
+        <li>Clear expectations before arrival</li>
+        <li>Short, registry-based booking</li>
+      </ul>
+
+      <div class="card" style="margin-top:12px; padding:14px;">
+        <div style="font-weight:1000;">In-app messaging</div>
+        <div class="muted" style="margin-top:6px; max-width:85ch;">
+          Mentors and test-takers can message in-app to coordinate timing, clarify expectations, and share calm, practical reminders.
+          Once a booking is accepted, it is confirmed and subject to platform policies.
+        </div>
+      </div>
+
+      <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+        <a
+          class="cta"
+          href={withBmbCity("https://borrowmybike.ca/browse")}
+          target="_blank"
+          rel="noopener"
+        >
+          Go to BorrowMyBike →
+        </a>
+
+        <a
+          class="cta"
+          href="https://borrowmybike.ca/legal"
+          target="_blank"
+          rel="noopener"
+        >
+          Rules & Responsibilities →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin-top:0;">Damage &amp; responsibility</h2>
+      <p class="muted" style="max-width:85ch; margin:0;">
+        Deposits are designed for accountability and to discourage no-shows — they do not guarantee full damage coverage.
+        This model is built for short, registry-based road tests, not rentals or open riding.
+      </p>
+
+      <div class="muted" style="margin-top:12px; font-weight:900;">If something goes wrong</div>
+      <ol class="muted" style="margin:6px 0 0; padding-left:18px; display:grid; gap:6px; max-width:95ch;">
+        <li><b>Safety first.</b> Follow local requirements and call emergency services if needed.</li>
+        <li><b>Document.</b> Take clear photos and note time/location.</li>
+        <li><b>Report it.</b> Both parties should email <a href="mailto:support@borrowmybike.ca"><b>support@borrowmybike.ca</b></a> with a short summary and any photos.</li>
+        <li><b>Review and outcome.</b> The platform reviews both sides and applies the written rules.</li>
+        <li><b>Close-out.</b> The booking is marked resolved and repeated unsafe behavior can lead to removal.</li>
+      </ol>
+
+      <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+        <a
+          class="cta"
+          href="https://borrowmybike.ca/legal#damage"
+          rel="noopener"
+          target="_blank"
+        >
+          Damage & Responsibility →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin-top:0;">Why this matters</h2>
+
+      <p class="muted" style="max-width:85ch;">
+        The goal is not just passing a test. The goal is helping riders begin with a safety-first mindset — calm, aware, and more prepared from day one.
+      </p>
+
+      <p class="muted" style="max-width:85ch; margin-top:10px;">
+        When new riders begin their journey in a controlled, respectful, and prepared environment, it benefits everyone on the road.
+      </p>
+    </div>
+  </section>
+
+  <section class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2 style="margin-top:0;">For experienced riders</h2>
+
+      <p class="muted" style="max-width:85ch;">
+        If you own a suitable motorcycle and understand test-day expectations, you can help new riders start strong — and be compensated for your time, preparation, and professionalism.
+      </p>
+
+      <div style="margin-top:12px;">
+        <a class="cta" href={withCity("/become-a-mentor")}>
+          Become a mentor →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {ADS_ENABLED && cityName ? (
+    <section class="grid" style="margin-top:14px;">
+      <div class="card">
+        <h2 style="margin-top:0;">More {cityName} partner visibility</h2>
+        <p class="muted" style="max-width:85ch; margin:0;">
+          A lower slot can be used for a second local partner without cluttering the page.
+        </p>
+
+        <div style="margin-top:12px;">
+          <SponsorSlot
+            cityName={cityName}
+            slotNumber={3}
+            tier="standard"
+            placement="bottom"
+            compact={false}
+          />
+        </div>
+      </div>
+    </section>
+  ) : null}
+
+  <section class="card" style="margin-top:14px;">
+    <h2 style="margin:0 0 10px; font-weight:1000;">Continue reading</h2>
+    <p class="muted" style="margin:0 0 10px; max-width:85ch;">
+      Explore more guidance to make your road test day calm, predictable, and safe.
+    </p>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <a class="cta" href={withCity("/road-test-guide")}>Road test guide →</a>
+      <a class="cta" href={withCity("/mentor-guide")}>Mentor guide →</a>
+      <a class="cta" href={withCity("/become-a-mentor")}>Become a mentor →</a>
+    </div>
+  </section>
+
+</BaseLayout>

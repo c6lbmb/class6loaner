@@ -1,0 +1,99 @@
+---
+import { groupCitiesByProvince } from "../data/cities";
+
+type Props = {
+  targetBasePath: string;
+  title?: string;
+  body?: string;
+  note?: string;
+};
+
+const {
+  targetBasePath,
+  title = "Choose your location",
+  body = "To show accurate road test information and local resources, please choose your location.",
+  note = "Don't see your city? Choose the closest location for now and email support@borrowmybike.ca and we'll add it.",
+} = Astro.props;
+
+const byProvRaw = groupCitiesByProvince();
+const provincesAll = Object.keys(byProvRaw).sort();
+const byProvClient = Object.fromEntries(
+  Object.entries(byProvRaw).map(([prov, list]) => [
+    prov,
+    (list ?? [])
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((c) => ({ slug: c.slug, name: c.name })),
+  ])
+);
+
+const normalizedBase = targetBasePath.startsWith("/") ? targetBasePath : `/${targetBasePath}`;
+const gateId = normalizedBase.replace(/[^a-z0-9]/gi, "-") || "location-gate";
+---
+
+<section class="card" data-location-gate={gateId} data-base={normalizedBase} data-cities={JSON.stringify(byProvClient)}>
+  <div class="muted" style="font-weight:900;">Choose your location</div>
+  <h1 style="margin:8px 0 0; font-weight:1000;">{title}</h1>
+  <p class="muted" style="margin:10px 0 0; max-width:85ch;">{body}</p>
+
+  <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+    <label style="display:flex; flex-direction:column; gap:6px; font-weight:900; min-width:220px;">
+      <span class="muted" style="font-size:13px;">Province</span>
+      <select data-role="prov" class="card" style="padding:10px 12px; border-radius:12px;">
+        <option value="">Select a province…</option>
+        {provincesAll.map((p) => (
+          <option value={p}>{p}</option>
+        ))}
+      </select>
+    </label>
+
+    <label style="display:flex; flex-direction:column; gap:6px; font-weight:900; min-width:260px;">
+      <span class="muted" style="font-size:13px;">City</span>
+      <select data-role="city" class="card" style="padding:10px 12px; border-radius:12px;" disabled>
+        <option value="">Select a city…</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="muted" style="margin-top:10px; font-size:13px; max-width:85ch;">
+    {note}
+  </div>
+</section>
+
+<script is:inline define:vars={{ gateId }}>
+  (() => {
+    const gate = document.querySelector(`[data-location-gate="${gateId}"]`);
+    if (!gate) return;
+
+    const provSel = gate.querySelector('[data-role="prov"]');
+    const citySel = gate.querySelector('[data-role="city"]');
+    if (!(provSel instanceof HTMLSelectElement) || !(citySel instanceof HTMLSelectElement)) return;
+
+    let map = {};
+    try {
+      map = JSON.parse(gate.getAttribute('data-cities') || '{}');
+    } catch {}
+
+    const base = gate.getAttribute('data-base') || '/';
+
+    provSel.addEventListener('change', () => {
+      const prov = provSel.value;
+      const list = Array.isArray(map[prov]) ? map[prov] : [];
+
+      citySel.innerHTML = '<option value="">Select a city…</option>';
+      list.forEach((c) => {
+        const opt = document.createElement('option');
+        opt.value = c.slug;
+        opt.textContent = c.name;
+        citySel.appendChild(opt);
+      });
+      citySel.disabled = list.length === 0;
+    });
+
+    citySel.addEventListener('change', () => {
+      const slug = citySel.value;
+      if (!slug) return;
+      window.location.href = `${base}/${slug}`;
+    });
+  })();
+</script>
