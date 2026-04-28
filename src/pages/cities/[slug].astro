@@ -450,11 +450,28 @@ const schema = [
       </div>
     </div>
 
-    <div class="grid">
-      <SponsorSlot cityName={city.name} slotNumber={1} />
-      <SponsorSlot cityName={city.name} slotNumber={2} />
-      <SponsorSlot cityName={city.name} slotNumber={3} />
-      <SponsorSlot cityName={city.name} slotNumber={4} />
-    </div>
+    <div class="grid" style="margin-top:14px;">
+  <SponsorSlot
+    cityName={city.name}
+    slotNumber={1}
+    tier="premium"
+    placement="top"
+    compact={false}
+  />
+  <SponsorSlot
+    cityName={city.name}
+    slotNumber={2}
+    tier="standard"
+    placement="mid"
+    compact={false}
+  />
+  <SponsorSlot
+    cityName={city.name}
+    slotNumber={3}
+    tier="standard"
+    placement="bottom"
+    compact={false}
+  />
+</div>
   </section>
 </BaseLayout>

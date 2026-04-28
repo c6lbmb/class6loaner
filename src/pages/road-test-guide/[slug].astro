@@ -50,7 +50,7 @@ const isBC = provinceName === "BC";
         If you book through the app, use in-app messaging for coordination, clarification, and experience-based safety tips.
       </div>
     </div>
-
+</section>
     {ADS_ENABLED && cityName ? (
       <div style="margin-top:14px;">
         <SponsorSlot
@@ -62,7 +62,7 @@ const isBC = provinceName === "BC";
         />
       </div>
     ) : null}
-
+<section class="card">
     <div class="grid grid-3" style="margin-top:14px; gap:10px;">
       <div class="card" style="padding:14px;">
         <div style="font-weight:1000;">Show up prepared</div>
@@ -421,25 +421,16 @@ const isBC = provinceName === "BC";
   </section>
 
   {ADS_ENABLED && cityName ? (
-    <section class="grid" style="margin-top:14px;">
-      <div class="card">
-        <h2 style="margin:0 0 10px; font-weight:1000;">{cityName} partner spot</h2>
-        <p class="muted" style="margin:0; max-width:92ch;">
-          Local businesses relevant to riders and road-test traffic in {cityName} can appear here without cluttering the page.
-        </p>
-
-        <div style="margin-top:12px;">
-          <SponsorSlot
-            cityName={cityName}
-            slotNumber={2}
-            tier="standard"
-            placement="mid"
-            compact={false}
-          />
-        </div>
-      </div>
-    </section>
-  ) : null}
+  <section style="margin-top:14px;">
+    <SponsorSlot
+      cityName={cityName}
+      slotNumber={2}
+      tier="standard"
+      placement="mid"
+      compact={false}
+    />
+  </section>
+) : null}
 
   {isBC ? (
     <section class="grid grid-2" style="margin-top:14px;">
@@ -636,23 +627,14 @@ const isBC = provinceName === "BC";
   </section>
 
   {ADS_ENABLED && cityName ? (
-    <section class="grid" style="margin-top:14px;">
-      <div class="card">
-        <h2 style="margin:0 0 10px; font-weight:1000;">More {cityName} partner visibility</h2>
-        <p class="muted" style="margin:0; max-width:92ch;">
-          A lower slot can be used for a second local partner or sponsor package.
-        </p>
-
-        <div style="margin-top:12px;">
-          <SponsorSlot
-            cityName={cityName}
-            slotNumber={3}
-            tier="standard"
-            placement="bottom"
-            compact={false}
-          />
-        </div>
-      </div>
-    </section>
-  ) : null}
+  <section style="margin-top:14px;">
+    <SponsorSlot
+      cityName={cityName}
+      slotNumber={3}
+      tier="standard"
+      placement="bottom"
+      compact={false}
+    />
+  </section>
+) : null}
 </BaseLayout>

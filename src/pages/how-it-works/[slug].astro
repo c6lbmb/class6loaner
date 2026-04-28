@@ -57,6 +57,9 @@ const withBmbCity = (path) =>
       </p>
     ) : null}
 
+</section>
+
+
     {ADS_ENABLED && cityName ? (
       <div style="margin-top:14px;">
         <SponsorSlot
@@ -68,7 +71,7 @@ const withBmbCity = (path) =>
         />
       </div>
     ) : null}
-  </section>
+  
 
   {provinceResources?.roadTestSchedulerUrl ? (
     <section class="grid" style="margin-top:14px;">
@@ -191,25 +194,16 @@ const withBmbCity = (path) =>
   </section>
 
   {ADS_ENABLED && cityName ? (
-    <section class="grid" style="margin-top:14px;">
-      <div class="card">
-        <h2 style="margin-top:0;">{cityName} partner spot</h2>
-        <p class="muted" style="max-width:85ch; margin:0;">
-          Local businesses relevant to riders and road-test traffic in {cityName} can appear here.
-        </p>
-
-        <div style="margin-top:12px;">
-          <SponsorSlot
-            cityName={cityName}
-            slotNumber={2}
-            tier="standard"
-            placement="mid"
-            compact={false}
-          />
-        </div>
-      </div>
-    </section>
-  ) : null}
+  <section style="margin-top:14px;">
+    <SponsorSlot
+      cityName={cityName}
+      slotNumber={2}
+      tier="standard"
+      placement="mid"
+      compact={false}
+    />
+  </section>
+) : null}
 
   <section class="grid" style="margin-top:14px;">
     <div class="card">
@@ -317,25 +311,16 @@ const withBmbCity = (path) =>
   </section>
 
   {ADS_ENABLED && cityName ? (
-    <section class="grid" style="margin-top:14px;">
-      <div class="card">
-        <h2 style="margin-top:0;">More {cityName} partner visibility</h2>
-        <p class="muted" style="max-width:85ch; margin:0;">
-          A lower slot can be used for a second local partner without cluttering the page.
-        </p>
-
-        <div style="margin-top:12px;">
-          <SponsorSlot
-            cityName={cityName}
-            slotNumber={3}
-            tier="standard"
-            placement="bottom"
-            compact={false}
-          />
-        </div>
-      </div>
-    </section>
-  ) : null}
+  <section style="margin-top:14px;">
+    <SponsorSlot
+      cityName={cityName}
+      slotNumber={3}
+      tier="standard"
+      placement="bottom"
+      compact={false}
+    />
+  </section>
+) : null}
 
   <section class="card" style="margin-top:14px;">
     <h2 style="margin:0 0 10px; font-weight:1000;">Continue reading</h2>

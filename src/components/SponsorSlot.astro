@@ -2,17 +2,9 @@
 type Props = {
   cityName?: string;
   slotNumber: number;
-
-  // local or national sponsor
   scope?: "local" | "national";
-
-  // premium or standard slot
   tier?: "premium" | "standard";
-
-  // top, mid, bottom placement
   placement?: "top" | "mid" | "bottom";
-
-  // tighter layout if needed
   compact?: boolean;
 };
 
@@ -25,7 +17,6 @@ const {
   compact = false,
 } = Astro.props;
 
-// Global kill-switch
 const ADS_ENABLED = (import.meta.env.PUBLIC_ADS_ENABLED ?? "false") === "true";
 
 if (!ADS_ENABLED) {
@@ -34,36 +25,215 @@ if (!ADS_ENABLED) {
 
 const isNational = scope === "national";
 const isPremium = tier === "premium";
+const locationLabel = isNational ? "Canada" : cityName;
 
-const title = isNational
-  ? "Founding national partner opportunity"
-  : `Founding partner opportunity — ${cityName}`;
+const ads = [
+  {
+    key: "test-taker",
+    eyebrow: "BorrowMyBike",
+    headlineTop: "Need a motorcycle",
+    headlineMain: "For your Class 6 road test?",
+    bodyLines: ["Road-test-ready motorcycles", "Meet at the registry", "Easy online booking"],
+    cta: "Find a bike",
+    href: "https://borrowmybike.ca/browse?utm_source=class6loaner&utm_medium=sponsor_slot&utm_campaign=bmb_internal&utm_content=test_taker",
+    visual: "🏍️",
+    theme: "blue",
+    bg: "linear-gradient(135deg, #0b3b8f 0%, #0b1f3b 48%, #111827 100%)",
+    accent: "#facc15",
+    text: "#ffffff",
+    muted: "#dbeafe",
+    buttonBg: "#facc15",
+    buttonText: "#111827",
+  },
+  {
+    key: "mentor",
+    eyebrow: "BorrowMyBike",
+    headlineTop: "Earn $100",
+    headlineMain: "Per road test",
+    bodyLines: ["Loan your bike to road test takers", "Help new riders pass their test", "Make extra income"],
+    cta: "Become a mentor",
+    href: "https://borrowmybike.ca/mentors/start?utm_source=class6loaner&utm_medium=sponsor_slot&utm_campaign=bmb_internal&utm_content=mentor",
+    visual: "💵",
+    theme: "yellow",
+    bg: "linear-gradient(135deg, #171717 0%, #27272a 52%, #09090b 100%)",
+    accent: "#facc15",
+    text: "#ffffff",
+    muted: "#fef3c7",
+    buttonBg: "#facc15",
+    buttonText: "#111827",
+  },
+  {
+    key: "trust",
+    eyebrow: "BorrowMyBike",
+    headlineTop: "Not a rental",
+    headlineMain: "Road-test meetups only",
+    bodyLines: ["Short scheduled bookings", "Registry handoff only", "Built for Class 6 road tests"],
+    cta: "See how it works",
+    href: "https://class6loaner.com/how-it-works?utm_source=class6loaner&utm_medium=sponsor_slot&utm_campaign=bmb_internal&utm_content=trust",
+    visual: "✅",
+    theme: "dark",
+    bg: "linear-gradient(135deg, #111827 0%, #1f2937 52%, #0f172a 100%)",
+    accent: "#38bdf8",
+    text: "#ffffff",
+    muted: "#e0f2fe",
+    buttonBg: "#38bdf8",
+    buttonText: "#082f49",
+  },
+  {
+    key: "sponsor",
+    eyebrow: `${locationLabel} sponsor spot`,
+    headlineTop: "Your business",
+    headlineMain: "Could live here",
+    bodyLines: ["Reach riders preparing for tests", "Local and national placements", "Limited sponsor spots"],
+    cta: "Ask about this spot",
+    href: "mailto:support@borrowmybike.ca?subject=Class6Loaner%20sponsor%20spot",
+    visual: "📍",
+    theme: "orange",
+    bg: "linear-gradient(135deg, #f97316 0%, #ea580c 50%, #111827 100%)",
+    accent: "#facc15",
+    text: "#ffffff",
+    muted: "#ffedd5",
+    buttonBg: "#111827",
+    buttonText: "#ffffff",
+  },
+];
 
-const subtitle = isNational
-  ? "We're highlighting a small number of trusted businesses as Class6Loaner expands across Canada."
-  : `We're highlighting a small number of trusted local businesses as we launch in ${cityName}.`;
+const placementAdMap = {
+  top: "test-taker",
+  mid: isNational ? "trust" : "mentor",
+  bottom: "sponsor",
+};
 
-const showEmailLine = !compact;
+const preferredKey = placementAdMap[placement] ?? null;
+const selectedAd =
+  ads.find((ad) => ad.key === preferredKey) ??
+  ads[(Math.max(slotNumber, 1) - 1) % ads.length];
 
-const borderColor = isPremium ? "#f59e0b" : "#e5e7eb";
-const background = isPremium ? "#fff7ed" : "#fff";
+const borderColor = isPremium ? selectedAd.accent : "rgba(255,255,255,.22)";
+const padding = compact ? "14px" : "22px";
+const adAccent = selectedAd.stripe ?? selectedAd.accent ?? "#facc15";
+const adTitle = selectedAd.title ?? `${selectedAd.headlineTop ?? ""} ${selectedAd.headlineMain ?? ""}`.trim();
+const adBody = selectedAd.body ?? "";
+const adLines = selectedAd.chips ?? selectedAd.bodyLines ?? [];
 ---
 
-<div class="card" style={`padding:14px; border:1px solid ${borderColor}; background:${background};`}>
-  <div style="font-weight:1000;">
-    {title}
-  </div>
+<a
+  href={selectedAd.href}
+  rel="noopener"
+  target={selectedAd.href.startsWith("mailto:") ? undefined : "_blank"}
+  class="sponsor-ad"
+  style={`
+    position:relative;
+    display:block;
+    min-height:${compact ? "118px" : "145px"};
+    overflow:hidden;
+    border-radius:0px;
+    background:${selectedAd.bg};
+    color:white;
+    text-decoration:none;
+    box-shadow:0 10px 26px rgba(15,23,42,.16);
+  `}
+>
+  <img
+    src={selectedAd.key === "trust" ? "/images/hero-bike.jpeg" : "/images/C6L-pic2.png"}
+    alt=""
+    loading="lazy"
+    style="
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+       object-fit:cover;
+  object-position:center right;
+  opacity:.55;
+  filter:saturate(1.05) contrast(1.05) brightness(1.08);
+    "
+  />
 
-  <div class="muted" style="margin-top:6px;">
-    {subtitle}
-  </div>
+  <div
+    style="
+      position:absolute;
+      inset:0;
+      background:linear-gradient(90deg, rgba(11,31,59,.58) 0%, rgba(11,31,59,.32) 55%, rgba(11,31,59,.06) 100%);
+    "
+  ></div>
 
-  {showEmailLine && (
-    <div class="muted" style="margin-top:10px;">
-      Interested in this placement?{" "}
-      <a href="mailto:support@borrowmybike.ca">
-        support@borrowmybike.ca
-      </a>
+  <div
+    style={`
+      position:relative;
+      z-index:1;
+      padding:${compact ? "14px" : "18px 20px"};
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      min-height:${compact ? "118px" : "145px"};
+      max-width:720px;
+    `}
+  >
+    {selectedAd.key !== "sponsor" ? (
+      <img
+        src="/images/ads/bmb-logo.png"
+        alt="BorrowMyBike"
+        style="
+          width:138px;
+          max-width:42%;
+          height:auto;
+          margin-bottom:8px;
+          display:block;
+        "
+      />
+    ) : (
+      <div style="font-size:11px; font-weight:1000; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.82); margin-bottom:8px;">
+        {selectedAd.eyebrow}
+      </div>
+    )}
+
+    <div
+      style="
+        font-size:clamp(21px, 2.7vw, 34px);
+        line-height:1.02;
+        font-weight:1000;
+        letter-spacing:-.035em;
+        max-width:620px;
+      "
+    >
+      {selectedAd.headline} {selectedAd.punch}
     </div>
-  )}
-</div>
+
+    <div
+      style="
+        margin-top:7px;
+        max-width:560px;
+        color:rgba(255,255,255,.82);
+        font-size:13px;
+        line-height:1.35;
+        font-weight:750;
+      "
+    >
+      {selectedAd.body}
+    </div>
+
+    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:12px;">
+      <span
+        style={`
+          display:inline-flex;
+          align-items:center;
+          justify-content:center;
+          padding:8px 13px;
+          border-radius:999px;
+          background:${selectedAd.buttonBg};
+          color:${selectedAd.buttonText};
+          font-size:13px;
+          font-weight:1000;
+          box-shadow:0 8px 18px rgba(0,0,0,.20);
+        `}
+      >
+        {selectedAd.cta} →
+      </span>
+
+      <span style="font-size:11px; font-weight:850; color:rgba(255,255,255,.58);">
+        {selectedAd.key === "sponsor" ? "Premium placement available" : "via Class6Loaner"}
+      </span>
+    </div>
+  </div>
+</a>

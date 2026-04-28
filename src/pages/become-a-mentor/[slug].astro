@@ -18,7 +18,7 @@ const canonicalPath = "/become-a-mentor/";
 
 const ADS_ENABLED = (import.meta.env.PUBLIC_ADS_ENABLED ?? "false") === "true";
 
-const citySlug = city?.slug ?? null;
+const citySlug = city?.slug ?? null; 
 const cityName = city?.name ?? null;
 const provinceName = city?.province ?? null;
 
@@ -51,18 +51,6 @@ function withBmbCity(url: string) {
       </p>
     ) : null}
 
-    {ADS_ENABLED ? (
-      <div style="margin-top:14px;">
-        <SponsorSlot
-          cityName={cityName}
-          slotNumber={1}
-          tier="premium"
-          placement="top"
-          compact={false}
-        />
-      </div>
-    ) : null}
-
     <div class="grid grid-3" style="margin-top:14px;">
       <div class="card" style="padding:14px;">
         <div style="font-weight:1000;">1) List your bike</div>
@@ -85,6 +73,21 @@ function withBmbCity(url: string) {
         </div>
       </div>
     </div>
+    </section>
+
+    {ADS_ENABLED ? (
+      <div style="margin-top:14px;">
+        <SponsorSlot
+          cityName={cityName}
+          slotNumber={2}
+          tier="premium"
+          placement="mid"
+          compact={false}
+        />
+      </div>
+    ) : null}
+
+    <section class="card'>
 
     <div class="card" style="padding:14px; margin-top:14px;">
       <div style="font-weight:1000;">Fast summary</div>
@@ -127,6 +130,19 @@ function withBmbCity(url: string) {
     </div>
   </section>
 
+  {ADS_ENABLED ? (
+  <div style="margin-top:14px;">
+    <SponsorSlot
+      cityName={cityName}
+      slotNumber={3}
+      tier="standard"
+      placement="bottom"
+      compact={false}
+    />
+  </div>
+) : null}
+  
+
   <section class="grid grid-2" style="margin-top:14px;">
     <div class="card">
       <h2 style="margin:0 0 10px; font-weight:1000;">What mentors actually do</h2>
@@ -153,4 +169,5 @@ function withBmbCity(url: string) {
       </ul>
     </div>
   </section>
+
 </BaseLayout>

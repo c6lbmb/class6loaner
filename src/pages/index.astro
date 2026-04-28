@@ -46,10 +46,10 @@ const selectedProvince = null;
       <div
         style="
           position: relative;
-          min-height: 430px;
+          min-height: 500px;
           background-image: url('/images/hero-bike.jpeg');
           background-size: cover;
-          background-position: center bottom;
+          background-position: center;
         "
       >
         <div
@@ -70,11 +70,11 @@ const selectedProvince = null;
           </h1>
 
           <p style="margin:12px 0 0; color: rgba(255,255,255,.92); max-width: 72ch; font-weight: 650;">
-            Class6Loaner is the educational front door for test-takers. Learn what test day looks like, what to bring, and how BorrowMyBike helps riders connect with mentors who provide a road-test-ready motorcycle through a structured, accountability-first process.
+            If you already know how to ride but do not have a bike for your Class 6 road test, Class6Loaner helps you understand the process and points you to BorrowMyBike to request a short, controlled road-test booking.
           </p>
 
           <div style="margin-top:12px; color: rgba(255,255,255,.84); font-size: 13px; font-weight: 800; max-width:72ch;">
-            This is built for short, government road tests — not open-ended borrowing, not lessons, and not recreational riding.
+            This is not a rental, not a lesson, and not for casual riding — it is strictly for registry road tests.
           </div>
 
           <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;">
@@ -88,7 +88,7 @@ const selectedProvince = null;
               rel="noopener"
               target="_blank"
             >
-              Find a mentor + bike →
+              Find a Bike Near You →
             </a>
 
             <a class="cta" href="/road-test-guide">
@@ -146,9 +146,9 @@ const selectedProvince = null;
       </div>
 
       <div class="card" style="padding:14px;">
-        <div style="font-weight:1000;">3) Request a mentor + bike</div>
+        <div style="font-weight:1000;">3) Request a bike</div>
         <div class="muted" style="margin-top:6px;">
-          When you’re ready, go to BorrowMyBike and request a road-test-ready motorcycle.
+          When you’re ready, go to BorrowMyBike and request a road-test-ready motorcycle for your test.
         </div>
       </div>
     </div>
@@ -201,7 +201,7 @@ const selectedProvince = null;
     <div class="card">
       <h2 style="margin:0 0 10px; font-weight:1000;">For test-takers</h2>
       <p class="muted" style="margin:0; max-width:85ch;">
-        If you already have your road test booked but do not have a suitable motorcycle, Class6Loaner helps you understand the process and points you to the next step.
+        If you already know how to ride and have your road test coming up, Class6Loaner helps you understand the process and find the next step if you do not have a bike lined up.
       </p>
 
       <ul style="margin:12px 0 0; padding-left:18px; display:grid; gap:8px;">
@@ -229,7 +229,7 @@ const selectedProvince = null;
     <div class="card">
       <h2 style="margin:0 0 10px; font-weight:1000;">For mentors</h2>
       <p class="muted" style="margin:0; max-width:85ch;">
-        Experienced riders can help a test-taker show up calm and prepared with a road-test-ready motorcycle. This is <b>not a rental</b> and <b>not training</b>.
+        Experienced riders can help a test-taker complete a short registry road test with a road-test-ready motorcycle. This is <b>not a rental</b> and <b>not training</b>.
       </p>
 
       <ul style="margin:12px 0 0; padding-left:18px; display:grid; gap:8px;">
@@ -247,57 +247,46 @@ const selectedProvince = null;
   </section>
 
   {ADS_ENABLED ? (
-    <section class="grid" style="margin-top:14px;">
-      <div class="card">
-        <h2 style="margin:0 0 10px; font-weight:1000;">
-          {selectedCityName ? `${selectedCityName} partner spots` : "Founding sponsor spots"}
-        </h2>
-        <p class="muted" style="margin:0; max-width:85ch;">
-          {selectedCityName
-            ? `These spots are reserved for local businesses relevant to riders in ${selectedCityName}.`
-            : "National spots live here until a visitor selects a city. Once a city is selected, local placements become more relevant."}
-        </p>
-
-        {selectedCityName ? (
-          <div class="grid grid-2" style="margin-top:12px;">
-            <SponsorSlot
-              cityName={selectedCityName}
-              slotNumber={2}
-              tier="standard"
-              placement="mid"
-              compact={false}
-            />
-            <SponsorSlot
-              cityName={selectedCityName}
-              slotNumber={3}
-              tier="standard"
-              placement="bottom"
-              compact={false}
-            />
-          </div>
-        ) : (
-          <div class="grid grid-2" style="margin-top:12px;">
-            <SponsorSlot
-              cityName="Canada"
-              slotNumber={2}
-              scope="national"
-              tier="standard"
-              placement="mid"
-              compact={false}
-            />
-            <SponsorSlot
-              cityName="Canada"
-              slotNumber={3}
-              scope="national"
-              tier="standard"
-              placement="bottom"
-              compact={false}
-            />
-          </div>
-        )}
+  <section style="margin-top:14px;">
+    {selectedCityName ? (
+      <div class="grid grid-2">
+        <SponsorSlot
+          cityName={selectedCityName}
+          slotNumber={2}
+          tier="standard"
+          placement="mid"
+          compact={false}
+        />
+        <SponsorSlot
+          cityName={selectedCityName}
+          slotNumber={3}
+          tier="standard"
+          placement="bottom"
+          compact={false}
+        />
       </div>
-    </section>
-  ) : null}
+    ) : (
+      <div class="grid grid-2">
+        <SponsorSlot
+          cityName="Canada"
+          slotNumber={2}
+          scope="national"
+          tier="standard"
+          placement="mid"
+          compact={false}
+        />
+        <SponsorSlot
+          cityName="Canada"
+          slotNumber={3}
+          scope="national"
+          tier="standard"
+          placement="bottom"
+          compact={false}
+        />
+      </div>
+    )}
+  </section>
+) : null}
 
   <section class="grid" style="margin-top:14px;">
     <div class="card">

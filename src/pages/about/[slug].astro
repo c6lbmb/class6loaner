@@ -43,8 +43,9 @@ function withBmbCity(url: string) {
       Class6Loaner started with a simple problem: getting licensed should be straightforward, but finding a road-test-ready motorcycle often is not.
       Many riders are ready for their Class 6 test long before they have reliable access to a suitable bike on the right day and at the right time.
     </p>
+  </section>
 
-    {ADS_ENABLED && cityName ? (
+  {ADS_ENABLED && cityName ? (
       <div style="margin-top:14px;">
         <SponsorSlot
           cityName={cityName}
@@ -55,7 +56,6 @@ function withBmbCity(url: string) {
         />
       </div>
     ) : null}
-  </section>
 
   <section class="grid" style="margin-top:14px;">
     <div class="card">
@@ -102,25 +102,16 @@ function withBmbCity(url: string) {
   </section>
 
   {ADS_ENABLED && cityName ? (
-    <section class="grid" style="margin-top:14px;">
-      <div class="card">
-        <h2 style="margin:0 0 10px; font-weight:1000;">{cityName} partner spot</h2>
-        <p class="muted" style="margin:0; max-width:92ch;">
-          A mid-page local sponsor can sit here without interrupting the story or making the page feel cluttered.
-        </p>
-
-        <div style="margin-top:12px;">
-          <SponsorSlot
-            cityName={cityName}
-            slotNumber={2}
-            tier="standard"
-            placement="mid"
-            compact={false}
-          />
-        </div>
-      </div>
-    </section>
-  ) : null}
+  <section style="margin-top:14px;">
+    <SponsorSlot
+      cityName={cityName}
+      slotNumber={2}
+      tier="standard"
+      placement="mid"
+      compact={false}
+    />
+  </section>
+) : null}
 
   <section class="grid grid-2" style="margin-top:14px;">
     <div class="card">
@@ -222,25 +213,16 @@ function withBmbCity(url: string) {
   </section>
 
   {ADS_ENABLED && cityName ? (
-    <section class="grid" style="margin-top:14px;">
-      <div class="card">
-        <h2 style="margin:0 0 10px; font-weight:1000;">More {cityName} partner visibility</h2>
-        <p class="muted" style="margin:0; max-width:92ch;">
-          A lower slot can be used for a second local partner or sponsor package.
-        </p>
-
-        <div style="margin-top:12px;">
-          <SponsorSlot
-            cityName={cityName}
-            slotNumber={3}
-            tier="standard"
-            placement="bottom"
-            compact={false}
-          />
-        </div>
-      </div>
-    </section>
-  ) : null}
+  <section style="margin-top:14px;">
+    <SponsorSlot
+      cityName={cityName}
+      slotNumber={3}
+      tier="standard"
+      placement="bottom"
+      compact={false}
+    />
+  </section>
+) : null}
 
   <section class="card" style="margin-top:14px;">
     <h2 style="margin:0 0 10px; font-weight:1000;">Explore the project</h2>
